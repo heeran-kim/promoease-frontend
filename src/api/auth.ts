@@ -16,6 +16,18 @@ export const register = (email: string, password: string, role: string) => {
     return axios.post(`${API_URL}/users/register/`, { email, password, role });
 };
 
-export const login = (email: string, password: string) => {
-    return axios.post(`${API_URL}/users/login/`, { email, password });
+export const login = async (email: string, password: string) => {
+    try {
+        const response = await axios.post(`${API_URL}/users/login/`, { email, password });
+        return response.data;
+    } catch (error) {
+        if (axios.isAxiosError(error) && error.response) {
+            let errorMessage = error.response.data.non_field_errors?.[0] || error.response.data.error || "Login failed";
+            if (typeof errorMessage !== "string") {
+                errorMessage = JSON.stringify(errorMessage);
+            }
+            throw new Error(errorMessage);
+        }
+        throw new Error("Something went wrong");
+    }
 };
