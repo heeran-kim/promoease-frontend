@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { FaGoogle, FaApple, FaFacebook, FaKey, FaUser } from "react-icons/fa";
+import { FaGoogle, FaApple, FaFacebook, FaKey } from "react-icons/fa";
 
 export default function RegisterPage() {
     const [showEmailForm, setShowEmailForm] = useState(false);
@@ -21,7 +21,7 @@ export default function RegisterPage() {
 
     // 입력값 검증 (Validation)
     const validateForm = () => {
-        let newErrors = {};
+        const newErrors = {};
 
         if (!formData.name.trim()) newErrors.name = "Name is required.";
         if (!formData.email.includes("@")) newErrors.email = "Invalid email format.";

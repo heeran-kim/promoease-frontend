@@ -10,8 +10,8 @@ const Navbar = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [scrolling, setScrolling] = useState(false);
-    const [bgWhite, setBgWhite] = useState(false);
+    // const [scrolling, setScrolling] = useState(false);
+    // const [bgWhite, setBgWhite] = useState(false);
     const router = useRouter();
     let dropdownTimeout: NodeJS.Timeout;
 
@@ -25,16 +25,16 @@ const Navbar = () => {
             .catch(() => setIsAuthenticated(false));
 
         const handleScroll = () => {
-            setScrolling(window.scrollY > 50);
+            // setScrolling(window.scrollY > 50);
         };
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-    useEffect(() => {
-        // ✅ 로그인 페이지에서 네비게이션 바 글자 안 보이는 문제 해결
-        setBgWhite(window.location.pathname.includes("/login"));
-    }, [router]);
+    // useEffect(() => {
+    //     // ✅ 로그인 페이지에서 네비게이션 바 글자 안 보이는 문제 해결
+    //     // setBgWhite(window.location.pathname.includes("/login"));
+    // }, [router]);
 
     const handleLogout = async () => {
         try {
