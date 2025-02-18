@@ -93,7 +93,7 @@ export default function LoginPage() {
 
                 {/* 회원가입 & 비밀번호 찾기 */}
                 <div className="mt-4 text-center text-sm text-gray-500 dark:text-gray-400">
-                    <p>Don&apos;'t have an account? <Link href="/register" className="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 transition">Sign up</Link></p>
+                    <p>Don&apos;t have an account? <Link href="/register" className="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 transition">Sign up</Link></p>
                     <p className="mt-2"><Link href="/forgot-password" className="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 transition">Forgot your password?</Link></p>
                 </div>
             </div>
