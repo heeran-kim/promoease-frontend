@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 import Link from "next/link";
 import { FaGoogle, FaApple, FaFacebook, FaKey } from "react-icons/fa";
 
@@ -12,16 +12,17 @@ export default function RegisterPage() {
         password: "",
         confirmPassword: ""
     });
-    const [errors, setErrors] = useState({});
+    
+    const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
     // 입력값 변경 처리
-    const handleChange = (e) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
     // 입력값 검증 (Validation)
     const validateForm = () => {
-        const newErrors = {};
+        const newErrors: {[key: string]: string } = {};
 
         if (!formData.name.trim()) newErrors.name = "Name is required.";
         if (!formData.email.includes("@")) newErrors.email = "Invalid email format.";
@@ -33,7 +34,7 @@ export default function RegisterPage() {
     };
 
     // 회원가입 처리
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (validateForm()) {
             console.log("Registration Successful", formData);
