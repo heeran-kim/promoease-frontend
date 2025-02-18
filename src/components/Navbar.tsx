@@ -6,16 +6,13 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { FaChevronDown, FaChevronUp, FaRobot, FaChartLine, FaLightbulb } from "react-icons/fa";
 
-const Navbar = () => {
+export default function Navbar() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    // const [scrolling, setScrolling] = useState(false);
-    // const [bgWhite, setBgWhite] = useState(false);
     const router = useRouter();
     let dropdownTimeout: NodeJS.Timeout;
 
-    {/* 내비게이션 버튼 공통 스타일 */}
     const navItemClass = "px-3 py-2 rounded-md transition hover:bg-gray-100 dark:hover:bg-gray-800";
 
 
@@ -23,18 +20,7 @@ const Navbar = () => {
         axios.get("/api/check-auth", { withCredentials: true })
             .then((response) => setIsAuthenticated(response.data.isAuthenticated))
             .catch(() => setIsAuthenticated(false));
-
-        const handleScroll = () => {
-            // setScrolling(window.scrollY > 50);
-        };
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
     }, []);
-
-    // useEffect(() => {
-    //     // ✅ 로그인 페이지에서 네비게이션 바 글자 안 보이는 문제 해결
-    //     // setBgWhite(window.location.pathname.includes("/login"));
-    // }, [router]);
 
     const handleLogout = async () => {
         try {
@@ -54,20 +40,17 @@ const Navbar = () => {
     const handleMouseLeave = () => {
         dropdownTimeout = setTimeout(() => {
             setIsDropdownOpen(false);
-        }, 400); // ✅ 400ms로 줄임 (자연스러우면서도 빠르게)
+        }, 400);
     };
 
     return (
         <nav className={`fixed top-0 w-full z-50 bg-white dark:bg-gray-900 shadow-md transition-colors duration-200`}>
             <div className="max-w-7xl mx-auto px-6 flex justify-between items-center h-16">
-                {/* 로고 */}
                 <Link href="/" className="text-2xl font-bold text-black dark:text-white">
                     Promoease
                 </Link>
 
-                {/* 데스크탑 메뉴 */}
                 <div className="hidden md:flex space-x-6 items-center">
-                    {/* 드롭다운 메뉴 */}
                     <div 
                         className="relative group"
                         onMouseEnter={handleMouseEnter}
@@ -145,7 +128,6 @@ const Navbar = () => {
                     )}
                 </div>
 
-                {/* 모바일 메뉴 버튼 */}
                 <div className="md:hidden">
                     <button onClick={() => setIsOpen(!isOpen)} className="focus:outline-none">
                         {isOpen ? "✖️" : "☰"}
@@ -153,7 +135,6 @@ const Navbar = () => {
                 </div>
             </div>
 
-            {/* 모바일 메뉴 */}
             <div className={`md:hidden bg-white dark:bg-gray-900 transition-all duration-300 ${
                 isOpen ? "max-h-60 opacity-100" : "max-h-0 opacity-0"
             } overflow-hidden`}>
@@ -182,5 +163,3 @@ const Navbar = () => {
         </nav>
     );
 };
-
-export default Navbar;
