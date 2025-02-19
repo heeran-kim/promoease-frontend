@@ -10,11 +10,11 @@ export default function Navbar() {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isMobileDropdownOpen, setIsMobileDropdownOpen] = useState(false);
     const pathname = usePathname();
+    let dropdownTimeout: NodeJS.Timeout;
 
     // Common navigation item styling
-    const navItemClass = "px-3 py-2 rounded-md transition hover:bg-gray-100 dark:hover:bg-gray-800";
+    const navItemClass = "flex items-center justify-center w-[100px] h-[40px] rounded-lg transition bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800";
     const dropdownItemClass = "flex items-center space-x-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg";
-    // const mobileNavItemClass = "block py-3 px-4 text-gray-600 dark:text-gray-300 hover;bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition";
 
     // Close menu when pathname changes
     useEffect(() => {
@@ -32,31 +32,31 @@ export default function Navbar() {
         return () => window.removeEventListener("keydown", handleKeyDown);
     }, []);
 
-    // Toggle dropdown for mobile navigation
-    // const toggleMobileDropdown = () => setIsMobileDropdownOpen(prev => !prev);
-
-
     return (
         <nav className="fixed top-0 left-0 w-full h-16 z-50
                         bg-gray-50 dark:bg-gray-900 shadow-md transition-colors duration-200"
         >
             <div className="max-w-7xl mx-auto px-6 flex justify-between items-center h-full">
+                {/* Logo */}
                 <Link href="/" className="text-2xl font-bold text-black dark:text-white">
                     Promoease
                 </Link>
 
                 {/* Descktop Navigation */}
-                <div className="hidden md:flex space-x-6 items-center">
+                <div className="hidden md:flex space-x-2 items-center">
                     <div 
-                        className="relative group"
-                        onMouseEnter={() => setIsDropdownOpen(true)}
-                        onMouseLeave={() => setIsDropdownOpen(false)}
+                        className="relative"
+                        onMouseEnter={() => {
+                            clearTimeout(dropdownTimeout);
+                            setIsDropdownOpen(true);
+                        }}
+                        onMouseLeave={() => {
+                            dropdownTimeout = setTimeout(() => setIsDropdownOpen(false), 300);
+                        }}
                     >
                         <button 
-                            className={`${navItemClass} flex items-center space-x-1 ${
-                                isDropdownOpen ? "bg-gray-100 dark:bg-gray-800 text-indigo-600 dark:text-indigo-400" 
-                                            : "hover:text-indigo-500 dark:hover:text-indigo-400"
-                            }`}
+                            className={`${navItemClass} flex items-center space-x-1
+                                        ${isDropdownOpen ? "bg-gray-100 dark:bg-gray-800" : ""}`}
                         >
                             <span>Products</span>
                             {isDropdownOpen ? <FaChevronUp size={14} /> : <FaChevronDown size={14} />}
@@ -94,9 +94,15 @@ export default function Navbar() {
                         )}
                     </div>
 
-                    <Link href="/about" className={navItemClass}>About</Link>
-                    <Link href="/login" className={navItemClass}>Login</Link>
-                    <Link href="/register" className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition">
+                    <Link href="/docs" className={navItemClass}>Docs</Link>
+                    <Link href="/pricing" className={navItemClass}>Pricing</Link>
+                    <Link href="/contact" className={navItemClass}>Contact</Link>
+                </div>
+
+                {/* Login & Register */}
+                <div className="hidden md:flex items-center space-x-2">
+                    <Link href="/login" className={`${navItemClass} border`}>Login</Link>
+                    <Link href="/register" className="flex justify-center items-center w-[100px] h-[40px] bg-black text-white rounded-lg hover:bg-gray-800 transition">
                         Sign Up
                     </Link>
                 </div>
