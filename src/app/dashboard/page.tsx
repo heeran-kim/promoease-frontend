@@ -1,8 +1,21 @@
+// src/app/dashboard/page.tsx
 "use client";
-// import { useState } from "react";
-// import { MenuIcon } from "@heroicons/react/outline";
+import { useAuth } from "@/components/AuthProvider";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect } from "react";
 
 export default function DashboardPage() {
+  const { user } = useAuth();
+  const router = useRouter();
+
+  const redirectToLogin = useCallback(() => {
+    router.push("/login");
+  }, [router]);
+  
+  useEffect(() => {
+    if (!user) redirectToLogin();
+  }, [user, redirectToLogin]);
+
   return (
     <div className="grid grid-cols-5 gap-4">
       {/* 사이드바 */}

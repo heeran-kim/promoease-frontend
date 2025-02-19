@@ -1,10 +1,11 @@
 "use client";
-
 import { useState, ChangeEvent, FormEvent } from "react";
-import Link from "next/link";
+import { useAuth } from "@/components/AuthProvider";
 import { FaGoogle, FaApple, FaFacebook, FaKey } from "react-icons/fa";
+import Link from "next/link";
 
 export default function RegisterPage() {
+    const { login } = useAuth();
     const [showEmailForm, setShowEmailForm] = useState(false);
     const [formData, setFormData] = useState({
         name: "",
@@ -12,15 +13,14 @@ export default function RegisterPage() {
         password: "",
         confirmPassword: ""
     });
-    
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
-
-    // 입력값 변경 처리
+    
+    //
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    // 입력값 검증 (Validation)
+    // Input Validation
     const validateForm = () => {
         const newErrors: {[key: string]: string } = {};
 
@@ -33,11 +33,28 @@ export default function RegisterPage() {
         return Object.keys(newErrors).length === 0;
     };
 
-    // 회원가입 처리
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    // Handle Register
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (validateForm()) {
-            console.log("Registration Successful", formData);
+        if (!validateForm()) {
+            console.log("Validation failed", formData);
+            return;
+        }
+
+        // Remove confirmPassword before sending the request
+        const { confirmPassword, ...formDataToSend } = formData;
+        void confirmPassword;
+
+        const res = await fetch("/api/auth/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formDataToSend),
+        });
+
+        if (res.ok) {
+            await login(formData.email, formData.password);
+        } else {
+            console.error("Register failed");
         }
     };
 

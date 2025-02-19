@@ -14,7 +14,7 @@ export default function Navbar() {
     // Common navigation item styling
     const navItemClass = "px-3 py-2 rounded-md transition hover:bg-gray-100 dark:hover:bg-gray-800";
     const dropdownItemClass = "flex items-center space-x-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg";
-    const mobileNavItemClass = "block py-3 px-4 text-gray-600 dark:text-gray-300 hover;bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition";
+    // const mobileNavItemClass = "block py-3 px-4 text-gray-600 dark:text-gray-300 hover;bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition";
 
     // Close menu when pathname changes
     useEffect(() => {
@@ -33,7 +33,7 @@ export default function Navbar() {
     }, []);
 
     // Toggle dropdown for mobile navigation
-    const toggleMobileDropdown = () => setIsMobileDropdownOpen(prev => !prev);
+    // const toggleMobileDropdown = () => setIsMobileDropdownOpen(prev => !prev);
 
 
     return (
