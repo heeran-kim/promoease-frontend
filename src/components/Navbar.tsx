@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FaChevronDown, FaChevronUp, FaRobot, FaChartLine, FaLightbulb, FaBars, FaTimes } from "react-icons/fa";
 
-export default function Navbar() {
+export default function Navbar({ onSignIn }: { onSignIn: () => void}) {
     const [isOpen, setIsOpen] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isMobileDropdownOpen, setIsMobileDropdownOpen] = useState(false);
@@ -95,7 +95,10 @@ export default function Navbar() {
                     </div>
 
                     <Link href="/about" className={navItemClass}>About</Link>
-                    <Link href="/login" className={navItemClass}>Login</Link>
+                    <button onClick={() => {
+                        console.log("Login button clicked");
+                        onSignIn();
+                    }} className={navItemClass}>Login</button>
                     <Link href="/register" className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition">
                         Sign Up
                     </Link>
@@ -134,10 +137,13 @@ export default function Navbar() {
                                                         rounded-lg hover:bg-gray-800 transition">
                             Sign Up
                         </Link>
-                        <Link href="/login" className="block w-full text-center px-4 py-2 border border-gray-300 text-black 
+                        <button onClick={() => {
+                            console.log("Mobile login button clicked");
+                            onSignIn();
+                        }} className="block w-full text-center px-4 py-2 border border-gray-300 text-black 
                                                         rounded-lg hover:bg-gray-100 transition">
                             Log In
-                        </Link>
+                        </button>
 
                         {/* 네비게이션 아이템 */}
                         <button 

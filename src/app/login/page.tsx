@@ -7,13 +7,14 @@ import {
     FaApple, 
     FaFacebook, 
     FaKey, 
-    // FaEnvelope 
+    FaEnvelope 
 } from "react-icons/fa";
 
 export default function LoginPage() {
     const [showEmailForm, setShowEmailForm] = useState(false);
 
     return (
+        
         <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
             <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md transition-all duration-300">
                 {/* 제목 */}
@@ -21,18 +22,21 @@ export default function LoginPage() {
                     Log in to Promoease
                 </h2>
 
-                {/* 소셜 로그인 버튼 */}
-                <div className="mt-6 space-y-3">
-                    <button className="flex items-center w-full px-4 py-3 text-white bg-[#4285F4] rounded-md hover:bg-[#357ae8] transition">
-                        <FaGoogle className="mr-3" /> Continue with Google
-                    </button>
-                    <button className="flex items-center w-full px-4 py-3 text-white bg-[#000000] rounded-md hover:bg-[#333333] transition">
-                        <FaApple className="mr-3" /> Continue with Apple
-                    </button>
-                    <button className="flex items-center w-full px-4 py-3 text-white bg-[#1877F2] rounded-md hover:bg-[#166FE5] transition">
-                        <FaFacebook className="mr-3" /> Continue with Facebook
-                    </button>
-                </div>
+                {/* Sign in buttons */}
+                    <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md text-center">
+                        <button className="flex items-center justify-center w-full px-2 py-2 mb-4 text-gray-700 text-xs border border-gray-300 rounded-full transition">
+                            <FaGoogle className="ms-2 mr-3" /> <span className="w-full">Sign in with Google</span>
+                        </button>
+                        <button className="flex items-center w-full px-2 py-2 mb-4 mr-2 text-gray-700 text-xs text-center border border-gray-300 rounded-full transition">
+                            <FaApple className="ms-2 mr-3" /> <span className="w-full">Sign in with Apple</span>
+                        </button>
+                        <button className="flex items-center w-full px-2 py-2 mb-4 text-gray-700 text-xs border border-gray-300 rounded-full transition">
+                            <FaFacebook className="ms-2 mr-3" /> <span className="w-full">Sign in with Facebook</span>
+                        </button>
+                        <button className="flex items-center w-full px-2 py-2 mb-4 text-gray-700 text-xs border border-gray-300 rounded-full transition">
+                            <FaEnvelope className="ms-2 mr-3" /> <span className="w-full">Sign in with email</span>
+                        </button>
+                    </div>
 
                 {/* 구분선 */}
                 <div className="relative my-6">

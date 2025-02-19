@@ -16,3 +16,11 @@ body {
 .dark img {
   filter: invert(1);
 }
+
+.navbar {
+  height: 60px; /* 고정 높이 */
+}
+
+.footer {
+  height: 60px; /* 고정 높이 */
+}
