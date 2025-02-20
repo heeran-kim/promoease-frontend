@@ -1,16 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { 
-    FaGoogle, 
-    FaApple, 
-    FaFacebook, 
-    FaKey, 
-    // FaEnvelope 
-} from "react-icons/fa";
+import { useRouter } from 'next/navigation';
+import { FaGoogle, FaApple, FaFacebook, FaKey } from "react-icons/fa";
 
 
 export default function LoginPage() {
+    const router = useRouter();
+    const handleContinueWithEmail = () => {
+        router.push('/login/email');
+    };
+
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
             <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md transition-all duration-300">
@@ -46,6 +46,15 @@ export default function LoginPage() {
                 <button className="socialbutton">
                     <FaKey className="ms-2 mr-3" /> <span className="w-full">Login with Passkey</span>
                 </button>
+
+                {/* 이메일 로그인 버튼 */}
+                <div className="mt-4 text-center">
+                    <button onClick={handleContinueWithEmail} 
+                        className="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 transition"
+                    >
+                        Continue with Email →
+                    </button>
+                </div>
 
                 {/* 회원가입 & 비밀번호 찾기 */}
                 <div className="mt-4 text-center text-sm text-gray-500 dark:text-gray-400">
