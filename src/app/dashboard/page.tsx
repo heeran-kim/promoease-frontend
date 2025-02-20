@@ -8,9 +8,9 @@ export default function DashboardPage() {
   const { user } = useAuth();
   const router = useRouter();
 
-  useEffect(() => {
-    if (!user) router.push("/login");
-  }, [user]);
+  // useEffect(() => {
+  //   if (!user) router.push("/login");
+  // }, [user]);
 
   return (
     <div className="grid grid-cols-5 gap-4">
