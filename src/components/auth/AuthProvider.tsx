@@ -27,10 +27,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     
     const checkAuth = async () => {
         try {
-            const res = await fetch("/api/auth/me", { credentials: "include" });
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/me/`, { method: "GET", credentials: "include" , headers: { "Content-Type": "application/json" } });
             if (res.ok) {
                 const data = await res.json();
-                setUser(data.user);
+                setUser(data);
             }
         } catch (error) {
             console.error("Auth check failed", error);
@@ -38,7 +38,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     const login = async (email: string, password: string) => {
-        const res = await fetch("/api/auth/login", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/login/`, {
             method: "POST",
             credentials: "include",
             headers: { "Content-Type": "application/json" },
@@ -46,8 +46,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         });
 
         if (res.ok) {
-            const data = await res.json();
-            setUser(data.user);
+            await res.json();
+            checkAuth();
+            console.log("Login Successed! forwarding to dashboard.", user);
             router.push("/dashboard");
         } else {
             console.error("Login failed");
@@ -55,7 +56,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     const logout = async () => {
-        await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
+        await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/logout/`, { method: "POST", credentials: "include" });
         setUser(null);
         router.push("/login");
     };
