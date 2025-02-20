@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, FormEvent} from "react";
+import { useState, ChangeEvent, FormEvent} from "react";
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/components/auth/AuthProvider';
 

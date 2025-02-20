@@ -1,64 +1,10 @@
 "use client";
-import { useState, ChangeEvent, FormEvent } from "react";
-import { useAuth } from "@/components/auth/AuthProvider";
 import { FaGoogle, FaApple, FaFacebook, FaKey } from "react-icons/fa";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
 
 export default function RegisterPage() {
     const router = useRouter();
-    const { login } = useAuth();
-    const [showEmailForm, setShowEmailForm] = useState(false);
-    const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-        password: "",
-        confirmPassword: ""
-    });
-    const [errors, setErrors] = useState<{ [key: string]: string }>({});
-    
-    //
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
-
-    // Input Validation
-    const validateForm = () => {
-        const newErrors: {[key: string]: string } = {};
-
-        if (!formData.name.trim()) newErrors.name = "Name is required.";
-        if (!formData.email.includes("@")) newErrors.email = "Invalid email format.";
-        if (formData.password.length < 6) newErrors.password = "Password must be at least 6 characters.";
-        if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = "Passwords do not match.";
-
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
-    };
-
-    // Handle Register
-    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        if (!validateForm()) {
-            console.log("Validation failed", formData);
-            return;
-        }
-
-        // Remove confirmPassword before sending the request
-        const { confirmPassword, ...formDataToSend } = formData;
-        void confirmPassword;
-
-        const res = await fetch("/api/auth/register", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(formDataToSend),
-        });
-
-        if (res.ok) {
-            await login(formData.email, formData.password);
-        } else {
-            console.error("Register failed");
-        }
-    };
 
     const handleContinueWithEmail = () => {
         router.push('/register/email');
@@ -101,16 +47,14 @@ export default function RegisterPage() {
                 </button>
 
                 {/* 이메일 회원가입 버튼 */}
-                {!showEmailForm && (
-                    <div className="mt-4 text-center">
-                        <button
-                            className="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 transition"
-                            onClick={() => handleContinueWithEmail()}
-                        >
-                            Continue with Email →
-                        </button>
-                    </div>
-                )}
+                <div className="mt-4 text-center">
+                    <button
+                        className="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 transition"
+                        onClick={() => handleContinueWithEmail()}
+                    >
+                        Continue with Email →
+                    </button>
+                </div>
 
                 {/* 로그인 페이지 이동 */}
                 <div className="mt-4 text-center text-sm text-gray-500 dark:text-gray-400">

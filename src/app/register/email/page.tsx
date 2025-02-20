@@ -1,12 +1,10 @@
 "use client"
 
-import { useState, FormEvent} from "react";
-import { useRouter } from 'next/navigation';
+import { useState, ChangeEvent, FormEvent} from "react";
 import { useAuth } from '@/components/auth/AuthProvider';
 
 const EmailRegisterPage: React.FC = () => {
     const { login } = useAuth();
-    const [showEmailForm, setShowEmailForm] = useState(false);
     const [formData, setFormData] = useState({
         name: "",
         email: "",
