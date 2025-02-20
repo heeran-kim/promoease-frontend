@@ -23,14 +23,14 @@ export default function LoginPage() {
 
                 {/* 소셜 로그인 버튼 */}
                 <div className="mt-6 space-y-3">
-                    <button className="flex items-center w-full px-4 py-3 text-white bg-[#4285F4] rounded-md hover:bg-[#357ae8] transition">
-                        <FaGoogle className="mr-3" /> Continue with Google
+                    <button className="socialbutton">
+                        <FaGoogle className="ms-2 mr-3" /> <span className="w-full">Continue with Google</span>
                     </button>
-                    <button className="flex items-center w-full px-4 py-3 text-white bg-[#000000] rounded-md hover:bg-[#333333] transition">
-                        <FaApple className="mr-3" /> Continue with Apple
+                    <button className="socialbutton">
+                        <FaApple className="ms-2 mr-3" /> <span className="w-full"> Continue with Apple </span>
                     </button>
-                    <button className="flex items-center w-full px-4 py-3 text-white bg-[#1877F2] rounded-md hover:bg-[#166FE5] transition">
-                        <FaFacebook className="mr-3" /> Continue with Facebook
+                    <button className="socialbutton">
+                        <FaFacebook className="ms-2 mr-3" /> <span className="w-full"> Continue with Facebook </span>
                     </button>
                 </div>
 
@@ -45,8 +45,8 @@ export default function LoginPage() {
                 </div>
 
                 {/* Passkey 로그인 */}
-                <button className="flex items-center w-full px-4 py-3 bg-gray-900 text-white rounded-md hover:bg-gray-700 transition">
-                    <FaKey className="mr-3" /> Login with Passkey
+                <button className="socialbutton">
+                    <FaKey className="ms-2 mr-3" /> <span className="w-full">Login with Passkey</span>
                 </button>
 
                 {/* 이메일 로그인 버튼 */}

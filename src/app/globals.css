@@ -20,3 +20,7 @@ body {
 .navbar {
   height: 64px; /* 16 rem in tailwind */
 }
+
+.socialbutton {
+  @apply flex items-center justify-center w-full px-2 py-2 mb-4 text-gray-700 text-sm border border-gray-300 rounded-full transition;
+}
