@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     useEffect(() => {
         checkAuth();
     }, []);
-
+    
     const checkAuth = async () => {
         try {
             const res = await fetch("/api/auth/me", { credentials: "include" });
@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         } catch (error) {
             console.error("Auth check failed", error);
         }
-    }
+    };
 
     const login = async (email: string, password: string) => {
         const res = await fetch("/api/auth/login", {
