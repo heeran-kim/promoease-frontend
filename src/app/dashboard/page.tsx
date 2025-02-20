@@ -1,6 +1,6 @@
 // src/app/dashboard/page.tsx
 "use client";
-import { useAuth } from "@/components/AuthProvider";
+import { useAuth } from "@/components/auth/AuthProvider";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect } from "react";
 
@@ -8,13 +8,9 @@ export default function DashboardPage() {
   const { user } = useAuth();
   const router = useRouter();
 
-  const redirectToLogin = useCallback(() => {
-    router.push("/login");
-  }, [router]);
-  
   useEffect(() => {
-    if (!user) redirectToLogin();
-  }, [user, redirectToLogin]);
+    if (!user) router.push("/login");
+  }, [user]);
 
   return (
     <div className="grid grid-cols-5 gap-4">

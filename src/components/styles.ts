@@ -1,0 +1,22 @@
+import clsx from "clsx";
+
+// ✅ Layout styles
+export const flexRowClass = "flex items-center space-x-2";
+
+// ✅ Base Navigation Button Styles
+export const navItemClass = "flex items-center justify-center py-2 px-3 rounded-2xl transition text-sm";
+export const hoverNavItemClass = "hover:bg-gray-100 dark:hover:bg-gray-800";
+export const groupHoverNavItemClass = "group-hover:bg-gray-100 group-hover:dark:bg-gray-800";
+export const activeNavItemClass = "bg-gray-100 dark:bg-gray-800"; // Keep hover effect when dropdown is open
+
+// ✅ Auth Button Styles (Login, Dashboard, Sign Up, Logout)
+export const authButtonClass = "border bg-white dark:bg-gray-900"; // For login/dashboard
+export const primaryAuthButtonClass = "border bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-300"; // For Sign up & Logout
+
+// ✅ Predefined Combinations for Different Components
+export const dropdownNavItemClass = (isActive: boolean) =>
+    clsx(navItemClass, groupHoverNavItemClass, { [activeNavItemClass]: isActive });
+
+export const defaultNavItemClass = clsx(navItemClass, hoverNavItemClass);
+export const authNavItemClass = clsx(navItemClass, hoverNavItemClass, authButtonClass);
+export const primaryNavItemClass = clsx(navItemClass, primaryAuthButtonClass);

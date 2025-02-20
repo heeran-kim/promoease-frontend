@@ -1,6 +1,6 @@
 "use client";
 import { useState, ChangeEvent, FormEvent } from "react";
-import { useAuth } from "@/components/AuthProvider";
+import { useAuth } from "@/components/auth/AuthProvider";
 import { FaGoogle, FaApple, FaFacebook, FaKey } from "react-icons/fa";
 import Link from "next/link";
 

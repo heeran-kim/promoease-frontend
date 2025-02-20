@@ -4,9 +4,9 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 interface User {
-    id: number;
     name: string;
     email: string;
+    role: string;
 }
 
 interface AuthContextType {
@@ -22,19 +22,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const router = useRouter();
 
     useEffect(() => {
-        const checkAuth = async () => {
-            try {
-                const res = await fetch("/api/auth/me", { credentials: "include" });
-                if (res.ok) {
-                    const data = await res.json();
-                    setUser(data.user);
-                }
-            } catch (error) {
-                console.error("Auth check failed", error);
-            }
-        };
         checkAuth();
     }, []);
+
+    const checkAuth = async () => {
+        try {
+            const res = await fetch("/api/auth/me", { credentials: "include" });
+            if (res.ok) {
+                const data = await res.json();
+                setUser(data.user);
+            }
+        } catch (error) {
+            console.error("Auth check failed", error);
+        }
+    }
 
     const login = async (email: string, password: string) => {
         const res = await fetch("/api/auth/login", {
