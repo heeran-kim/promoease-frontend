@@ -16,3 +16,7 @@ body {
 .dark img {
   filter: invert(1);
 }
+
+.navbar {
+  height: 64px; /* 16 rem in tailwind */
+}
