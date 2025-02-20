@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from 'next/navigation';
+
 import Link from "next/link";
 import { 
     FaGoogle, 
@@ -10,9 +12,14 @@ import {
     // FaEnvelope 
 } from "react-icons/fa";
 
+
 export default function LoginPage() {
     const [showEmailForm, setShowEmailForm] = useState(false);
-
+    const router = useRouter();
+    const handleContinueWithEmail = () => {
+        router.push('/login/email');
+    };
+    
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
             <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md transition-all duration-300">
@@ -52,9 +59,8 @@ export default function LoginPage() {
                 {/* 이메일 로그인 버튼 */}
                 {!showEmailForm && (
                     <div className="mt-4 text-center">
-                        <button
+                        <button onClick={handleContinueWithEmail} 
                             className="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 transition"
-                            onClick={() => setShowEmailForm(true)}
                         >
                             Continue with Email →
                         </button>
