@@ -9,6 +9,7 @@ export async function POST(req: Request) {
     // Forward the registration data to Django backend
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/login/`, {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
     });

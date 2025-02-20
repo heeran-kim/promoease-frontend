@@ -3,8 +3,10 @@ import { useState, ChangeEvent, FormEvent } from "react";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { FaGoogle, FaApple, FaFacebook, FaKey } from "react-icons/fa";
 import Link from "next/link";
+import { useRouter } from 'next/navigation';
 
 export default function RegisterPage() {
+    const router = useRouter();
     const { login } = useAuth();
     const [showEmailForm, setShowEmailForm] = useState(false);
     const [formData, setFormData] = useState({
@@ -58,6 +60,10 @@ export default function RegisterPage() {
         }
     };
 
+    const handleContinueWithEmail = () => {
+        router.push('/register/email');
+    };
+
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
             <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md transition-all duration-300">
@@ -99,76 +105,11 @@ export default function RegisterPage() {
                     <div className="mt-4 text-center">
                         <button
                             className="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 transition"
-                            onClick={() => setShowEmailForm(true)}
+                            onClick={() => handleContinueWithEmail()}
                         >
                             Continue with Email →
                         </button>
                     </div>
-                )}
-
-                {/* 이메일 회원가입 폼 */}
-                {showEmailForm && (
-                    <form onSubmit={handleSubmit} className="mt-6 space-y-4 animate-fade-in">
-                        {/* 이름 입력 */}
-                        <div>
-                            <label className="block text-gray-700 dark:text-gray-300">Name</label>
-                            <input
-                                type="text"
-                                name="name"
-                                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white"
-                                placeholder="Enter your name"
-                                onChange={handleChange}
-                            />
-                            {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
-                        </div>
-
-                        {/* 이메일 입력 */}
-                        <div>
-                            <label className="block text-gray-700 dark:text-gray-300">Email</label>
-                            <input
-                                type="email"
-                                name="email"
-                                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white"
-                                placeholder="Enter your email"
-                                onChange={handleChange}
-                            />
-                            {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
-                        </div>
-
-                        {/* 비밀번호 입력 */}
-                        <div>
-                            <label className="block text-gray-700 dark:text-gray-300">Password</label>
-                            <input
-                                type="password"
-                                name="password"
-                                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white"
-                                placeholder="Enter your password"
-                                onChange={handleChange}
-                            />
-                            {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
-                        </div>
-
-                        {/* 비밀번호 확인 입력 */}
-                        <div>
-                            <label className="block text-gray-700 dark:text-gray-300">Confirm Password</label>
-                            <input
-                                type="password"
-                                name="confirmPassword"
-                                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white"
-                                placeholder="Re-enter your password"
-                                onChange={handleChange}
-                            />
-                            {errors.confirmPassword && <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>}
-                        </div>
-
-                        {/* 회원가입 버튼 */}
-                        <button
-                            type="submit"
-                            className="w-full px-4 py-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition"
-                        >
-                            Sign Up
-                        </button>
-                    </form>
                 )}
 
                 {/* 로그인 페이지 이동 */}
