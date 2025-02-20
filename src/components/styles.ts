@@ -20,3 +20,6 @@ export const dropdownNavItemClass = (isActive: boolean) =>
 export const defaultNavItemClass = clsx(navItemClass, hoverNavItemClass);
 export const authNavItemClass = clsx(navItemClass, hoverNavItemClass, authButtonClass);
 export const primaryNavItemClass = clsx(navItemClass, primaryAuthButtonClass);
+export const dropdownItemClass = clsx(flexRowClass, hoverNavItemClass, "p-2 rounded-lg transition");
+export const dropdownTextClass = "font-semibold text-sm text-gray-900 dark:text-white";
+export const dropdownSubTextClass = "text-xs text-gray-500 dark:text-gray-400";
