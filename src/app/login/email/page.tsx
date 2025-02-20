@@ -20,6 +20,12 @@ const EmailPage: React.FC = () => {
                         required
                         className="w-full p-2 border border-gray-300 rounded mb-4"
                     />
+                    <input
+                        type="password"
+                        placeholder="Enter your password"
+                        required
+                        className="w-full p-2 border border-gray-300 rounded mb-4"
+                    />
                     <button type="submit" className="socialbutton">
                         Continue with email
                     </button>
