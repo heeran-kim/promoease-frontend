@@ -27,13 +27,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     
     const checkAuth = async () => {
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/me/`, { method: "GET", credentials: "include" , headers: { "Content-Type": "application/json" } });
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/me/`, {
+                method: "GET",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" }
+            });
+
             if (res.ok) {
                 const data = await res.json();
                 setUser(data);
+            } else {
+                setUser(null);
             }
         } catch (error) {
             console.error("Auth check failed", error);
+            setUser(null);
         }
     };
 

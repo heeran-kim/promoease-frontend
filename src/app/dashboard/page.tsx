@@ -1,7 +1,23 @@
 // src/app/dashboard/page.tsx
 "use client";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/components/auth/AuthProvider";
 
 export default function DashboardPage() {
+  const { user } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+      if (!user) {
+          router.push("/login");
+      }
+  }, [user, router]);
+
+  if (!user) {
+    return <p>Loading...</p>;
+  }
+
   return (
     <div className="grid grid-cols-5 gap-4">
       {/* 사이드바 */}
