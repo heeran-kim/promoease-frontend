@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import Link from "next/link";
-import ProductsDropdown from "./ProductsDropdown";
+import ProductsDropdown from "@/components/navigation/ProductsDropdown";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { flexRowClass, dropdownNavItemClass, defaultNavItemClass } from "@/components/styles";
 

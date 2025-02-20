@@ -14,12 +14,12 @@ export default function Navbar() {
                 </Link>
 
                 {/* Desktop Navigation */}
-                <div className="hidden md:flex flex-1">
+                <div className="flex flex-1">
                     <NavLinks />
                 </div>
 
                 {/* Desktop Auth Buttons */}
-                <div className="hidden md:flex">
+                <div>
                     <AuthButtons />
                 </div>
             </div>
