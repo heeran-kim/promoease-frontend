@@ -27,11 +27,40 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     
     const checkAuth = async () => {
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/me/`, {
+            let res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/me/`, {
                 method: "GET",
                 credentials: "include",
                 headers: { "Content-Type": "application/json" }
             });
+
+            if (res.status === 401) {
+                let newAccessToken = null;
+                console.warn("🔄 Access Token expired, trying to refresh...");
+                try {
+                    const refresth_res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/refresh/`, {
+                        method: "POST",
+                        credentials: "include",
+                    });
+    
+                    if (refresth_res.ok) {
+                        console.log("✅ Successfully refreshed access token");
+                        // After refreshing, retry fetching user info
+                        res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/me/`, {
+                            method: "GET",
+                            credentials: "include",
+                            headers: { "Content-Type": "application/json" },
+                        });
+                    } else {
+                        console.warn("❌ Refresh token expired or invalid. User must log in again.");
+                        setUser(null);
+                        return;
+                    }
+                } catch (error) {
+                    console.error("❌ Refresh Token API Error:", error);
+                    setUser(null);
+                    return;
+                }
+            }
 
             if (res.ok) {
                 const data = await res.json();

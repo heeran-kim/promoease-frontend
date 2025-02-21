@@ -22,7 +22,7 @@ export default function NavLinks() {
     };
 
     return (
-        <div className={flexRowClass}>
+        <div className={`${flexRowClass}`}>
             {/* Products Dropdown (Keeps Active State While Open) */}
             <div className="relative group" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                 <button className={dropdownNavItemClass(isDropdownOpen)}>

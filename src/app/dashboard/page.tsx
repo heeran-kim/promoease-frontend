@@ -1,44 +1,64 @@
-// src/app/dashboard/page.tsx
 "use client";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useAuth } from "@/components/auth/AuthProvider";
 
-export default function DashboardPage() {
-  const { user } = useAuth();
-  const router = useRouter();
+import { getMockRestaurants } from "@/mocks/mockData";
+import { useState, useEffect } from "react";
+import RestaurantCard from "@/app/dashboard/components/RestaurantCard"
+import SearchBar from "@/app/dashboard/components/SearchBar";
+import SortDropdown from "@/app/dashboard/components/SortDropdown";
 
-  useEffect(() => {
-      if (!user) {
-          router.push("/login");
-      }
-  }, [user, router]);
+export default function Dashboard() {
+    const [restaurants, setRestaurants] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [sortBy, setSortBy] = useState("name");
 
-  if (!user) {
-    return <p>Loading...</p>;
-  }
+    useEffect(() => {
+        setRestaurants(getMockRestaurants());
+        // async function fetchRestaurants() {
+        //     try {
+        //         const res = await fetch("/api/restaurants/", {
+        //             method: "GET",
+        //             headers: {
+        //                 "Content-Type": "application/json",
+        //             },
+        //         });
 
-  return (
-    <div className="grid grid-cols-5 gap-4">
-      {/* 사이드바 */}
-      <aside className="col-span-1 bg-white shadow-lg rounded-lg p-6 h-screen">
-        <h3 className="text-lg font-bold">대시보드</h3>
-        <nav className="mt-4 space-y-2">
-          <a href="#" className="block p-2 rounded-lg hover:bg-gray-100">
-            메뉴 관리
-          </a>
-          <a href="#" className="block p-2 rounded-lg hover:bg-gray-100">
-            AI 콘텐츠 생성
-          </a>
-        </nav>
-      </aside>
+        //         if (!res.ok) throw new Error("Failed to fetch restaurants");
 
-      {/* 메인 콘텐츠 */}
-      <main className="col-span-4 bg-white shadow-lg rounded-lg p-6">
-        <h2 className="text-2xl font-bold">메뉴 관리</h2>
-        <p className="text-gray-500">Drag-and-Drop을 활용한 메뉴 관리</p>
-        {/* TODO: Drag-and-Drop 메뉴 생성 기능 추가 */}
-      </main>
-    </div>
-  );
+        //         const data = await res.json();
+        //         setRestaurants(data);
+        //     } catch (error) {
+        //         console.error("Error fetching restaurants:", error);
+        //     }
+        // }
+
+        // fetchRestaurants();
+    }, []);
+
+    // 🔍 검색 필터링
+    const filteredRestaurants = restaurants.filter((restaurant) =>
+        restaurant.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    // 🔄 정렬 로직
+    const sortedRestaurants = [...filteredRestaurants].sort((a, b) => {
+        return a.name.localeCompare(b.name); // 🔄 기본 정렬은 이름 기준
+    });
+
+    return (
+        <div className="max-w-7xl mx-auto p-6">
+            {/* 검색 & 정렬 & 추가 버튼 */}
+            <div className="flex justify-between items-center mb-6 gap-4">
+                <SearchBar setSearchTerm={setSearchTerm} />
+                <SortDropdown sortBy={sortBy} setSortBy={setSortBy} />
+                <button className="bg-black text-white px-4 py-2 rounded-lg">+ Add New</button>
+            </div>
+
+            {/* 레스토랑 목록 */}
+            <div className="grid grid-cols-3 gap-6">
+                {sortedRestaurants.map((restaurant) => (
+                    <RestaurantCard key={restaurant.id} restaurant={restaurant} />
+                ))}
+            </div>
+        </div>
+    );
 }
