@@ -64,10 +64,24 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     const logout = async () => {
-        await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/logout/`, { method: "POST", credentials: "include" });
-        setUser(null);
-        router.push("/login");
-    };
+        try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/logout/`, {
+                method: "POST",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+            });
+    
+            if (res.ok) {
+                setUser(null);
+                router.push("/login");
+                console.log("✅ Logout successful");
+            } else {
+                console.error("❌ Logout failed");
+            }
+        } catch (error) {
+            console.error("❌ Logout API Error:", error);
+        }
+    };    
 
     return (
         <AuthContext.Provider value={{ user, login, logout }}>
