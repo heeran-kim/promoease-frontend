@@ -14,7 +14,7 @@ export default function SocialMediaLinks({ links }: SocialMediaLinksProps) {
     if (Object.keys(links).length === 0) return null;
 
     return (
-        <div className="flex items-center mt-2">
+        <div className="flex items-center">
             {/* ✅ 여러 아이콘을 하나의 버튼 안에 넣기 */}
             <div className="flex space-x-2 bg-gray-100 px-3 py-1 rounded-full">
                 {links.instagram && (
