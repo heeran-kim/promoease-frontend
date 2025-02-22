@@ -19,11 +19,11 @@ export default function SubNavbar() {
 
     const restaurantNavItems = slug
         ? [
-              { name: "Dashboard", href: `/restaurant/${slug}` },
-              { name: "New Post", href: `/restaurant/${slug}/new-post` },
-              { name: "Promotion", href: `/restaurant/${slug}/promotion` },
-              { name: "Analytics", href: `/restaurant/${slug}/analytics` },
-              { name: "Settings", href: `/restaurant/${slug}/settings` },
+              { name: "Dashboard", href: `/${slug}` },
+              { name: "New Post", href: `/${slug}/new-post` },
+              { name: "Promotion", href: `/${slug}/promotion` },
+              { name: "Analytics", href: `/${slug}/analytics` },
+              { name: "Settings", href: `/${slug}/settings` },
           ]
         : [];
 
