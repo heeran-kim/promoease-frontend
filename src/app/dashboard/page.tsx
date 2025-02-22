@@ -50,7 +50,10 @@ export default function Dashboard() {
             <div className="flex justify-between items-center mb-6 gap-4">
                 <SearchBar setSearchTerm={setSearchTerm} />
                 <SortDropdown sortBy={sortBy} setSortBy={setSortBy} />
-                <button className="bg-black text-white px-4 py-2 rounded-lg">+ Add New</button>
+                <button className="text-sm px-4 py-2 rounded-lg text-white bg-black hover:bg-gray-800
+                                    dark:bg-white dark:hover:bg-gray-700 dark:text-black">
+                    + Add New
+                </button>
             </div>
 
             {/* 레스토랑 목록 */}
