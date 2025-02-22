@@ -44,7 +44,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     <main className="flex-grow" style={{ paddingTop: `${paddingTop}px` }}>
                         {children}
                     </main>
-                    <Footer />=
+                    <Footer />
                 </AuthProvider>
             </body>
         </html>
