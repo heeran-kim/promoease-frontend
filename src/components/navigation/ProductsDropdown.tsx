@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FaRobot, FaChartLine, FaLightbulb } from "react-icons/fa";
+import { FaRobot, FaChartLine, FaLightbulb, FaPen } from "react-icons/fa";
 import { dropdownItemClass, dropdownTextClass, dropdownSubTextClass } from "@/components/styles";
 
 const productItems = [
@@ -20,6 +20,12 @@ const productItems = [
         icon: <FaLightbulb className="text-xl" />,
         title: "Promotion Suggestion",
         description: "Get AI-powered promotion ideas",
+    },
+    {
+        href: "/feature4",
+        icon: <FaPen className="text-xl" />,
+        title: "Social Media Management",
+        description: "Schedule & manage posts across multiple platforms",
     },
 ];
 
