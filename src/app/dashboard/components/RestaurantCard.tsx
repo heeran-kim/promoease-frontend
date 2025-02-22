@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import RestaurantDropdown from "./RestaurantDropdown"; // 드롭다운 컴포넌트
 import SocialMediaLinks from "./SocialMediaLinks";
+import { FaLink } from "react-icons/fa";
 
 interface RestaurantCardProps {
     restaurant: Restaurant;
@@ -58,9 +59,34 @@ export default function RestaurantCard({ restaurant }: RestaurantCardProps) {
                     className="rounded-full" 
                 />
                 <div className="flex flex-col">
-                    <h3 className="text-md font-semibold">{restaurant.name}</h3>
-                    <SocialMediaLinks links={restaurant.socialMediaLinks} />
-                    <p className="text-gray-500 text-sm">Last Activity: {restaurant.lastActivity}</p>
+                    <div className="flex items-center space-x-2">
+                        <h3 className="text-md font-semibold">{restaurant.name}</h3>
+                        <SocialMediaLinks links={restaurant.socialMediaLinks} />
+                    </div>
+
+                    {/* ✅ Last Post (시간 + 링크 통합) */}
+                    {restaurant.lastActivity && (
+                        <p className="mt-2 text-xs text-gray-600 flex items-center">
+                            Last Post: {new Date(restaurant.lastActivity).toLocaleString()}
+                            {restaurant.lastPostLink && (
+                                <a
+                                    href={restaurant.lastPostLink}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="ml-2 text-blue-600 hover:text-blue-800"
+                                    onClick={(e) => e.stopPropagation()}
+                                >
+                                    <FaLink className="inline-block text-xs" /> {/* 🔗 링크 아이콘 */}
+                                </a>
+                            )}
+                        </p>
+                    )}
+
+                    {restaurant.upcomingPosts > 0 && (
+                        <p className="mt-2 text-xs text-gray-600">
+                            ⏳ {restaurant.upcomingPosts} pending posts
+                        </p>
+                    )}
                 </div>
             </div>
 
