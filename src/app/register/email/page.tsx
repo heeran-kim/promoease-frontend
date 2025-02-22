@@ -1,10 +1,11 @@
+
 "use client"
 
 import { useState, ChangeEvent, FormEvent} from "react";
 import { useAuth } from '@/components/auth/AuthProvider';
 
 const EmailRegisterPage: React.FC = () => {
-    const { login } = useAuth();
+    const { register } = useAuth();
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -44,16 +45,13 @@ const EmailRegisterPage: React.FC = () => {
         const { confirmPassword, ...formDataToSend } = formData;
         void confirmPassword;
 
-        const res = await fetch("/api/auth/register", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(formDataToSend),
-        });
-
-        if (res.ok) {
-            await login(formData.email, formData.password);
-        } else {
-            setErrors({"message": "Registration failed"});
+        try {
+            await register(formDataToSend.name,
+                formDataToSend.email,
+                formDataToSend.password
+            );
+        } catch  {
+            setErrors({"message": "register failed"});
         }
     };
 

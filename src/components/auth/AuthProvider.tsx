@@ -2,6 +2,7 @@
 "use client";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { emitWarning } from "process";
 
 interface User {
     name: string;
@@ -13,6 +14,7 @@ interface AuthContextType {
     user: User | null;
     login: (email: string, password: string) => Promise<void>;
     logout: () => void;
+    register: (name:string, email: string, password: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -110,10 +112,32 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         } catch (error) {
             console.error("❌ Logout API Error:", error);
         }
-    };    
+    };
+
+    const register = async (name: string, email: string, password: string) => {
+        try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/register/`, {
+                method: "POST",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({name, email, password}),
+            });
+
+            if (res.ok)
+            {
+                console.log("✅ Register successful");
+                checkAuth();
+                router.push("/dashboard");
+            } else {
+                console.error("❌ Register failed");
+            }
+        } catch (error) {
+            console.error("❌ Register API Error:", error);
+        }
+    }
 
     return (
-        <AuthContext.Provider value={{ user, login, logout }}>
+        <AuthContext.Provider value={{ user, login, logout, register }}>
             {children}
         </AuthContext.Provider>
     );
