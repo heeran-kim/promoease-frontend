@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useParams } from "next/navigation";
 import { useAuth } from "@/components/auth/AuthProvider";
 
-const navItems = [
+const subNavItems = [
     { name: "Overview", href: "/dashboard" },
     { name: "Support", href: "/dashboard/support" },
     { name: "Settings", href: "/dashboard/settings" },
@@ -13,8 +13,21 @@ const navItems = [
 export default function SubNavbar() {
     const pathname = usePathname();
     const { user } = useAuth();
+    const { slug } = useParams();
 
     if (!user) return null;
+
+    const restaurantNavItems = slug
+        ? [
+              { name: "Dashboard", href: `/restaurant/${slug}` },
+              { name: "New Post", href: `/restaurant/${slug}/new-post` },
+              { name: "Promotion", href: `/restaurant/${slug}/promotion` },
+              { name: "Analytics", href: `/restaurant/${slug}/analytics` },
+              { name: "Settings", href: `/restaurant/${slug}/settings` },
+          ]
+        : [];
+
+    const navItems = slug ? restaurantNavItems : subNavItems;
 
     return (
         <div className="w-full bg-gray-50 dark:bg-gray-900 border-b border-gray-300 dark:border-gray-700 shadow-sm relative">

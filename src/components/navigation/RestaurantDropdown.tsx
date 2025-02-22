@@ -15,7 +15,7 @@ export default function RestaurantsDropdown({ selectedSlug, closeDropdown }: Pro
     const router = useRouter();
 
     return (
-        <div className="absolute top-8 left-20 bg-white shadow-md border rounded-lg w-48 text-sm z-50">
+        <div className="absolute top-8 left-20 bg-white shadow-md border rounded-lg z-50">
             {restaurants.map((restaurant) => (
                 <button
                     key={restaurant.id}
@@ -23,18 +23,18 @@ export default function RestaurantsDropdown({ selectedSlug, closeDropdown }: Pro
                         router.push(`/${restaurant.slug}`);
                         closeDropdown();
                     }}
-                    className={`flex items-center w-full text-left px-4 py-2 text-sm hover:bg-gray-100 space-x-2 truncate ${
-                        restaurant.slug === selectedSlug ? "bg-gray-200 font-semibold" : ""
+                    className={`flex items-center w-full text-left ps-2 pe-8 py-2 text-sm hover:bg-gray-100 space-x-2 truncate ${
+                        restaurant.slug === selectedSlug ? "bg-gray-100" : ""
                     }`}
                 >
                     <Image
                         src={restaurant.logo || "/globe.svg"}
                         alt={restaurant.name}
-                        width={20}
-                        height={20}
+                        width={16}
+                        height={16}
                         className="rounded-full"
                     />
-                    <span className="truncate w-full">{restaurant.name}</span>
+                    <span className="text-sm">{restaurant.name}</span>
                 </button>
             ))}
         </div>

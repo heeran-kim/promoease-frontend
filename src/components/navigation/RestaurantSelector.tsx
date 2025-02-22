@@ -66,12 +66,12 @@ export default function RestaurantSelector() {
 
     return (
         <div className="relative">
-            <div className="flex items-center space-x-2 text-base font-medium">
+            <div className="flex items-center ps-2 space-x-2 text-base text-sm">
                 <Image
                     src={selectedRestaurant.logo || "/globe.svg"}
                     alt={selectedRestaurant.name}
-                    width={24}
-                    height={24}
+                    width={18}
+                    height={18}
                     className="rounded-full"
                 />
                 <span>{selectedRestaurant.name}</span>
