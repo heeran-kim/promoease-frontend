@@ -1,14 +1,16 @@
 "use client";
+
+import { Restaurant } from "@/mocks/mockData";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import RestaurantDropdown from "@/app/dashboard/components/RestaurantDropdown"; // 드롭다운 컴포넌트
 
-export default function RestaurantCard({
-    restaurant,
-}: {
-    restaurant: { id: string; name: string; slug: string; lastActivity: string; logo: string };
-}) {
+interface RestaurantCardProps {
+    restaurant: Restaurant;
+}
+
+export default function RestaurantCard({ restaurant }: RestaurantCardProps) {
     const router = useRouter();
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
