@@ -1,38 +1,64 @@
 "use client";
 
+import { useState } from "react";
 import { useParams } from "next/navigation";
+import { getRestaurantPostings, Posting } from "@/mocks/mockData";
 import Image from "next/image";
 
-// 더미 데이터
-const mockRestaurants = [
-  { id: "1", name: "The Great Steakhouse", slug: "the-great-steakhouse", lastActivity: "2024-02-20", logo: "/vercel.svg" },
-  { id: "2", name: "Ocean's Fresh Sushi", slug: "oceans-fresh-sushi", lastActivity: "2024-02-18", logo: "/vercel.svg" },
-  { id: "3", name: "Italian Delights", slug: "italian-delights", lastActivity: "2024-02-19", logo: "/vercel.svg" },
-];
+export default function PostingsDashboard() {
+    const { slug } = useParams(); // ✅ 현재 레스토랑 가져오기
+    const [selectedPlatform, setSelectedPlatform] = useState<string | null>(null);
+    
+    if (!slug) return <p>No restaurant selected</p>;
 
-export default function RestaurantDetailPage() {
-    const { slug } = useParams(); // ✅ Slug를 URL에서 가져옴
-    const restaurant = mockRestaurants.find((r) => r.slug === slug); // ✅ Slug로 데이터 찾기
-
-    // 📌 데이터가 없으면 404 메시지 표시
-    if (!restaurant) {
-        return (
-            <div className="max-w-7xl mx-auto p-6 text-center">
-                <h1 className="text-2xl font-bold text-red-500">Restaurant Not Found</h1>
-                <p className="text-gray-500 mt-2">해당 레스토랑을 찾을 수 없습니다.</p>
-            </div>
-        );
-    }
+    const postings = getRestaurantPostings(slug).filter((post) =>
+        selectedPlatform ? post.platforms.some((p) => p.platform === selectedPlatform) : true
+    );
 
     return (
-        <div className="max-w-7xl mx-auto p-6">
-            {/* 레스토랑 정보 */}
-            <div className="flex items-center space-x-4">
-                <Image src={restaurant.logo} alt={restaurant.name} width={64} height={64} className="rounded-full" />
-                <div>
-                    <h1 className="text-2xl font-bold">{restaurant.name}</h1>
-                    <p className="text-gray-500 text-sm">Last Activity: {restaurant.lastActivity}</p>
-                </div>
+        <div className="p-6">
+            <h1 className="text-xl font-semibold mb-4">Postings Management</h1>
+
+            {/* ✅ 소셜미디어 필터 버튼 */}
+            <div className="flex space-x-2 mb-4">
+                {["Facebook", "Twitter", "Instagram"].map((platform) => (
+                    <button
+                        key={platform}
+                        onClick={() => setSelectedPlatform(selectedPlatform === platform ? null : platform)}
+                        className={`px-4 py-2 text-sm font-medium rounded-md transition ${
+                            selectedPlatform === platform ? "bg-blue-500 text-white" : "bg-gray-200"
+                        }`}
+                    >
+                        {platform}
+                    </button>
+                ))}
+            </div>
+
+            {/* ✅ 게시물 목록 */}
+            <div className="space-y-6">
+                {postings.map((post) => (
+                    <div key={post.id} className="p-4 border rounded-lg shadow-sm">
+                        <div className="flex space-x-4">
+                            <Image src={post.image} alt="Post Image" width={80} height={80} className="rounded-lg" />
+                            <div className="flex flex-col">
+                                <p className="font-semibold">{post.description}</p>
+                                <p className="text-gray-500 text-sm">{post.hashtags.join(" ")}</p>
+                                <div className="mt-2">
+                                    {post.platforms.map(({ platform, status }) => (
+                                        <span
+                                            key={platform}
+                                            className={`px-2 py-1 text-xs rounded-md mr-2 ${
+                                                status === "Success" ? "bg-green-200 text-green-800" : "bg-red-200 text-red-800"
+                                            }`}
+                                        >
+                                            {platform} {status === "Success" ? "✅" : "❌"}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ))}
             </div>
         </div>
     );

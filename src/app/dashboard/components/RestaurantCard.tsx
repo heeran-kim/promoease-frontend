@@ -54,8 +54,8 @@ export default function RestaurantCard({ restaurant }: RestaurantCardProps) {
                 <Image 
                     src={restaurant.logo || defaultLogo} 
                     alt={`${restaurant.name} Logo`} 
-                    width={40} 
-                    height={40} 
+                    width={60} 
+                    height={60} 
                     className="rounded-full" 
                 />
                 <div className="flex flex-col">

@@ -70,13 +70,12 @@ export default function RestaurantSelector() {
                 <Image
                     src={selectedRestaurant.logo || "/globe.svg"}
                     alt={selectedRestaurant.name}
-                    width={18}
-                    height={18}
+                    width={25}
+                    height={25}
                     className="rounded-full"
                 />
                 <span>{selectedRestaurant.name}</span>
 
-                {/* ✅ 화살표 버튼 (이것만 클릭 가능) */}
                 <button
                     ref={buttonRef}
                     onClick={() => setIsOpen(!isOpen)}
@@ -89,7 +88,6 @@ export default function RestaurantSelector() {
                     />
                 </button>
 
-                {/* ✅ 드롭다운 */}
                 {isOpen && (
                     <div ref={dropdownRef}>
                         <RestaurantDropdown selectedSlug={slug} closeDropdown={() => setIsOpen(false)} />
