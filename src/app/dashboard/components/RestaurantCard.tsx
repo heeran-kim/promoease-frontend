@@ -60,20 +60,20 @@ export default function RestaurantCard({ restaurant }: RestaurantCardProps) {
                 />
                 <div className="flex flex-col">
                     <div className="flex items-center space-x-2">
-                        <h3 className="text-md font-semibold">{restaurant.name}</h3>
+                        <h3 className="text-md font-semibold text-gray-900 dark:text-gray-200">{restaurant.name}</h3> 
                         <SocialMediaLinks links={restaurant.socialMediaLinks} />
                     </div>
 
                     {/* ✅ Last Post (시간 + 링크 통합) */}
                     {restaurant.lastActivity && (
-                        <p className="mt-2 text-xs text-gray-600 flex items-center">
+                        <p className="mt-2 text-xs text-gray-600 dark:text-gray-300 flex items-center">
                             Last Post: {new Date(restaurant.lastActivity).toLocaleString()}
                             {restaurant.lastPostLink && (
                                 <a
                                     href={restaurant.lastPostLink}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="ml-2 text-blue-600 hover:text-blue-800"
+                                    className="ml-2 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
                                     onClick={(e) => e.stopPropagation()}
                                 >
                                     <FaLink className="inline-block text-xs" /> {/* 🔗 링크 아이콘 */}
@@ -83,7 +83,7 @@ export default function RestaurantCard({ restaurant }: RestaurantCardProps) {
                     )}
 
                     {restaurant.upcomingPosts > 0 && (
-                        <p className="mt-2 text-xs text-gray-600">
+                        <p className="mt-2 text-xs text-gray-600 dark:text-gray-300">
                             ⏳ {restaurant.upcomingPosts} pending posts
                         </p>
                     )}
