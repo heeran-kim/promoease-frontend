@@ -4,7 +4,8 @@ import { Restaurant } from "@/mocks/mockData";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
-import RestaurantDropdown from "@/app/dashboard/components/RestaurantDropdown"; // 드롭다운 컴포넌트
+import RestaurantDropdown from "./RestaurantDropdown"; // 드롭다운 컴포넌트
+import SocialMediaLinks from "./SocialMediaLinks";
 
 interface RestaurantCardProps {
     restaurant: Restaurant;
@@ -58,6 +59,7 @@ export default function RestaurantCard({ restaurant }: RestaurantCardProps) {
                 />
                 <div className="flex flex-col">
                     <h3 className="text-md font-semibold">{restaurant.name}</h3>
+                    <SocialMediaLinks links={restaurant.socialMediaLinks} />
                     <p className="text-gray-500 text-sm">Last Activity: {restaurant.lastActivity}</p>
                 </div>
             </div>
