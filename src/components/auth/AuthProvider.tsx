@@ -36,7 +36,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             });
 
             if (res.status === 401) {
-                let newAccessToken = null;
+                // let newAccessToken = null;
                 console.warn("🔄 Access Token expired, trying to refresh...");
                 try {
                     const refresth_res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/refresh/`, {

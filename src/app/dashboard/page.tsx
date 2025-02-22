@@ -1,13 +1,13 @@
 "use client";
 
-import { getMockRestaurants } from "@/mocks/mockData";
+import { getMockRestaurants, Restaurant } from "@/mocks/mockData";
 import { useState, useEffect } from "react";
 import RestaurantCard from "@/app/dashboard/components/RestaurantCard"
 import SearchBar from "@/app/dashboard/components/SearchBar";
 import SortDropdown from "@/app/dashboard/components/SortDropdown";
 
 export default function Dashboard() {
-    const [restaurants, setRestaurants] = useState([]);
+    const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [sortBy, setSortBy] = useState("name");
 
