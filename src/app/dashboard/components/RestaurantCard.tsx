@@ -14,6 +14,7 @@ export default function RestaurantCard({ restaurant }: RestaurantCardProps) {
     const router = useRouter();
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const defaultLogo = "/globe.svg";
 
     // ✅ 드롭다운 바깥을 클릭하면 자동으로 닫히도록 감지
     useEffect(() => {
@@ -48,7 +49,13 @@ export default function RestaurantCard({ restaurant }: RestaurantCardProps) {
 
             {/* 업장 로고 & 정보 */}
             <div onClick={() => router.push(`/${restaurant.slug}`)} className="flex items-center space-x-4">
-                <Image src={restaurant.logo} alt="logo" width={40} height={40} className="rounded-full" />
+                <Image 
+                    src={restaurant.logo || defaultLogo} 
+                    alt={`${restaurant.name} Logo`} 
+                    width={40} 
+                    height={40} 
+                    className="rounded-full" 
+                />
                 <div className="flex flex-col">
                     <h3 className="text-md font-semibold">{restaurant.name}</h3>
                     <p className="text-gray-500 text-sm">Last Activity: {restaurant.lastActivity}</p>

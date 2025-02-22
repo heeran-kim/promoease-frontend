@@ -3,7 +3,7 @@
 
 import Logo from "@/components/navigation/Logo";
 import NavLinks from "@/components/navigation/NavLinks";
-// import RestaurantSelector from "@/components/navigation/RestaurantSelector";
+import RestaurantSelector from "@/components/navigation/RestaurantSelector";
 import AuthButtons from "@/components/navigation/AuthButtons";
 import SubNavbar from "@/components/layout/SubNavbar";
 import { useAuth } from "@/components/auth/AuthProvider";
@@ -18,7 +18,7 @@ export default function Navbar() {
                 {/* Left section: Logo, RestaurantSelector, NavLinks */}
                 <div className="flex items-center gap-2">
                     <Logo />
-                    {/* <RestaurantSelector /> */}
+                    <RestaurantSelector />
                     {!user && <NavLinks />}
                 </div>
 
