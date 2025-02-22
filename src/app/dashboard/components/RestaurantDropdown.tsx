@@ -1,4 +1,7 @@
 "use client";
+
+import clsx from "clsx";
+import { baseContainerClass } from "@/components/styles";
 import { useRouter } from "next/navigation";
 
 export default function RestaurantDropdown({
@@ -19,9 +22,7 @@ export default function RestaurantDropdown({
     ];
 
     return (
-        <div
-            className="absolute top-12 right-2 bg-white shadow-md border rounded-lg w-48 text-sm z-50"
-        >
+        <div className={clsx("absolute top-12 right-2 w-48 text-sm z-50 shadow-md rounded", baseContainerClass)}>
             {menuItems.map((item) => (
                 <button
                     key={item.label}
@@ -29,7 +30,7 @@ export default function RestaurantDropdown({
                         router.push(item.path);
                         closeDropdown();
                     }}
-                    className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                    className="block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
                 >
                     {item.label}
                 </button>

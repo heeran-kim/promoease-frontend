@@ -12,7 +12,11 @@ export default function Navbar() {
     const { user } = useAuth();
 
     return (
-        <nav className="bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+        <nav
+            className={`transition-colors duration-200 ${
+                user ? "bg-white dark:bg-neutral-900" : "bg-gray-50 dark:bg-gray-900"
+            }`}
+        >
             {/* Main Navbar */}
             <div className="justify-between max-w-7xl mx-auto px-6 py-2 flex items-center h-full">
                 {/* Left section: Logo, RestaurantSelector, NavLinks */}

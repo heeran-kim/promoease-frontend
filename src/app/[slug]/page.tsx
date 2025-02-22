@@ -1,63 +1,97 @@
 "use client";
 
+import clsx from "clsx";
+import { baseContainerClass } from "@/components/styles";
 import { useState } from "react";
-import { useParams } from "next/navigation";
+import { FaEllipsisV } from "react-icons/fa";
 import { getRestaurantPostings, Posting } from "@/mocks/mockData";
-import Image from "next/image";
+import SearchBar from "@/components/common/SearchBar"; 
+import DateRangePicker from "@/components/common/DateRangePicker";
+import PostingCard from "./PostingCard";
 
 export default function PostingsDashboard() {
-    const { slug } = useParams(); // ✅ 현재 레스토랑 가져오기
+    const [searchTerm, setSearchTerm] = useState("");
     const [selectedPlatform, setSelectedPlatform] = useState<string | null>(null);
-    
-    if (!slug) return <p>No restaurant selected</p>;
+    const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
+    const [visibleCount, setVisibleCount] = useState(5);
+    const [menuOpen, setMenuOpen] = useState(false);
 
-    const postings = getRestaurantPostings(slug).filter((post) =>
-        selectedPlatform ? post.platforms.some((p) => p.platform === selectedPlatform) : true
-    );
+    const handleDateChange = (range: { start: Date | null; end: Date | null }) => {
+        console.log("Selected Range:", range);
+    };
+
+    const postings = getRestaurantPostings("the-great-steakhouse");
+
+    // ✅ "Posted" 게시물과 "Scheduled/Failed" 게시물 분리
+    const postedPosts = postings.filter((post) => post.status === "Posted");
+    const scheduledOrFailedPosts = postings.filter((post) => post.status !== "Posted");
 
     return (
-        <div className="p-6">
-            <h1 className="text-xl font-semibold mb-4">Postings Management</h1>
-
-            {/* ✅ 소셜미디어 필터 버튼 */}
-            <div className="flex space-x-2 mb-4">
-                {["Facebook", "Twitter", "Instagram"].map((platform) => (
+        <div className="max-w-4xl mx-auto px-6 py-6">
+            {/* ✅ 제목 + 설정 버튼 */}
+            <div className="flex justify-between items-center pb-4 border-b">
+                <h1 className="text-2xl font-semibold dark:text-white">Postings Management</h1>
+                <div className="relative">
                     <button
-                        key={platform}
-                        onClick={() => setSelectedPlatform(selectedPlatform === platform ? null : platform)}
-                        className={`px-4 py-2 text-sm font-medium rounded-md transition ${
-                            selectedPlatform === platform ? "bg-blue-500 text-white" : "bg-gray-200"
-                        }`}
+                        onClick={() => setMenuOpen(!menuOpen)}
+                        className="p-2 border bg-white rounded-md hover:bg-gray-100 dark:hover:bg-gray-700"
                     >
-                        {platform}
+                        <FaEllipsisV className="btext-gray-500 dark:text-gray-300" />
                     </button>
-                ))}
+                    {menuOpen && (
+                        <div className={clsx("absolute right-0 mt-2 w-40 p-2 shadow-lg rounded-lg", baseContainerClass)}>
+                            <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-200 dark:hover:bg-gray-700">New Posting</button>
+                            <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-200 dark:hover:bg-gray-700">Restaurant Settings</button>
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            {/* ✅ 필터 바 */}
+            <div className="flex items-center space-x-4 py-4 border-b">
+                <SearchBar setSearchTerm={setSearchTerm} placeholder="Search posts..." />
+
+                {/* 📅 날짜 선택 */}
+                <DateRangePicker onChange={handleDateChange} />
+                
+                {/* 🌐 소셜미디어 선택 */}
+                <select
+                    onChange={(e) => setSelectedPlatform(e.target.value)}
+                    className="border rounded-md px-4 py-2 text-sm dark:bg-gray-800 dark:text-white"
+                >
+                    <option value="">All Social Media</option>
+                    <option value="Facebook">Facebook</option>
+                    <option value="Twitter">Twitter</option>
+                    <option value="Instagram">Instagram</option>
+                </select>
+
+                {/* 📌 상태 선택 */}
+                <select
+                    onChange={(e) => setSelectedStatus(e.target.value)}
+                    className="border rounded-md px-4 py-2 text-sm dark:bg-gray-800 dark:text-white"
+                >
+                    <option value="">All Status</option>
+                    <option value="Scheduled">Scheduled</option>
+                    <option value="Posted">Posted</option>
+                    <option value="Failed">Failed</option>
+                </select>
             </div>
 
             {/* ✅ 게시물 목록 */}
-            <div className="space-y-6">
-                {postings.map((post) => (
-                    <div key={post.id} className="p-4 border rounded-lg shadow-sm">
-                        <div className="flex space-x-4">
-                            <Image src={post.image} alt="Post Image" width={80} height={80} className="rounded-lg" />
-                            <div className="flex flex-col">
-                                <p className="font-semibold">{post.description}</p>
-                                <p className="text-gray-500 text-sm">{post.hashtags.join(" ")}</p>
-                                <div className="mt-2">
-                                    {post.platforms.map(({ platform, status }) => (
-                                        <span
-                                            key={platform}
-                                            className={`px-2 py-1 text-xs rounded-md mr-2 ${
-                                                status === "Success" ? "bg-green-200 text-green-800" : "bg-red-200 text-red-800"
-                                            }`}
-                                        >
-                                            {platform} {status === "Success" ? "✅" : "❌"}
-                                        </span>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <div className="space-y-4">
+                {/* ✅ 아직 게시되지 않은 (Scheduled/Failed) 콘텐츠 */}
+                {scheduledOrFailedPosts.map((post) => (
+                    <PostingCard key={post.id} posting={post} />
+                ))}
+
+                {/* ✅ 구분선 (Posted가 있고, Scheduled/Failed가 있을 때만 표시) */}
+                {postedPosts.length > 0 && scheduledOrFailedPosts.length > 0 && (
+                    <div className="border-t border-gray-300 dark:border-gray-700 my-4"></div>
+                )}
+
+                {/* ✅ 이미 게시된 (Posted) 콘텐츠 */}
+                {postedPosts.map((post) => (
+                    <PostingCard key={post.id} posting={post} />
                 ))}
             </div>
         </div>

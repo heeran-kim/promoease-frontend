@@ -2,16 +2,16 @@
 
 import { useEffect, useState } from "react";
 import { FaTwitter, FaFacebookF, FaLinkedinIn, FaArrowUp, FaSun, FaMoon } from "react-icons/fa";
+import { useAuth } from "@/components/auth/AuthProvider";
 
 export default function Footer() {
+    const { user } = useAuth();
     const [isDark, setIsDark] = useState(false);
     const [showScrollButton, setShowScrollButton] = useState(false);
 
     useEffect(() => {
-        // 현재 다크모드 상태 감지
         setIsDark(document.documentElement.classList.contains("dark"));
 
-        // 스크롤 이벤트 리스너 추가
         const handleScroll = () => {
             setShowScrollButton(window.scrollY > 300);
         };
@@ -34,7 +34,9 @@ export default function Footer() {
     };
 
     return (
-        <footer className="bg-gray-100 dark:bg-gray-900 text-black dark:text-gray-300 py-12 relative">
+        <footer
+            className="py-12 relative transition-colors duration-300 dark:bg-neutral-900 bg-gray-50 text-black dark:text-gray-300"
+        >
             <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-4 gap-6">
                 <div>
                     <h3 className="text-lg font-semibold">Promoease</h3>

@@ -1,5 +1,8 @@
 import clsx from "clsx";
 
+// ✅ Container styles
+export const baseContainerClass = "bg-white dark:bg-black border dark:border-gray-600 transition";
+
 // ✅ Layout styles
 export const flexRowClass = "flex items-center space-x-2";
 

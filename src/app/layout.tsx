@@ -19,10 +19,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         updatePaddingTop();
 
-        // Resize 이벤트 리스너
         window.addEventListener("resize", updatePaddingTop);
 
-        // MutationObserver를 사용하여 Navbar의 크기 변화를 감지
         const observer = new MutationObserver(updatePaddingTop);
         if (navbarRef.current) {
             observer.observe(navbarRef.current, { attributes: true, childList: true, subtree: true });
@@ -41,7 +39,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     <div ref={navbarRef} className="fixed w-full z-50">
                         <Navbar />
                     </div>
-                    <main className="flex-grow" style={{ paddingTop: `${paddingTop}px` }}>
+                    <main className="flex-grow bg-gray-50 dark:bg-black" style={{ paddingTop: `${paddingTop}px` }}>
                         {children}
                     </main>
                     <Footer />

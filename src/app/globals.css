@@ -13,9 +13,9 @@ body {
 }
 
 /* 이미지 반전 (다크 모드에서 밝은 이미지 보이도록 설정) */
-.dark img {
+/* .dark img {
   filter: invert(1);
-}
+} */
 
 .navbar {
   height: 64px; /* 16 rem in tailwind */

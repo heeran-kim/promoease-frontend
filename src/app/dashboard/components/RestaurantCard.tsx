@@ -1,5 +1,7 @@
 "use client";
 
+import clsx from "clsx";
+import { baseContainerClass } from "@/components/styles";
 import { Restaurant } from "@/mocks/mockData";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -36,7 +38,7 @@ export default function RestaurantCard({ restaurant }: RestaurantCardProps) {
     }, [dropdownOpen]);
 
     return (
-        <div className="relative p-4 border rounded-lg shadow-sm hover:shadow-md transition flex flex-col cursor-pointer">
+        <div className={clsx("relative p-4 rounded-lg shadow-sm hover:shadow-md transition flex flex-col cursor-pointer", baseContainerClass)}>
             {/* 점점점 버튼 (우측 상단 고정) */}
             <button
                 onClick={(e) => {
