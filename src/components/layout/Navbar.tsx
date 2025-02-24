@@ -22,7 +22,7 @@ export default function Navbar() {
                 {/* Left section: Logo, RestaurantSelector, NavLinks */}
                 <div className="flex items-center gap-2">
                     <Logo />
-                    <RestaurantSelector />
+                    {/* <RestaurantSelector /> */}
                     {!user && <NavLinks />}
                 </div>
 

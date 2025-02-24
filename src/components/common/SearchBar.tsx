@@ -1,3 +1,4 @@
+// src/components/common/SearchBar.tsx
 "use client";
 import { FaSearch } from "react-icons/fa";
 

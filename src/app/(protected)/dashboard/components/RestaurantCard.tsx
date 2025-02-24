@@ -6,9 +6,10 @@ import { Restaurant } from "@/mocks/mockData";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
-import RestaurantDropdown from "./RestaurantDropdown"; // 드롭다운 컴포넌트
+import RestaurantDropdown from "./RestaurantDropdown";
 import SocialMediaLinks from "./SocialMediaLinks";
 import { FaLink } from "react-icons/fa";
+import RestaurantStatus from "./RestaurantStatus";
 
 interface RestaurantCardProps {
     restaurant: Restaurant;
@@ -20,7 +21,6 @@ export default function RestaurantCard({ restaurant }: RestaurantCardProps) {
     const dropdownRef = useRef<HTMLDivElement>(null);
     const defaultLogo = "/globe.svg";
 
-    // ✅ 드롭다운 바깥을 클릭하면 자동으로 닫히도록 감지
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -39,19 +39,16 @@ export default function RestaurantCard({ restaurant }: RestaurantCardProps) {
 
     return (
         <div className={clsx("relative p-4 rounded-lg shadow-sm hover:shadow-md transition flex flex-col cursor-pointer", baseContainerClass)}>
-            {/* 점점점 버튼 (우측 상단 고정) */}
             <button
                 onClick={(e) => {
-                    e.stopPropagation(); // 카드 클릭 이벤트 방지
+                    e.stopPropagation();
                     setDropdownOpen(!dropdownOpen);
                 }}
                 className="absolute top-2 right-2 p-2 text-gray-500 hover:text-black"
             >
-                {/* ✅ 원래 쓰던 점점점 스타일 (세로 점점점) */}
                 <span className="text-lg font-bold">⋮</span>
             </button>
 
-            {/* 업장 로고 & 정보 */}
             <div onClick={() => router.push(`/${restaurant.slug}`)} className="flex items-center space-x-4">
                 <Image 
                     src={restaurant.logo || defaultLogo} 
@@ -66,7 +63,6 @@ export default function RestaurantCard({ restaurant }: RestaurantCardProps) {
                         <SocialMediaLinks links={restaurant.socialMediaLinks} />
                     </div>
 
-                    {/* ✅ Last Post (시간 + 링크 통합) */}
                     {restaurant.lastActivity && (
                         <p className="mt-2 text-xs text-gray-600 dark:text-gray-300 flex items-center">
                             Last Post: {new Date(restaurant.lastActivity).toLocaleString()}
@@ -84,15 +80,14 @@ export default function RestaurantCard({ restaurant }: RestaurantCardProps) {
                         </p>
                     )}
 
-                    {restaurant.upcomingPosts > 0 && (
-                        <p className="mt-2 text-xs text-gray-600 dark:text-gray-300">
-                            ⏳ {restaurant.upcomingPosts} pending posts
-                        </p>
-                    )}
+                    <RestaurantStatus 
+                        upcomingPosts={restaurant.upcomingPosts} 
+                        uploadedPosts={restaurant.uploadedPosts} 
+                        failedPosts={restaurant.failedPosts} 
+                    />
                 </div>
             </div>
 
-            {/* 드롭다운 메뉴 (바깥 클릭 감지 추가) */}
             {dropdownOpen && (
                 <div ref={dropdownRef}>
                     <RestaurantDropdown

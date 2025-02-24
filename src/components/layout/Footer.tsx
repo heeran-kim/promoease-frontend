@@ -35,7 +35,8 @@ export default function Footer() {
 
     return (
         <footer
-            className="py-12 relative transition-colors duration-300 dark:bg-neutral-900 bg-gray-50 text-black dark:text-gray-300"
+            className={`py-12 relative transition-colors duration-300 dark:bg-neutral-900 text-black dark:text-gray-300
+                ${user ? "bg-white" : "bg-gray-50"}`}
         >
             <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-4 gap-6">
                 <div>
