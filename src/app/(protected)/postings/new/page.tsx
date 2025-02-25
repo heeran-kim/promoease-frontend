@@ -26,6 +26,10 @@ export default function NewPosting() {
     const router = useRouter();
 
     const handleGenerateCaptions = () => {
+        if (!image) {
+            alert("Please upload an image before generating AI captions.");
+            return;
+        }
         resetPlatformCaptions();
         setIsLoading(true);
         setTimeout(() => {

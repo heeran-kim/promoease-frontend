@@ -32,8 +32,8 @@ const mockRestaurant: Restaurant | null = {
 };
 
 export const getMockRestaurant = (): Restaurant | null => {
-    return mockRestaurant;
-    // return null;
+    // return mockRestaurant;
+    return null;
 };
 
 

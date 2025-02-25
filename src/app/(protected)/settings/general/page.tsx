@@ -139,7 +139,7 @@ export default function GeneralSettings() {
                 />
             </Card>
 
-            <Card
+            {/* <Card
                 title="Popular Menu"
                 description="List some of your best-selling menu items."
                 restriction="Please use 32 characters at maximum."
@@ -149,7 +149,7 @@ export default function GeneralSettings() {
                     className="w-3/4 text-sm p-2 border rounded-md focus:ring focus:ring-blue-300"
                     placeholder="e.g. Classic Cheeseburger, Spicy Ramen, Avocado Toast"
                 />
-            </Card>
+            </Card> */}
 
             <Card
                 title="Vibe"

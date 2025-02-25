@@ -18,10 +18,11 @@ export const NAV_ITEMS: {
         href: "/postings",
         description: `
         Manage, schedule, and monitor your social media posts across multiple platforms in one place.
-        - 📊 **Cross-platform Overview:** View all your posts across different social media platforms in a single list.
-        - ⏳ **Edit Scheduled Posts:** Modify scheduled posts, including their posting time and content.
+        - 📊 **Cross-platform Overview:** View all your posts across different social media platforms in a single list, including reactions and comment counts.
         - ❌ **Delete Unwanted Posts:** No need to delete posts manually on each platform—remove them directly from here with a single click.
+        - ⏳ **Edit Scheduled Posts:** Modify scheduled posts, including their posting time and content.
         - ⚠️ **Resolve Failed Posts:** If a post fails due to account issues, get notified and retry after fixing the problem.
+        - ✨ **Create New Posts with AI Captions**: Want to generate a new post using AI-generated captions? Simply click the “⋯” (More Options) button on the right and select “Create Post”.
         `,
         subPages: [
             {

@@ -23,21 +23,14 @@ const ListCard = <T extends Posting | Promotion>({ item, onDelete, type }: ListC
     : `${format(new Date((item as Promotion).startDate), "yyyy-MM-dd")} ~ ${format(new Date((item as Promotion).endDate), "yyyy-MM-dd")}`;
 
     const actions = [
-        { 
-            label: "Edit", 
-            onClick: () => onEdit(item.id), 
-            disabled: item.status !== "Scheduled" && item.status !== "Failed"
-        },
-        { 
-            label: "Retry", 
-            onClick: () => onRetry(item.id), 
-            disabled: item.status !== "Failed" 
-        },
-        { 
-            label: "Delete", 
-            onClick: () => onDelete(item.id)
-        },
-    ];
+        item.status === "Scheduled" || item.status === "Failed"
+            ? { label: "Edit", onClick: () => onEdit(item.id) }
+            : null,
+        item.status === "Failed"
+            ? { label: "Retry", onClick: () => onRetry(item.id) }
+            : null,
+        { label: "Delete", onClick: () => onDelete(item.id) },
+    ].filter(Boolean);
 
     return (
         <div className="relative p-4 bg-white dark:bg-gray-900 rounded-lg shadow-md cursor-pointer transition hover:shadow-lg flex items-center space-x-4 h-auto">

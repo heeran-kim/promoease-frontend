@@ -66,7 +66,7 @@ export default function CaptionSuggestions({ setStep, selectedPlatform, setSelec
             title="Step 3: Review & Customize Captions" 
             description="Drag and drop a caption to your selected platform. You can also edit captions before posting. If you want different AI-generated captions, click 'Back to Edit' to adjust your inputs and generate new suggestions."
         >
-            <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+            <DndContext onDragEnd={handleDragEnd}>
                 <div className="flex gap-6">
                     <div className="w-1/2 flex-shrink-0 space-y-3">
                         <h3 className="text-sm font-medium">📝 Generated Captions:</h3>
