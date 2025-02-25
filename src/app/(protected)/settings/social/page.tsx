@@ -2,23 +2,14 @@
 
 import { useState } from "react";
 import Card from "@/components/common/Card";
-import { FaTwitter, FaInstagram, FaFacebook, FaThreads } from "react-icons/fa6";
-
-const socialPlatforms = [
-    { name: "Twitter", url: "twitter.com/", icon: <FaTwitter className="w-5 h-5 text-blue-500" /> },
-    { name: "Instagram", url: "instagram.com/", icon: <FaInstagram className="w-5 h-5 text-pink-500" /> },
-    { name: "Facebook", url: "facebook.com/", icon: <FaFacebook className="w-5 h-5 text-blue-600" /> },
-    { name: "Threads", url: "threads.net/", icon: <FaThreads className="w-5 h-5 text-black" /> },
-];
+import { platformConfig, getPlatformIcon } from "@/constants/platforms";
 
 export default function SocialMediaSettings() {
     const [businessInfo, setBusinessInfo] = useState({
-        socials: {
-            Twitter: "",
-            Instagram: "",
-            Facebook: "",
-            Threads: "",
-        },
+        socials: Object.keys(platformConfig).reduce((acc, platform) => {
+            acc[platform] = "";
+            return acc;
+        }, {} as Record<string, string>),
     });
 
     const handleSocialChange = (platform: string, value: string) => {
@@ -30,17 +21,17 @@ export default function SocialMediaSettings() {
 
     return (
         <div className="max-w-3xl mx-auto space-y-6">
-            {socialPlatforms.map(({ name, url, icon }) => (
+            {Object.entries(platformConfig).map(([name, { icon, color }]) => (
                 <Card
                     key={name}
-                    title={name}
+                    title={name.charAt(0).toUpperCase() + name.slice(1)}
                     description={`Enter your ${name} username to link your account.`}
                     restriction="Please enter your username only."
                 >
                     <div className="flex items-center border rounded-md overflow-hidden">
-                        <span className="flex items-center gap-2 bg-gray-200 text-gray-600 px-3 py-2 text-sm">
-                            {icon} {/* 플랫폼 아이콘 추가 */}
-                            {url}
+                        <span className={`flex items-center gap-2 px-3 py-2 text-sm bg-gray-200 ${color}`}>
+                            {getPlatformIcon(name, "w-5 h-5")}
+                            {`${name}.com/`}
                         </span>
                         <input
                             type="text"

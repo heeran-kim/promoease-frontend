@@ -15,7 +15,6 @@ export default function SocialMediaLinks({ links }: SocialMediaLinksProps) {
 
     return (
         <div className="flex items-center">
-            {/* ✅ 여러 아이콘을 하나의 버튼 안에 넣기 */}
             <div className="flex space-x-2 bg-gray-100 px-3 py-1 rounded-full">
                 {links.instagram && (
                     <a href={links.instagram} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>

@@ -27,3 +27,15 @@ export const primaryNavItemClass = clsx(navItemClass, primaryAuthButtonClass);
 export const dropdownItemClass = clsx(flexRowClass, hoverNavItemClass, "p-2 rounded-lg transition");
 export const dropdownTextClass = "font-semibold text-sm text-gray-900 dark:text-white";
 export const dropdownSubTextClass = "text-xs text-gray-500 dark:text-gray-400";
+
+// Status Color Mapping
+const STATUS_COLORS: Record<string, string> = {
+    "Failed": "bg-red-100 text-red-600",
+    "Scheduled": "bg-yellow-100 text-yellow-600",
+    "Posted": "bg-green-100 text-green-600",
+    "Upcoming": "bg-blue-100 text-blue-600",
+    "Ongoing": "bg-green-100 text-green-600",
+    "Ended": "bg-gray-300 text-gray-700",
+};
+
+export const getStatusClass = (status: string) => STATUS_COLORS[status] || "bg-gray-200 text-gray-500";

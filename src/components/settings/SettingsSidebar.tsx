@@ -5,22 +5,16 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import SearchBar from "@/components/common/SearchBar";
 import Link from "next/link";
-
-const menuItems = [
-    { name: "General Information", href: "/settings/general" },
-    { name: "Upload Sales Data", href: "/settings/sales" },
-    { name: "Billing", href: "/settings/billing" },
-    { name: "Invoices", href: "/settings/invoices" },
-    { name: "Social Media", href: "/settings/social" },
-    { name: "Account", href: "/settings/account" },
-];
+import { NAV_ITEMS } from "@/constants/navItems";
 
 export default function SettingsSidebar() {
     const [searchTerm, setSearchTerm] = useState("");
     const pathname = usePathname();
+    const settingsNav = NAV_ITEMS.find((item) => item.name === "Settings");
+    const menuItems = settingsNav?.subPages || [];
 
     return (
-        <div className="sticky w-50 top-32 self-start h-[calc(100vh-4rem)] text-sm h-screen p-4 overflow-y-auto">
+        <div className="sticky w-64 top-32 self-start h-[calc(100vh-4rem)] text-sm h-screen p-4 overflow-y-auto">
             {/* Search Bar */}
             <SearchBar setSearchTerm={setSearchTerm} placeholder="Search settings..." />
 
@@ -31,7 +25,7 @@ export default function SettingsSidebar() {
                         item.name.toLowerCase().includes(searchTerm.toLowerCase())
                     )
                     .map((item) => {
-                        const isActive = pathname.startsWith(item.href);
+                        const isActive = pathname === item.href;
                         return (
                             <li key={item.href}>
                                 <Link

@@ -1,13 +1,14 @@
 "use client";
 
-import { useState } from "react";
 import DragAndDropUploader from "@/components/common/DragAndDropUploader";
 import Card from "@/components/common/Card";
 
-export default function ImageAnalyser() {
-    const [image, setImage] = useState<string>("");
-    const [detectedItems, setDetectedItems] = useState<string[]>([]);
-
+export default function ImageAnalyser({ image, setImage, detectedItems, setDetectedItems }: { 
+    image: string; 
+    setImage: (image: string) => void;
+    detectedItems: string[];
+    setDetectedItems: (items: string[]) => void;
+}) {
     const handleImageUpload = (file: File | null) => {
         if (file) {
             const fileURL = URL.createObjectURL(file);

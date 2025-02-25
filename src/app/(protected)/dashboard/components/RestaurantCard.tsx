@@ -5,11 +5,11 @@ import { baseContainerClass } from "@/components/styles";
 import { Restaurant } from "@/mocks/mockData";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState, useEffect, useRef } from "react";
-import RestaurantDropdown from "./RestaurantDropdown";
 import SocialMediaLinks from "./SocialMediaLinks";
 import { FaLink } from "react-icons/fa";
 import RestaurantStatus from "./RestaurantStatus";
+import ActionDropdown from "@/components/common/ActionDropdown";
+import { NAV_ITEMS } from "@/constants/navItems";
 
 interface RestaurantCardProps {
     restaurant: Restaurant;
@@ -17,41 +17,21 @@ interface RestaurantCardProps {
 
 export default function RestaurantCard({ restaurant }: RestaurantCardProps) {
     const router = useRouter();
-    const [dropdownOpen, setDropdownOpen] = useState(false);
-    const dropdownRef = useRef<HTMLDivElement>(null);
-    const defaultLogo = "/globe.svg";
 
-    useEffect(() => {
-        function handleClickOutside(event: MouseEvent) {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-                setDropdownOpen(false);
-            }
-        }
-
-        if (dropdownOpen) {
-            document.addEventListener("mousedown", handleClickOutside);
-        } else {
-            document.removeEventListener("mousedown", handleClickOutside);
-        }
-
-        return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, [dropdownOpen]);
+    const actions = NAV_ITEMS
+        .filter(({ href }) => href !== "/dashboard")
+        .map(({ name, href }) => ({
+            label: name,
+            onClick: () => router.push(href),
+        }));
 
     return (
         <div className={clsx("relative p-4 rounded-lg shadow-sm hover:shadow-md transition flex flex-col cursor-pointer", baseContainerClass)}>
-            <button
-                onClick={(e) => {
-                    e.stopPropagation();
-                    setDropdownOpen(!dropdownOpen);
-                }}
-                className="absolute top-2 right-2 p-2 text-gray-500 hover:text-black"
-            >
-                <span className="text-lg font-bold">⋮</span>
-            </button>
+            <ActionDropdown actions={actions} />
 
-            <div onClick={() => router.push(`/${restaurant.slug}`)} className="flex items-center space-x-4">
+            <div className="flex items-center space-x-4">
                 <Image 
-                    src={restaurant.logo || defaultLogo} 
+                    src={restaurant.logo} 
                     alt={`${restaurant.name} Logo`} 
                     width={60} 
                     height={60} 
@@ -87,15 +67,6 @@ export default function RestaurantCard({ restaurant }: RestaurantCardProps) {
                     />
                 </div>
             </div>
-
-            {dropdownOpen && (
-                <div ref={dropdownRef}>
-                    <RestaurantDropdown
-                        restaurant={restaurant}
-                        closeDropdown={() => setDropdownOpen(false)}
-                    />
-                </div>
-            )}
         </div>
     );
 }

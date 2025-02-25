@@ -1,4 +1,4 @@
-// ✅ Restaurant 타입 정의
+// src/mocks/mockData.ts
 export type Restaurant = {
     id: string;
     name: string;
@@ -22,7 +22,7 @@ const mockRestaurant: Restaurant | null = {
     upcomingPosts: 2,
     uploadedPosts: 10,
     failedPosts: 1,
-    lastActivity: "2024-02-22T12:00:00Z",
+    lastActivity: "2025-02-22T12:00:00Z",
     lastPostLink: "https://instagram.com/p/abc123",
     socialMediaLinks: {
         instagram: "https://instagram.com/greatsteakhouse",
@@ -50,16 +50,17 @@ export type Posting = {
     type: "Marketing" | "Event" | "Announcement";
     platform: "Facebook" | "Twitter" | "Instagram"; // ✅ 특정 플랫폼에 맞게 개별 처리
     link: string;
+    reactions?: number;
+    comments?: number;
 };
 
-// ✅ Mock 포스팅 데이터 (각 소셜미디어별 개별 포스팅)
-export const mockPostings: Posting[] = [
+let postings: Posting[] = [
     // 1️⃣ 가게 내부 소개 (Instagram만 사용)
     {
         id: "1",
         restaurantId: "the-great-steakhouse",
-        createdAt: "2024-01-15T10:00:00Z",
-        scheduledAt: "2024-01-16T10:00:00Z",
+        createdAt: "2025-01-15T10:00:00Z",
+        scheduledAt: "2025-01-16T10:00:00Z",
         status: "Posted",
         image: "/images/store-inside.jpg",
         platform: "Instagram",
@@ -67,14 +68,16 @@ export const mockPostings: Posting[] = [
         hashtags: ["#SteakLover", "#CozyVibes"],
         type: "Marketing",
         link: "https://instagram.com/p/storeintro",
+        reactions: 10,
+        comments: 4,
     },
 
     // 2️⃣ 스테이크 사진 (Instagram + Facebook)
     {
         id: "2",
         restaurantId: "the-great-steakhouse",
-        createdAt: "2024-01-20T12:00:00Z",
-        scheduledAt: "2024-01-21T18:00:00Z",
+        createdAt: "2025-01-20T12:00:00Z",
+        scheduledAt: "2025-01-21T18:00:00Z",
         status: "Posted",
         image: "/images/steak.jpg",
         platform: "Instagram",
@@ -82,12 +85,14 @@ export const mockPostings: Posting[] = [
         hashtags: ["#Foodie", "#GrillMaster"],
         type: "Marketing",
         link: "https://instagram.com/p/steakpost",
+        reactions: 20,
+        comments: 14,
     },
     {
         id: "3",
         restaurantId: "the-great-steakhouse",
-        createdAt: "2024-01-20T12:00:00Z",
-        scheduledAt: "2024-01-21T18:00:00Z",
+        createdAt: "2025-01-20T12:00:00Z",
+        scheduledAt: "2025-01-21T18:00:00Z",
         status: "Posted",
         image: "/images/steak.jpg",
         platform: "Facebook",
@@ -95,14 +100,16 @@ export const mockPostings: Posting[] = [
         hashtags: ["#SteakLover"],
         type: "Marketing",
         link: "https://facebook.com/greatsteakhouse/post/steak",
+        reactions: 13,
+        comments: 9,
     },
 
     // 3️⃣ 스테이크 & 파스타 행사 (Instagram + Facebook + Twitter)
     {
         id: "4",
         restaurantId: "the-great-steakhouse",
-        createdAt: "2024-02-10T14:00:00Z",
-        scheduledAt: "2024-02-12T12:00:00Z",
+        createdAt: "2025-02-10T14:00:00Z",
+        scheduledAt: "2025-02-12T12:00:00Z",
         status: "Posted",
         image: "/images/steak-pasta.jpg",
         platform: "Instagram",
@@ -110,12 +117,14 @@ export const mockPostings: Posting[] = [
         hashtags: ["#FoodieEvent", "#DateNight"],
         type: "Event",
         link: "https://instagram.com/p/eventpost",
+        reactions: 30,
+        comments: 23,
     },
     {
         id: "5",
         restaurantId: "the-great-steakhouse",
-        createdAt: "2024-02-10T14:00:00Z",
-        scheduledAt: "2024-02-12T12:00:00Z",
+        createdAt: "2025-02-10T14:00:00Z",
+        scheduledAt: "2025-02-12T12:00:00Z",
         status: "Posted",
         image: "/images/steak-pasta.jpg",
         platform: "Facebook",
@@ -123,12 +132,14 @@ export const mockPostings: Posting[] = [
         hashtags: ["#PremiumSteak", "#PastaNight"],
         type: "Event",
         link: "https://facebook.com/greatsteakhouse/events/steakpasta",
+        reactions: 20,
+        comments: 19,
     },
     {
         id: "6",
         restaurantId: "the-great-steakhouse",
-        createdAt: "2024-02-10T14:00:00Z",
-        scheduledAt: "2024-02-12T12:00:00Z",
+        createdAt: "2025-02-10T14:00:00Z",
+        scheduledAt: "2025-02-12T12:00:00Z",
         status: "Posted",
         image: "/images/steak-pasta.jpg",
         platform: "Twitter",
@@ -136,14 +147,16 @@ export const mockPostings: Posting[] = [
         hashtags: ["#SteakLover", "#Foodie"],
         type: "Event",
         link: "https://twitter.com/greatsteakhouse/status/event",
+        reactions: 20,
+        comments: 2,
     },
 
     // 4️⃣ 부활절 휴무 공지 (Instagram + Facebook, 트위터 제외)
     {
         id: "7",
         restaurantId: "the-great-steakhouse",
-        createdAt: "2024-03-20T08:00:00Z",
-        scheduledAt: "2024-04-01T00:00:00Z",
+        createdAt: "2025-03-20T08:00:00Z",
+        scheduledAt: "2025-04-01T00:00:00Z",
         status: "Scheduled",
         image: "/images/easter-holiday.jpg",
         platform: "Instagram",
@@ -155,8 +168,8 @@ export const mockPostings: Posting[] = [
     {
         id: "8",
         restaurantId: "the-great-steakhouse",
-        createdAt: "2024-03-20T08:00:00Z",
-        scheduledAt: "2024-04-01T00:00:00Z",
+        createdAt: "2025-03-20T08:00:00Z",
+        scheduledAt: "2025-04-01T00:00:00Z",
         status: "Scheduled",
         image: "/images/easter-holiday.jpg",
         platform: "Facebook",
@@ -168,8 +181,8 @@ export const mockPostings: Posting[] = [
     {
         id: "9",
         restaurantId: "the-great-steakhouse",
-        createdAt: "2024-02-25T14:00:00Z",
-        scheduledAt: "2024-02-26T12:00:00Z",
+        createdAt: "2025-02-25T14:00:00Z",
+        scheduledAt: "2025-02-26T12:00:00Z",
         status: "Failed",
         image: "/images/failed-post.jpg",
         platform: "Instagram",
@@ -180,9 +193,14 @@ export const mockPostings: Posting[] = [
     },
 ];
 
-// ✅ 특정 레스토랑의 포스팅 가져오기 (소셜미디어별 구분)
-export const getRestaurantPostings = (restaurantId: string): Posting[] => {
-    return mockPostings
-        .filter((post) => post.restaurantId === restaurantId)
-        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()); // ✅ 최신순 정렬
+export const getRestaurantPostings = (): Posting[] => {
+    return postings.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+};
+
+export const addPosting = (newPost: Posting) => {
+    postings = [newPost, ...postings];
+};
+
+export const deletePosting = (postId: string) => {
+    postings = postings.filter((post) => post.id !== postId);
 };
