@@ -30,7 +30,7 @@ export default function SubNavbar() {
     if (menuItems.length === 0) return null;
 
     return (
-        <div className="w-full bg-white dark:bg-neutral-900 border-b border-gray-300 dark:border-gray-700 shadow-sm relative">
+        <div className="w-full bg-white dark:bg-neutral-900 border-b border-gray-300 dark:border-gray-700 shadow-sm">
             <div className="max-w-7xl mx-auto px-6 flex items-center h-12 space-x-8">
                 {menuItems.map((item) => (
                     <Link
