@@ -2,7 +2,7 @@
 "use client";
 
 import { createContext, useContext, useState, ReactNode, useEffect } from "react";
-import { platformConfig } from "@/constants/platforms";
+import { PLATFORM_OPTIONS } from "@/constants/platforms";
 
 interface PlatformCaptionsContextType {
     platformCaptions: { [key: string]: string };
@@ -14,16 +14,16 @@ const PlatformCaptionsContext = createContext<PlatformCaptionsContextType | unde
 
 export function PlatformCaptionsProvider({ children }: { children: ReactNode }) {
     const getInitialCaptions = () => {
-        if (typeof window === "undefined") return Object.fromEntries(Object.keys(platformConfig).map((platform) => [platform, ""]));
+        if (typeof window === "undefined") return Object.fromEntries(PLATFORM_OPTIONS.map((platform) => [platform, ""]));
 
         try {
             const storedCaptions = localStorage.getItem("platformCaptions");
             return storedCaptions
                 ? JSON.parse(storedCaptions)
-                : Object.fromEntries(Object.keys(platformConfig).map((platform) => [platform, ""]));
+                : Object.fromEntries(PLATFORM_OPTIONS.map((platform) => [platform, ""]));
         } catch (error) {
             console.error("Error parsing platformCaptions from localStorage:", error);
-            return Object.fromEntries(Object.keys(platformConfig).map((platform) => [platform, ""]));
+            return Object.fromEntries(PLATFORM_OPTIONS.map((platform) => [platform, ""]));
         }
     };
 
@@ -36,7 +36,7 @@ export function PlatformCaptionsProvider({ children }: { children: ReactNode }) 
     }, [platformCaptions]);
 
     const resetPlatformCaptions = () => {
-        const initialCaptions = Object.fromEntries(Object.keys(platformConfig).map((platform) => [platform, ""]));
+        const initialCaptions = Object.fromEntries(PLATFORM_OPTIONS.map((platform) => [platform, ""]));
         setPlatformCaptions(() => initialCaptions);
         if (typeof window !== "undefined") {
             localStorage.setItem("platformCaptions", JSON.stringify(initialCaptions));

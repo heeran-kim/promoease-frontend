@@ -1,7 +1,5 @@
 "use client";
 
-import { FaChartBar, FaLightbulb, FaCloudSun } from "react-icons/fa";
-
 export default function PromotionSuggestions() {
     return (
         <div className="max-w-6xl mx-auto space-y-16 p-6">
@@ -17,13 +15,13 @@ export default function PromotionSuggestions() {
                 </div>
 
                 <div className="space-y-4">
-                    {/* 🔹 메뉴 조합 & 사이드 메뉴 프로모션 */}
+                    {/* combo */}
                     <div className="bg-blue-50 dark:bg-blue-900 p-4 rounded-lg shadow-md space-y-2">
                         <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-line">
                             🤖 <strong>AI Assistant:</strong> 
                             <strong> 70% of customers who order Steak also add Fries. </strong>
                             However, <strong>30% don’t order any sides.</strong>
-                            👉 Consider a <strong>combo discount</strong> to increase sales.
+                            <br></br>👉 Consider a <strong>combo discount</strong> to increase sales.
                         </p>
                         <div className="border-t border-gray-300 dark:border-gray-700 mt-2 pt-2 text-xs text-gray-500 whitespace-pre-line flex flex-col">
                             <div>🔹 <strong>Powered by:</strong> Apriori Algorithm (Frequent Pattern Mining, Market Basket Analysis)</div>
@@ -31,15 +29,28 @@ export default function PromotionSuggestions() {
                         </div>
                     </div>
 
-                    {/* 🔹 판매 부진 메뉴 할인 */}
+                    {/*  */}
                     <div className="bg-blue-50 dark:bg-blue-900 p-4 rounded-lg shadow-md space-y-2">
                         <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-line">
                             🤖 <strong>AI Assistant:</strong> 
                             Your <strong>Seafood Pasta sales dropped by 20%</strong> in the last 2 weeks.
-                            👉 A <strong>limited-time discount + social media post</strong> could help boost sales.
+                            <br></br>👉 A <strong>limited-time discount + social media post</strong> could help boost sales.
                         </p>
                         <div className="border-t border-gray-300 dark:border-gray-700 mt-2 pt-2 text-xs text-gray-500">
                             <div>🔹 <strong>Powered by:</strong> Time-Series Sales Analysis (ARIMA, Seasonal Decomposition)</div>
+                            <div>🔹 <strong>Required Data:</strong> Internal sales database</div>
+                        </div>
+                    </div>
+
+                    {/* best-selling menu promotion */}
+                    <div className="bg-blue-50 dark:bg-blue-900 p-4 rounded-lg shadow-md space-y-2">
+                        <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-line">
+                            🤖 <strong>AI Assistant:</strong> 
+                            Your <strong>Signature T-Bone Steak</strong> was the best-selling menu item last week, with over <strong>120 orders</strong> in just 7 days! 
+                            <br></br>👉 Consider highlighting this dish on social media or featuring it as a <strong>Chef’s Special</strong> to maintain momentum.
+                        </p>
+                        <div className="border-t border-gray-300 dark:border-gray-700 mt-2 pt-2 text-xs text-gray-500">
+                            <div>🔹 <strong>Powered by:</strong> Sales Performance Analysis (Moving Average, Trend Detection)</div>
                             <div>🔹 <strong>Required Data:</strong> Internal sales database</div>
                         </div>
                     </div>
@@ -53,8 +64,8 @@ export default function PromotionSuggestions() {
                     <div className="bg-purple-50 dark:bg-purple-900 p-4 rounded-lg shadow-md space-y-2">
                         <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-line">
                             🤖 <strong>AI Assistant:</strong> 
-                            Restaurants in your industry are <strong>heavily promoting Vegan Bowls.</strong>  
-                            👉 If you have one, <strong>now is a great time to highlight it!</strong>
+                            <strong>In the past month, 35% of trending restaurant ads featured Vegan Bowls.</strong>  
+                            <br></br>👉 You already have one on your menu—now is a great time to highlight it!
                         </p>
                         <div className="border-t border-gray-300 dark:border-gray-700 mt-2 pt-2 text-xs text-gray-500">
                             <div>🔹 <strong>Powered by:</strong> Competitor Analysis with NLP (Topic Modeling, Named Entity Recognition)  </div>
@@ -62,12 +73,11 @@ export default function PromotionSuggestions() {
                         </div>
                     </div>
 
-                    {/* 🔹 업계 트렌드 - 시즌별 인기 메뉴 */}
                     <div className="bg-purple-50 dark:bg-purple-900 p-4 rounded-lg shadow-md space-y-2">
                         <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-line">
                             🤖 <strong>AI Assistant:</strong> 
                             <strong>Local cafes are trending with seasonal Pumpkin Spice items.</strong>  
-                            👉 If you don’t have a similar offering, consider <strong>creating one!</strong>
+                            <br></br>👉 Since you don’t have a similar offering, consider <strong>creating one!</strong>
                         </p>
                         <div className="border-t border-gray-300 dark:border-gray-700 mt-2 pt-2 text-xs text-gray-500">
                             <div>🔹 <strong>Powered by:</strong> Social Media Trend Detection (Hashtag Analysis, Sentiment Analysis)  </div>
@@ -103,7 +113,7 @@ export default function PromotionSuggestions() {
                         <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-line">
                             🤖 <strong>AI Assistant:</strong> 
                             <strong>Today’s temperature is above 30°C!</strong>  
-                            👉 Promote your <strong>cold drinks and desserts</strong> to attract customers.
+                            <br></br>👉 Promote your <strong>cold drinks and desserts</strong> to attract customers.
                         </p>
                         <div className="border-t border-gray-300 dark:border-gray-700 mt-2 pt-2 text-xs text-gray-500">
                             <div>🔹 <strong>Powered by:</strong> Weather-Based Recommendation System (Time-Series Forecasting)  </div>
@@ -114,9 +124,10 @@ export default function PromotionSuggestions() {
                     {/* 🔹 SNS 트렌드 기반 챌린지 홍보 */}
                     <div className="bg-yellow-50 dark:bg-yellow-900 p-4 rounded-lg shadow-md space-y-2">
                         <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-line">
-                            🤖 <strong>AI Assistant:</strong> 
-                            <strong>The latest challenge involves spicy food!</strong>  
-                            👉 Create a <strong>Spicy Food Challenge Promo</strong> to engage customers.
+                            🤖 <strong>AI Assistant:</strong>  
+                            <strong>Spicy food challenges are trending on social media!</strong>  
+                            <br></br>👉 Your <strong>Spicy Wings</strong> fit this trend perfectly.  
+                            Now is a great time to highlight them and attract more customers!
                         </p>
                         <div className="border-t border-gray-300 dark:border-gray-700 mt-2 pt-2 text-xs text-gray-500">
                             <div>🔹 <strong>Powered by:</strong> Social Media Sentiment Analysis (BERT, Transformer-based Models)  </div>

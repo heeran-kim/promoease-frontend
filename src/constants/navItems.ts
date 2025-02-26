@@ -40,7 +40,16 @@ export const NAV_ITEMS: {
     {
         name: "Promotions",
         href: "/promotions",
-        description: "Manage and track your ongoing and upcoming promotions.",
+        description: `
+            Manage and track your event discounts, special deals, and creative promotions all in one place.
+            - 💸 **Event Discounts & Flash Sales:** Easily set up limited-time offers to draw in new customers.
+            - 🍔 **Menu & Combo Deals:** Get AI-driven suggestions for menu upgrades, combo deals, or seasonal offerings.
+            - 🤖 **Machine Learning Insights:** Leverage advanced recommendations to craft high-impact promotions that drive sales.
+            - 🔎 **Performance Tracking:** Stay on top of each promotion’s results, from redeemed discounts to boosted traffic.
+            
+            Want to create a brand-new promotion?
+            Just click the “⋯” (More Options) button on the top right and select “Create Promotion”.
+            `,
         subPages: [
             {
                 name: "Create Promotion",

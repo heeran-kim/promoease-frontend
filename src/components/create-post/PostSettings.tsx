@@ -1,7 +1,7 @@
 "use client";
 
 import Card from "@/components/common/Card";
-import { getPlatformIcon, getRegisteredPlatforms, platformConfig } from "@/constants/platforms";
+import { getPlatformIcon, getRegisteredPlatforms, PLATFORM_OPTIONS } from "@/constants/platforms";
 
 const promotionTypes = ["Store Promotion", "Menu Promotion", "Event Promotion", "Announcement"];
 
@@ -42,7 +42,7 @@ export default function PostSettings({
                 <div>
                     <p className="text-sm font-medium mb-1">🌍 Choose Platforms:</p>
                     <div className="flex flex-wrap gap-2">
-                        {Object.keys(platformConfig).map((platform) => (
+                        {PLATFORM_OPTIONS.map((platform) => (
                             <button
                                 key={platform}
                                 onClick={() => handlePlatformToggle(platform)}

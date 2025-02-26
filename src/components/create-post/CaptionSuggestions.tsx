@@ -5,7 +5,7 @@ import Card from "@/components/common/Card";
 import { DndContext, closestCenter } from "@dnd-kit/core";
 import DraggableCaption from "./DraggableCaption";
 import PlatformDropZone from "./PlatformDropZone";
-import { platformConfig, getPlatformIcon, registeredAccounts, getRegisteredPlatforms } from "@/constants/platforms";
+import { PLATFORM_OPTIONS, getPlatformIcon, registeredAccounts, getRegisteredPlatforms } from "@/constants/platforms";
 import { captions } from "@/constants/captions";
 import { usePlatformCaptions } from "@/context/PlatformCaptionsContext";
 
@@ -28,7 +28,7 @@ export default function CaptionSuggestions({ setStep, selectedPlatform, setSelec
         setPlatformCaptions((prev: { [key: string]: string }) => {
             const updatedCaptions: { [key: string]: string } = { ...prev };
     
-            Object.keys(platformConfig).forEach((platform) => {
+            PLATFORM_OPTIONS.forEach((platform) => {
                 if (!selectedPlatform.includes(platform)) {
                     updatedCaptions[platform] = "";
                 }
@@ -78,7 +78,7 @@ export default function CaptionSuggestions({ setStep, selectedPlatform, setSelec
                     <div className="w-1/2 flex-grow space-y-6">
                         <h3 className="text-sm font-medium">📲 Captions by Platform:</h3>
                         <div className="space-y-4 mt-3">
-                            {Object.keys(platformConfig).map((platform) => (
+                            {PLATFORM_OPTIONS.map((platform) => (
                                 <div key={platform}>
                                     <div className="flex justify-between items-center mb-2">
                                         <div className="flex items-center gap-2">

@@ -16,6 +16,8 @@ export const platformConfig: Record<string, { icon: React.ElementType; color: st
     threads: { icon: FaThreads, color: "text-black" },
 };
 
+export const PLATFORM_OPTIONS = Object.keys(platformConfig);
+
 export const getRegisteredPlatforms = () => {
     return Object.keys(registeredAccounts).filter((platform) => registeredAccounts[platform]);
 };

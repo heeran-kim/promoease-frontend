@@ -39,10 +39,24 @@ export default function NewPosting() {
     };
 
     const handleConfirmPost = () => {
+        if (selectedPlatform.length === 0) {
+            alert("Please select at least one platform to upload your post.");
+            return;
+        }
         setIsLoading(true);
+
+        function generateRandomString(length = 6) {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let result = '';
+            for (let i = 0; i < length; i++) {
+              result += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            return result;
+        }
 
         setTimeout(() => {
             selectedPlatform.forEach((platform) => {
+                const randomLink = `https://${platform}.com/${generateRandomString(8)}`;
                 addPosting({
                     id: uuidv4(),
                     restaurantId: "the-great-steakhouse",
@@ -54,14 +68,14 @@ export default function NewPosting() {
                     caption: platformCaptions[platform],
                     hashtags: [],
                     type: "Marketing",
-                    link: null,
+                    link: randomLink,
                 });
             });
     
-            setIsLoading(false);
             setIsSuccess(true);
     
             setTimeout(() => {
+                setIsLoading(false);
                 router.push("/postings");
             }, 1500);
         }, 2000);
