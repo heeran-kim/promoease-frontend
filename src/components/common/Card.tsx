@@ -3,15 +3,16 @@
 import { ReactNode } from "react";
 
 interface CardProps {
+    id?: string;
     title: string;
     description: ReactNode;
     children: ReactNode;
     restriction?: string;
     showSaveButton?: boolean;
-    onSave?: () => void;
+    onSave?: (e: React.MouseEvent<HTMLButtonElement>) => void; 
 }
 
-export default function Card({ title, description, children, restriction, showSaveButton = true, onSave }: CardProps) {
+export default function Card({ id, title, description, children, restriction, showSaveButton = true, onSave }: CardProps) {
     return (
         <div className="bg-white dark:bg-black border border-gray-200 dark:border-gray-600 rounded-lg shadow-md space-y-4">
             <div className="p-6">
@@ -28,6 +29,7 @@ export default function Card({ title, description, children, restriction, showSa
                     <p className="text-xs text-gray-500 dark:text-gray-400">{restriction}</p>
                     {showSaveButton ? (
                         <button
+                            id={id}
                             className="px-4 py-1.5 text-sm font-medium bg-black text-white rounded-md hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-300"
                             onClick={onSave}
                         >

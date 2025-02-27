@@ -2,13 +2,6 @@
 
 import { FaFacebook, FaInstagram, FaTwitter, FaThreads, FaCircleQuestion } from "react-icons/fa6";
 
-export const registeredAccounts: { [key: string]: string } = {
-    facebook: "@thegreatsteakhouse",
-    instagram: "@thegreatsteakhouse",
-    twitter: "@thegreatsteakhouse",
-    threads: "",
-};
-
 export const platformConfig: Record<string, { icon: React.ElementType; color: string }> = {
     facebook: { icon: FaFacebook, color: "text-blue-600" },
     instagram: { icon: FaInstagram, color: "text-pink-500" },
@@ -16,11 +9,7 @@ export const platformConfig: Record<string, { icon: React.ElementType; color: st
     threads: { icon: FaThreads, color: "text-black" },
 };
 
-export const PLATFORM_OPTIONS = Object.keys(platformConfig);
-
-export const getRegisteredPlatforms = () => {
-    return Object.keys(registeredAccounts).filter((platform) => registeredAccounts[platform]);
-};
+export const PLATFORM_OPTIONS = Object.keys(platformConfig) as (keyof typeof platformConfig)[];
 
 export const getPlatformIcon = (platform: string, additionalClasses = "") => {
     const lowerCasePlatform = platform.toLowerCase();

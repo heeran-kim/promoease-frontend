@@ -1,18 +1,7 @@
-export const TYPE_OPTIONS = ["Discount", "Combo", "MenuHighlight", "NewMenu"] as const;
-export const STATUS_OPTIONS = ["Upcoming", "Ongoing", "Ended"] as const;
+// src/mocks/mockPromotions.ts
+import { Promotion, setBulkPromotions } from "@/models/promotion";
 
-export type Promotion = {
-    id: string;
-    startDate: string;
-    endDate: string;
-    type: (typeof TYPE_OPTIONS)[number];
-    description: string;
-    status: (typeof STATUS_OPTIONS)[number];
-    soldCount?: number;
-    postId?: string[];
-};
-
-let promotions: Promotion[] = [
+const mockPromotions: Promotion[] = [
     {
         id: "1",
         startDate: "2024-05-01",
@@ -45,14 +34,4 @@ let promotions: Promotion[] = [
     },
 ];
 
-export const getRestaurantPromotions = (): Promotion[] => {
-    return promotions;
-};
-
-export const addPromotion = (newPromo: Promotion) => {
-    promotions = [newPromo, ...promotions];
-};
-
-export const deletePromotion = (promoId: string) => {
-    promotions = promotions.filter((promo) => promo.id !== promoId);
-};
+setBulkPromotions(mockPromotions);

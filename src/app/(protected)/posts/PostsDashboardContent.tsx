@@ -1,28 +1,28 @@
-// src/app/(protected)/postings/page.tsx
+// src/app/(protected)/posts/page.tsx
 "use client";
 
 import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
-import { getRestaurantPostings, deletePosting } from "@/mocks/mockData";
+import { getPosts, deletePost } from "@/models/post";
 import SearchBar from "@/components/common/SearchBar"; 
 import DateRangePicker from "@/components/common/DateRangePicker";
 import ListCard from "@/components/common/ListCard";
 import Select from "@/components/common/Select";
 import { PLATFORM_OPTIONS } from "@/constants/platforms";
-import { STATUS_OPTIONS } from "@/mocks/mockData";
+import { STATUS_OPTIONS } from "@/models/post";
 
 const ITEMS_PER_PAGE = 5; 
 
-export default function PostingsDashboard() {
+export default function PostsDashboardContent() {
+    const [postId, setPostId] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState("");
-    const [selectedPlatform, setSelectedPlatform] = useState<string | null>(null);
+    const [selectedPlatform, setSelectedPlatform] = useState<(typeof PLATFORM_OPTIONS)[number] | null>(null);
     const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
-    const [menuOpen, setMenuOpen] = useState(false);
-    const [posts, setPosts] = useState(getRestaurantPostings());
+    const [posts, setPosts] = useState(getPosts());
     const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
 
     const handleDelete = (postId: string) => {
-        deletePosting(postId);
+        deletePost(postId);
         setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
     };
 
@@ -41,28 +41,33 @@ export default function PostingsDashboard() {
     };
 
     const filteredPosts = posts
-    .filter(post => 
-        (!selectedPlatform || post.platform === selectedPlatform) &&
-        (!selectedStatus || post.status === selectedStatus)
-    )
-    .slice(0, visibleCount);
-
-    const failedPosts = posts.filter(post => post.status === "Failed");
-    const scheduledPosts = posts.filter(post => post.status === "Scheduled");
-    const postedPosts = posts.filter(post => post.status === "Posted");
+        .filter(post => 
+            (!selectedPlatform || post.platform === selectedPlatform) &&
+            (!selectedStatus || post.status === selectedStatus) &&
+            (!searchTerm || post.caption.toLowerCase().includes(searchTerm.toLowerCase()))
+        )
+    const slicedPosts = filteredPosts.slice(0, visibleCount);
 
     const searchParams = useSearchParams();
-    const postId = searchParams.get("id");
     const postRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
     useEffect(() => {
-        if (!postId) return;
-        if (postRefs.current[postId]) {
-            postRefs.current[postId]?.scrollIntoView({ behavior: "smooth", block: "start" });
-            return;
+        const newPostId = searchParams.get("id");
+        if (newPostId && newPostId !== postId) {
+            setPostId(newPostId);
         }
-        handleLoadMore();
-    }, [postId, visibleCount]);
+    }, [searchParams, postId]);
+
+    useEffect(() => {
+        if (!postId) return;
+
+        const isPostVisible = posts.some(post => post.id === postId);
+        if (isPostVisible) {
+            postRefs.current[postId]?.scrollIntoView({ behavior: "smooth", block: "start" });
+        } else {
+            handleLoadMore();
+        }
+    }, [postId, posts]);
 
     return (
         <div>
@@ -74,12 +79,12 @@ export default function PostingsDashboard() {
             </div>
 
             <div className="space-y-4 mt-2">
-                {filteredPosts.map((post) => {
+                {slicedPosts.map((post) => {
                     const actions = [
-                        post.status === "Failed" && { label: "Retry", onClick: () => handleRetry(post.id) },
-                        post.status !== "Posted" && { label: "Edit", onClick: () => handleEdit(post.id) },
-                        { label: "Delete", onClick: () => handleDelete(post.id) },
-                    ].filter(Boolean);
+                        post.status === "Failed" ? { label: "Retry", onClick: () => handleRetry(post.id) } : false,
+                        post.status !== "Posted" ? { label: "Edit", onClick: () => handleEdit(post.id) } : false,
+                        { label: "Delete", onClick: () => handleDelete(post.id) }
+                    ].filter(Boolean) as { label: string; onClick: () => void }[];
 
                     return (
                         <ListCard
@@ -87,13 +92,13 @@ export default function PostingsDashboard() {
                             ref={(el) => { postRefs.current[post.id] = el; }}
                             item={post}
                             actions={actions}
-                            type="posting"
+                            type="post"
                         />
                     );
                 })}
             </div>
 
-            {visibleCount < posts.length && (
+            {visibleCount < filteredPosts.length && (
                 <div className="flex justify-center mt-6">
                     <button
                         id="load-more-button"

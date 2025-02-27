@@ -7,16 +7,20 @@ import { useAuth } from "@/components/auth/AuthProvider";
 import { NAV_ITEMS } from "@/constants/navItems";
 import { features } from "@/constants/features";
 
+interface NavItem {
+    name: string;
+    href: string;
+    subPages?: NavItem[];
+}
+
 export default function SubNavbar() {
     const pathname = usePathname();
     const { user } = useAuth();
 
-    const currentMenuItem = NAV_ITEMS.find((item) => pathname.startsWith(item.href));
-
-    const isActive = (item: any) => {
+    const isActive = (item: NavItem) => {
         if (pathname.startsWith(item.href)) return true;
         if (item.subPages) {
-            return item.subPages.some((sub: any) => pathname.startsWith(sub.href));
+            return item.subPages.some((sub: NavItem) => pathname.startsWith(sub.href));
         }
         return false;
     };

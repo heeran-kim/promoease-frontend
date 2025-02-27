@@ -1,7 +1,18 @@
 "use client";
+import { ReactNode } from "react";
 import { FaRobot, FaLightbulb, FaPen, FaChartLine } from "react-icons/fa";
 
-export const features = [
+interface FeatureItem {
+    id: string;
+    href: string;
+    icon: ReactNode;
+    name: string;
+    shortDescription: string;
+    longTitle: string;
+    longDescription: string;
+}
+
+export const features: FeatureItem[] = [
     {
         id: "ai-captions",
         href: "/features/ai-captions",

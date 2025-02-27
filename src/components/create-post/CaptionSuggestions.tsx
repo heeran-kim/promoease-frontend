@@ -2,15 +2,22 @@
 
 import { useEffect } from "react";
 import Card from "@/components/common/Card";
-import { DndContext, closestCenter } from "@dnd-kit/core";
+import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import DraggableCaption from "./DraggableCaption";
 import PlatformDropZone from "./PlatformDropZone";
-import { PLATFORM_OPTIONS, getPlatformIcon, registeredAccounts, getRegisteredPlatforms } from "@/constants/platforms";
+import { PLATFORM_OPTIONS, getPlatformIcon } from "@/constants/platforms";
+import { getRegisteredAccount, getRegisteredPlatforms } from "@/models/business";
 import { captions } from "@/constants/captions";
 import { usePlatformCaptions } from "@/context/PlatformCaptionsContext";
 
+interface CaptionSuggestionsProps {
+    setStep: (step: number) => void;
+    selectedPlatform: string[];
+    setSelectedPlatform: React.Dispatch<React.SetStateAction<string[]>>;
+    handleConfirmPost: () => void;
+}
 
-export default function CaptionSuggestions({ setStep, selectedPlatform, setSelectedPlatform, handleConfirmPost }: any) {
+export default function CaptionSuggestions({ setStep, selectedPlatform, setSelectedPlatform, handleConfirmPost }: CaptionSuggestionsProps) {
     const { platformCaptions, setPlatformCaptions } = usePlatformCaptions();
     const registeredPlatforms = getRegisteredPlatforms();
     
@@ -25,18 +32,20 @@ export default function CaptionSuggestions({ setStep, selectedPlatform, setSelec
     };
 
     useEffect(() => {
-        setPlatformCaptions((prev: { [key: string]: string }) => {
-            const updatedCaptions: { [key: string]: string } = { ...prev };
+        setPlatformCaptions((prev: Record<string, string>) => {
+            const updatedCaptions: Record<string, string> = { ...prev };
+            let hasChanges = false;
     
             PLATFORM_OPTIONS.forEach((platform) => {
-                if (!selectedPlatform.includes(platform)) {
+                if (!selectedPlatform.includes(platform) && updatedCaptions[platform] !== "") {
                     updatedCaptions[platform] = "";
+                    hasChanges = true;
                 }
             });
     
-            return updatedCaptions;
+            return hasChanges ? updatedCaptions : prev;
         });
-    }, [selectedPlatform]);
+    }, [selectedPlatform, setPlatformCaptions]);
     
     const handleCaptionEdit = (platform: string, text: string) => {
         setPlatformCaptions((prev) => ({
@@ -45,21 +54,20 @@ export default function CaptionSuggestions({ setStep, selectedPlatform, setSelec
         }));
     };
 
-    const handleDragEnd = (event: any) => {
+    const handleDragEnd = (event: DragEndEvent) => {
         const { active, over } = event;
         if (!over) return;
-
-        const draggedCaption = active.id;
-        const targetPlatform = over.id;
-
+    
+        const draggedCaption = String(active.id);
+        const targetPlatform = String(over.id);
+    
         if (!selectedPlatform.includes(targetPlatform)) return;
-
-        setPlatformCaptions((prev) => ({
+    
+        setPlatformCaptions((prev: Record<string, string>) => ({
             ...prev,
             [targetPlatform]: draggedCaption,
         }));
     };
-
 
     return (
         <Card 
@@ -84,8 +92,8 @@ export default function CaptionSuggestions({ setStep, selectedPlatform, setSelec
                                         <div className="flex items-center gap-2">
                                             {getPlatformIcon(platform)}
                                             <p className="text-sm font-semibold">{platform}</p>
-                                            {registeredAccounts[platform] && (
-                                                <span className="text-xs text-gray-500">({registeredAccounts[platform]})</span>
+                                            {getRegisteredAccount(platform as keyof typeof PLATFORM_OPTIONS) && (
+                                                <span className="text-xs text-gray-500">({getRegisteredAccount(platform as keyof typeof PLATFORM_OPTIONS)})</span>
                                             )}
                                         </div>
                                         <button

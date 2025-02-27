@@ -2,12 +2,13 @@
 
 import DragAndDropUploader from "@/components/common/DragAndDropUploader";
 import Card from "@/components/common/Card";
+import { Dispatch, SetStateAction } from "react";
 
-export default function ImageAnalyser({ image, setImage, detectedItems, setDetectedItems }: { 
+export default function ImageAnalyser({ image, setImage, detectedItems, setDetectedItems }: {
     image: string; 
     setImage: (image: string) => void;
     detectedItems: string[];
-    setDetectedItems: (items: string[]) => void;
+    setDetectedItems: Dispatch<SetStateAction<string[]>>;
 }) {
     const handleImageUpload = (file: File | null) => {
         if (file) {
@@ -29,7 +30,7 @@ export default function ImageAnalyser({ image, setImage, detectedItems, setDetec
     };
 
     const removeDetectedItem = (index: number) => {
-        setDetectedItems((prev) => prev.filter((_, i) => i !== index));
+        setDetectedItems((prev: string[]) => prev.filter((_, i) => i !== index));
     };
 
     return (
@@ -41,7 +42,7 @@ export default function ImageAnalyser({ image, setImage, detectedItems, setDetec
                         <p>Start by uploading an image. The AI will analyse its content to extract key elements that will help in generating your caption.</p>
                         <ul className="list-disc ml-4">
                             <li>Upload an image by <strong>dragging & dropping</strong> or clicking to select a file.</li>
-                            <li>After uploading, click the <strong>"Analyse Image"</strong> button to detect key elements.</li>
+                            <li>After uploading, click the <strong>&quot;Analyse Image&quot;</strong> button to detect key elements.</li>
                             <li>Remove incorrect tags by hovering over them and clicking the <strong>X button</strong>.</li>
                         </ul>
                     </div>

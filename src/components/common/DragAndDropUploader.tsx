@@ -3,6 +3,7 @@
 import { useCallback, useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import { IoClose } from "react-icons/io5";
+import Image from "next/image";
 
 interface DragAndDropUploaderProps {
     value?: string;
@@ -26,7 +27,7 @@ export default function DragAndDropUploader({ value, onChange, fileType = "image
                 setPreview(fileURL);
             }
             setUploadedFile(file);
-            onChange && onChange(file);
+            if (onChange) onChange(file);
         }
     }, [onChange, fileType]);
 
@@ -34,7 +35,7 @@ export default function DragAndDropUploader({ value, onChange, fileType = "image
         event.stopPropagation();
         setPreview("");
         setUploadedFile(null);
-        onChange && onChange(null);
+        if (onChange) onChange(null);
     };
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -69,9 +70,11 @@ export default function DragAndDropUploader({ value, onChange, fileType = "image
                                     ${fileType === "logo" ? "w-24 h-24 rounded-full aspect-square border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900" 
                                     : "w-full max-w-md bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"}`}
                     >
-                        <img
+                        <Image
                             src={preview}
                             alt="Uploaded Preview"
+                            width={200}
+                            height={200}
                             className={`w-full h-full object-cover border border-gray-300
                                         ${fileType === "logo" ? "rounded-full" : "aspect-[4/5]"}`}
                         />

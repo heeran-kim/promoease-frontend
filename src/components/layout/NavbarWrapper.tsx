@@ -1,7 +1,7 @@
 // src/components/layout/NavbarWrapper.tsx
 "use client";
 
-import { useState, useLayoutEffect, useRef, useEffect} from "react";
+import { useState, useRef, useEffect} from "react";
 import MainNavbar from "@/components/layout/MainNavbar";
 import SubNavbar from "@/components/layout/SubNavbar";
 
@@ -17,7 +17,7 @@ export default function NavbarWrapper({ children }: { children: React.ReactNode 
             const currentScrollY = window.scrollY;
 
             if (currentScrollY === 0) {
-                setShowMainNav(true); // 화면이 상단에 있을 때만 true로 설정
+                setShowMainNav(true);
             } else if (currentScrollY > lastScrollY && currentScrollY > 50) {
                 setShowMainNav(false);
             }

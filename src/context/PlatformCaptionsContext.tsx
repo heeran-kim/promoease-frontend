@@ -5,8 +5,8 @@ import { createContext, useContext, useState, ReactNode, useEffect } from "react
 import { PLATFORM_OPTIONS } from "@/constants/platforms";
 
 interface PlatformCaptionsContextType {
-    platformCaptions: { [key: string]: string };
-    setPlatformCaptions: (captions: { [key: string]: string }) => void;
+    platformCaptions: Record<string, string>;
+    setPlatformCaptions: React.Dispatch<React.SetStateAction<Record<string, string>>>;
     resetPlatformCaptions: () => void;
 }
 

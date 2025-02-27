@@ -1,16 +1,22 @@
 "use client";
 
 import Card from "@/components/common/Card";
-import { getPlatformIcon, getRegisteredPlatforms, PLATFORM_OPTIONS } from "@/constants/platforms";
-
-const promotionTypes = ["Store Promotion", "Menu Promotion", "Event Promotion", "Announcement"];
+import { getPlatformIcon, PLATFORM_OPTIONS } from "@/constants/platforms";
+import { getRegisteredPlatforms } from "@/models/business";
+import { PostType, TYPE_OPTIONS } from "@/models/post";
+interface PostSettingsProps {
+    postType: PostType;
+    setPostType: (type: PostType) => void;
+    selectedPlatform: string[];
+    setSelectedPlatform: React.Dispatch<React.SetStateAction<string[]>>;
+}
 
 export default function PostSettings({
-    promotionType,
-    setPromotionType,
+    postType,
+    setPostType,
     selectedPlatform,
     setSelectedPlatform,
-}: any) {
+}: PostSettingsProps) {
     const registeredPlatforms = getRegisteredPlatforms();
     const handlePlatformToggle = (platform: string) => {
         if (!registeredPlatforms.includes(platform)) return;
@@ -25,12 +31,12 @@ export default function PostSettings({
                 <div>
                     <p className="text-sm font-medium mb-1">📌 Select Purpose:</p>
                     <div className="flex flex-wrap gap-2">
-                        {promotionTypes.map((type) => (
+                        {TYPE_OPTIONS.map((type) => (
                             <button
                                 key={type}
-                                onClick={() => setPromotionType(type)}
+                                onClick={() => setPostType(type)}
                                 className={`px-3 py-1.5 rounded-md border text-sm transition ${
-                                    promotionType === type ? "bg-gray-300" : "bg-white text-gray-800 border-gray-300 hover:bg-gray-100"
+                                    postType === type ? "bg-gray-300" : "bg-white text-gray-800 border-gray-300 hover:bg-gray-100"
                                 }`}
                             >
                                 {type}
@@ -51,7 +57,7 @@ export default function PostSettings({
                                         ? selectedPlatform.includes(platform)
                                             ? "bg-gray-300"
                                             : "bg-white text-gray-800 border-gray-300 hover:bg-gray-100"
-                                        : "bg-gray-200 text-gray-500 border-gray-300 cursor-not-allowed" // 등록되지 않은 플랫폼
+                                        : "bg-gray-200 text-gray-500 border-gray-300 cursor-not-allowed"
                                 }`}
                             >
                                 {getPlatformIcon(platform)}

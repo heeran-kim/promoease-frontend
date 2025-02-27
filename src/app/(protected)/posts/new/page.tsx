@@ -1,4 +1,4 @@
-// src/app/postings/new/page.tsx
+// src/app/posts/new/page.tsx
 "use client";
 
 import { useState } from "react";
@@ -9,13 +9,15 @@ import BusinessInfo from "@/components/create-post/BusinessInfo";
 import PostSettings from "@/components/create-post/PostSettings";
 import UserCustomization from "@/components/create-post/UserCustomization";
 import CaptionSuggestions from "@/components/create-post/CaptionSuggestions";
-import { addPosting } from "@/mocks/mockData";
+import { addPost } from "@/models/post";
 import { usePlatformCaptions } from "@/context/PlatformCaptionsContext";
 import { v4 as uuidv4 } from "uuid";
+import { PostType, TYPE_OPTIONS } from "@/models/post";
 
-export default function NewPosting() {
+
+export default function NewPost() {
     const [step, setStep] = useState(2); 
-    const [promotionType, setPromotionType] = useState("");
+    const [postType, setPostType] = useState<PostType>(TYPE_OPTIONS[0]);
     const [customText, setCustomText] = useState("");
     const [selectedPlatform, setSelectedPlatform] = useState<string[]>([]);
     const [image, setImage] = useState<string>("");
@@ -30,7 +32,9 @@ export default function NewPosting() {
             alert("Please upload an image before generating AI captions.");
             return;
         }
-        resetPlatformCaptions();
+        if (Object.values(platformCaptions).some((caption) => caption !== "")) {
+            resetPlatformCaptions();
+        }
         setIsLoading(true);
         setTimeout(() => {
             setStep(3);
@@ -46,28 +50,24 @@ export default function NewPosting() {
         setIsLoading(true);
 
         function generateRandomString(length = 6) {
-            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-            let result = '';
-            for (let i = 0; i < length; i++) {
-              result += characters.charAt(Math.floor(Math.random() * characters.length));
-            }
-            return result;
+            return [...Array(length)]
+                .map(() => "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+                .charAt(Math.floor(Math.random() * 62)))
+                .join('');
         }
 
         setTimeout(() => {
             selectedPlatform.forEach((platform) => {
                 const randomLink = `https://${platform}.com/${generateRandomString(8)}`;
-                addPosting({
+                addPost({
                     id: uuidv4(),
-                    restaurantId: "the-great-steakhouse",
                     createdAt: new Date().toISOString(),
                     scheduledAt: new Date().toISOString(),
                     status: "Posted",
                     image: image,
                     platform,
                     caption: platformCaptions[platform],
-                    hashtags: [],
-                    type: "Marketing",
+                    type: postType,
                     link: randomLink,
                 });
             });
@@ -76,7 +76,7 @@ export default function NewPosting() {
     
             setTimeout(() => {
                 setIsLoading(false);
-                router.push("/postings");
+                router.push("/posts");
             }, 1500);
         }, 2000);
     };
@@ -113,8 +113,8 @@ export default function NewPosting() {
                             <div className="space-y-1">
                                 <BusinessInfo />
                                 <PostSettings
-                                    promotionType={promotionType}
-                                    setPromotionType={setPromotionType}
+                                    postType={postType}
+                                    setPostType={setPostType}
                                     selectedPlatform={selectedPlatform}
                                     setSelectedPlatform={setSelectedPlatform}
                                 />

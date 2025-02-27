@@ -1,8 +1,14 @@
 "use client";
 
 import Card from "@/components/common/Card";
+import { Dispatch, SetStateAction } from "react";
 
-export default function UserCustomization({ customText, setCustomText }) {
+interface UserCustomizationProps {
+    customText: string;
+    setCustomText: Dispatch<SetStateAction<string>>;
+}
+
+export default function UserCustomization({ customText, setCustomText }: UserCustomizationProps) {
     return (
         <Card 
             title="Anything else to add?"

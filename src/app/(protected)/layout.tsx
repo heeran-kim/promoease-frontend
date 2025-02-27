@@ -26,7 +26,7 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
             item.subPages?.some((sub) => pathname.startsWith(sub.href))
         );
         if (parentNav) {
-            const subPage = parentNav.subPages.find((sub) => pathname.startsWith(sub.href));
+            const subPage = parentNav.subPages?.find((sub) => pathname.startsWith(sub.href));
             currentNav = subPage || parentNav;
             if (subPage) backTo = parentNav.href;
         }
@@ -40,7 +40,7 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
                 title={currentNav?.name || "Page"}
                 description={currentNav?.description}
                 actions={actions}
-                backTo={backTo}
+                backTo={backTo ?? undefined}
             />
             {children}
         </div>

@@ -10,7 +10,7 @@ export default function PromotionSuggestions() {
                         📊 Your Restaurant Data Analysis
                     </h2>
                     <p className="text-gray-600 dark:text-gray-400 mt-2">
-                        AI analyzes <strong>your restaurant's sales trends</strong> to suggest optimal promotions.
+                        AI analyzes <strong>your restaurant&apos;s sales trends</strong> to suggest optimal promotions.
                     </p>
                 </div>
 

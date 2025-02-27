@@ -6,7 +6,7 @@ import { FaChevronDown, FaCheck } from "react-icons/fa";
 interface SelectProps {
     value: string | null;
     onChange: (value: string | null) => void;
-    options: string[];
+    options: readonly string[];
     placeholder?: string;
     includeAllOption?: boolean;
 }
@@ -21,7 +21,6 @@ export default function Select({
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
-    // ❗️ 드롭다운 바깥 클릭 시 닫힘
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {

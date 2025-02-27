@@ -1,11 +1,9 @@
 // src/components/layout/Navbar.tsx
 "use client";
 
-import { useState, useEffect } from "react";
 import Logo from "@/components/navigation/Logo";
 import NavLinks from "@/components/navigation/NavLinks";
 import AuthButtons from "@/components/navigation/AuthButtons";
-import SubNavbar from "@/components/layout/SubNavbar";
 import { useAuth } from "@/components/auth/AuthProvider";
 
 export default function Navbar() {

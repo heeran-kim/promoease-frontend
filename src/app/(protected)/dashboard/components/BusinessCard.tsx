@@ -2,21 +2,23 @@
 
 import clsx from "clsx";
 import { baseContainerClass } from "@/components/styles";
-import { Restaurant } from "@/mocks/mockData";
+import { Business } from "@/models/business";
+import { getPostsSummary } from "@/models/post";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import SocialMediaLinks from "./SocialMediaLinks";
 import { FaLink } from "react-icons/fa";
-import RestaurantStatus from "./RestaurantStatus";
+import BusinessStatus from "./BusinessStatus";
 import ActionDropdown from "@/components/common/ActionDropdown";
 import { NAV_ITEMS } from "@/constants/navItems";
 
-interface RestaurantCardProps {
-    restaurant: Restaurant;
+interface BusinessCardProps {
+    business: Business;
 }
 
-export default function RestaurantCard({ restaurant }: RestaurantCardProps) {
+export default function BusinessCard({ business }: BusinessCardProps) {
     const router = useRouter();
+    const postsSummary = getPostsSummary();
 
     const actions = NAV_ITEMS
         .filter(({ href }) => href !== "/dashboard")
@@ -31,24 +33,24 @@ export default function RestaurantCard({ restaurant }: RestaurantCardProps) {
 
             <div className="flex items-center space-x-4">
                 <Image 
-                    src={restaurant.logo} 
-                    alt={`${restaurant.name} Logo`} 
+                    src={business.logo} 
+                    alt={`${business.name} Logo`} 
                     width={60} 
                     height={60} 
                     className="rounded-full" 
                 />
                 <div className="flex flex-col">
                     <div className="flex items-center space-x-2">
-                        <h3 className="text-md font-semibold text-gray-900 dark:text-gray-200">{restaurant.name}</h3> 
-                        <SocialMediaLinks links={restaurant.socialMediaLinks} />
+                        <h3 className="text-md font-semibold text-gray-900 dark:text-gray-200">{business.name}</h3> 
+                        <SocialMediaLinks links={business.socialMediaLinks} />
                     </div>
 
-                    {restaurant.lastActivity && (
+                    {postsSummary.lastActivity && (
                         <p className="mt-2 text-xs text-gray-600 dark:text-gray-300 flex items-center">
-                            Last Post: {new Date(restaurant.lastActivity).toLocaleString()}
-                            {restaurant.lastPostLink && (
+                            Last Post: {new Date(postsSummary.lastActivity).toLocaleString()}
+                            {postsSummary.lastPostLink && (
                                 <a
-                                    href={restaurant.lastPostLink}
+                                    href={postsSummary.lastPostLink}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="ml-2 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
@@ -60,10 +62,10 @@ export default function RestaurantCard({ restaurant }: RestaurantCardProps) {
                         </p>
                     )}
 
-                    <RestaurantStatus 
-                        upcomingPosts={restaurant.upcomingPosts} 
-                        uploadedPosts={restaurant.uploadedPosts} 
-                        failedPosts={restaurant.failedPosts} 
+                    <BusinessStatus 
+                        upcomingPosts={postsSummary.upcomingPosts} 
+                        uploadedPosts={postsSummary.uploadedPosts} 
+                        failedPosts={postsSummary.failedPosts} 
                     />
                 </div>
             </div>

@@ -1,35 +1,34 @@
 "use client";
 
+import "@/mocks/mockPromotions";
 import { useState } from "react";
-import { deletePosting } from "@/mocks/mockData";
-import { getRestaurantPromotions, deletePromotion } from "@/mocks/mockPromotions";
+import { deletePost } from "@/models/post";
+import { getPromotions, deletePromotion, TYPE_OPTIONS, STATUS_OPTIONS } from "@/models/promotion";
 import SearchBar from "@/components/common/SearchBar";
 import DateRangePicker from "@/components/common/DateRangePicker";
 import ListCard from "@/components/common/ListCard";
 import Select from "@/components/common/Select";
-import { TYPE_OPTIONS, STATUS_OPTIONS } from "@/mocks/mockPromotions";
 
 export default function PromotionsDashboard() {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedType, setSelectedType] = useState<string | null>(null);
     const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
-    const [viewMode, setViewMode] = useState<"grid" | "list">("list");
 
-    const [promotions, setPromotions] = useState(getRestaurantPromotions());
+    const [promotions, setPromotions] = useState(getPromotions());
 
     const handleDelete = (promotionId: string) => {
         const promotion = promotions.find((promo) => promo.id === promotionId);
         if (!promotion) return;
     
-        const relatedPostings = promotion.postId || [];
+        const relatedPosts = promotion.postId || [];
     
-        if (relatedPostings.length > 0) {
+        if (relatedPosts.length > 0) {
             const confirmDelete = window.confirm(
-                `There are ${relatedPostings.length} linked posts for this promotion. Do you want to delete them as well?`
+                `There are ${relatedPosts.length} linked posts for this promotion. Do you want to delete them as well?`
             );
     
             if (confirmDelete) {
-                relatedPostings.forEach((postId) => deletePosting(postId));
+                relatedPosts.forEach((postId) => deletePost(postId));
             }
         }
         deletePromotion(promotionId);
@@ -40,9 +39,19 @@ export default function PromotionsDashboard() {
         console.log(`Create a new post for promotion ID: ${promotionId}`);
     };
 
-    const ongoingPromotions = promotions.filter(promo => promo.status === "Ongoing");
-    const upcomingPromotions = promotions.filter(promo => promo.status === "Upcoming");
-    const endedPromotions = promotions.filter(promo => promo.status === "Ended");
+    const handleDuplicate = (promotionId: string) => {
+        console.log(`Duplicate for promotion ID: ${promotionId}`);
+    }
+
+    const filteredPromotions = promotions.filter(promo =>
+        (!selectedType || promo.type === selectedType) &&
+        (!selectedStatus || promo.status === selectedStatus) &&
+        (!searchTerm || promo.description.toLowerCase().includes(searchTerm.toLowerCase()))
+    );
+
+    const ongoingPromotions = filteredPromotions.filter(promo => promo.status === "Ongoing");
+    const upcomingPromotions = filteredPromotions.filter(promo => promo.status === "Upcoming");
+    const endedPromotions = filteredPromotions.filter(promo => promo.status === "Ended");
 
     return (
         <div>

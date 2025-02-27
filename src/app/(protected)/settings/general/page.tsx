@@ -3,17 +3,19 @@
 import { useState, useEffect } from "react";
 import Card from "@/components/common/Card";
 import DragAndDropUploader from "@/components/common/DragAndDropUploader";
+import { Business, defaultBusiness, setBusinessField, getBusiness } from "@/models/business";
 
 const industryOptions = ["Restaurant", "Cafe", "Bar", "Takeaway", "Others"];
 
 export default function GeneralSettings() {
     const [placeId, setPlaceId] = useState("");
-    const [businessInfo, setBusinessInfo] = useState({
-        name: "",
-        logo: "",
-        type: "",
-    });
     const [isPresetIndustry, setIsPresetIndustry] = useState(false);
+    const [businessInfo, setBusinessInfo] = useState<Business>(defaultBusiness);
+
+    useEffect(() => {
+        const storedBusiness = getBusiness();
+        setBusinessInfo(storedBusiness ?? defaultBusiness);
+    }, []);
 
     const fakeBusinessData = {
         name: "The Great Steakhouse",
@@ -22,11 +24,25 @@ export default function GeneralSettings() {
     };
 
     const handleSaveGoogleMapsLink = () => {
-        setBusinessInfo({
+        setBusinessInfo((prev) => ({
+            ...prev,
             name: fakeBusinessData.name,
             logo: fakeBusinessData.logo,
             type: fakeBusinessData.type,
-        });
+        }));
+    };
+
+    const handleSave = (e: React.MouseEvent<HTMLButtonElement>) => {
+        const fieldName = e.currentTarget.id as keyof typeof businessInfo;
+        const value = businessInfo[fieldName];
+        setBusinessField(fieldName, value);
+    };
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const fieldName = e.currentTarget.id as keyof Business;
+        setBusinessInfo((prev) => ({ ...prev, [fieldName]: e.target.value }));
+
+        console.log(businessInfo)
     };
 
     const handleLogoChange = (file: File | null) => {
@@ -34,7 +50,7 @@ export default function GeneralSettings() {
             const fileURL = URL.createObjectURL(file);
             setBusinessInfo((prev) => ({ ...prev, logo: fileURL }));
         } else {
-            setBusinessInfo((prev) => ({ ...prev, logo: "" })); // 로고 삭제 시 기본 상태로 변경
+            setBusinessInfo((prev) => ({ ...prev, logo: "" }));
         }
     };
 
@@ -44,11 +60,6 @@ export default function GeneralSettings() {
 
     const handleCategoryClick = (category: string) => {
         setBusinessInfo((prev) => ({ ...prev, type: category }));
-    };
-
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const inputValue = e.target.value;
-        setBusinessInfo((prev) => ({ ...prev, type: inputValue }));
     };
 
     return (
@@ -72,21 +83,25 @@ export default function GeneralSettings() {
 
             {/* Business Name */}
             <Card
+                id="name"
                 title="Business Name"
                 description="This is your business's visible name. Customers will see this name."
                 restriction="Please use 32 characters at maximum."
+                onSave={handleSave}
             >
                 <input
+                    id="name"
                     type="text"
                     className="w-1/2 text-sm p-2 border rounded-md focus:ring focus:ring-blue-300"
                     placeholder="Enter your business name"
                     value={businessInfo.name}
-                    onChange={(e) => setBusinessInfo({ ...businessInfo, name: e.target.value })}
+                    onChange={handleInputChange}
                 />
             </Card>
 
             {/* Business Logo */}
             <Card
+                id="logo"
                 title="Business Logo"
                 description="Upload your business's logo. This will be displayed on your profile."
                 restriction="Recommended size: 500x500px. PNG or JPG format."
@@ -97,9 +112,11 @@ export default function GeneralSettings() {
 
             {/* Business Type Selection */}
             <Card
+                id="type"
                 title="Business Type"
                 description="Select your business type. If your type is not listed or you want a more specific name, enter it manually."
                 restriction="Choose one of the options or enter manually."
+                onSave={handleSave}
             >
                 <div className="flex flex-wrap gap-2">
                     {industryOptions.map((industry) => (
@@ -119,47 +136,46 @@ export default function GeneralSettings() {
                 </div>
 
                 <input
+                    id="type"
                     type="text"
-                    value={isPresetIndustry ? "" : businessInfo.type}
-                    onChange={handleInputChange}
                     className="w-1/2 mt-2 text-sm p-2 border rounded-md focus:ring focus:ring-blue-300"
                     placeholder="Enter a more specific type"
+                    value={isPresetIndustry ? "" : businessInfo.type}
+                    onChange={handleInputChange}
                 />
             </Card>
 
             <Card
+                id="target"
                 title="Target Customer"
                 description="Provide information about your typical customers (Age, Gender)."
                 restriction="Please use 32 characters at maximum."
+                onSave={handleSave}
             >
                 <input
+                    id="target"
                     type="text"
                     className="w-1/2 text-sm p-2 border rounded-md focus:ring focus:ring-blue-300"
                     placeholder="e.g. 18-35 years old, mostly female"
+                    value={businessInfo.target}
+                    onChange={handleInputChange}
                 />
             </Card>
 
-            {/* <Card
-                title="Popular Menu"
-                description="List some of your best-selling menu items."
-                restriction="Please use 32 characters at maximum."
-            >
-                <input
-                    type="text"
-                    className="w-3/4 text-sm p-2 border rounded-md focus:ring focus:ring-blue-300"
-                    placeholder="e.g. Classic Cheeseburger, Spicy Ramen, Avocado Toast"
-                />
-            </Card> */}
-
             <Card
+                id="vibe"
                 title="Vibe"
                 description="Describe the atmosphere of your business."
                 restriction="Please use 32 characters at maximum."
+                onSave={handleSave}
             >
                 <input
+                    id="vibe"
                     type="text"
                     className="w-3/4 text-sm p-2 border rounded-md focus:ring focus:ring-blue-300"
                     placeholder="e.g. Cozy and family-friendly"
+                    value={businessInfo.vibe}
+                    onChange={handleInputChange}
                 />
             </Card>
 

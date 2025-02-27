@@ -1,18 +1,19 @@
 "use client";
 
 import React, { forwardRef } from "react";
-import { Posting, getPostById } from "@/mocks/mockData";
-import { Promotion } from "@/mocks/mockPromotions";
+import { Post, getPostById } from "@/models/post";
+import { Promotion } from "@/models/promotion";
 import { getPlatformIcon } from "@/constants/platforms";
 import { format } from "date-fns";
 import { getStatusClass } from "@/components/styles";
 import ActionDropdown from "@/components/common/ActionDropdown";
 import { FaRegCalendarAlt, FaTag } from "react-icons/fa";
+import Image from "next/image";
 
-interface ListCardProps<T extends Posting | Promotion> {
+interface ListCardProps<T extends Post | Promotion> {
     item: T;
     actions: { label: string; onClick: () => void }[];
-    type: "posting" | "promotion";
+    type: "post" | "promotion";
 }
 
 const formatShortURL = (url: string, maxLength = 18) => {
@@ -20,27 +21,27 @@ const formatShortURL = (url: string, maxLength = 18) => {
     return cleanURL.length > maxLength ? cleanURL.slice(0, maxLength) + "..." : cleanURL;
 };
 
-const ListCard = forwardRef<HTMLDivElement, ListCardProps<Posting | Promotion>>(
+const ListCard = forwardRef<HTMLDivElement, ListCardProps<Post | Promotion>>(
     ({ item, actions, type }, ref) => {
         const formattedDate =
-            type === "posting" 
-                ? format(new Date((item as Posting).scheduledAt), "yyyy-MM-dd hh:mm a")
+            type === "post" 
+                ? format(new Date((item as Post).scheduledAt), "yyyy-MM-dd hh:mm a")
                 : `${format(new Date((item as Promotion).startDate), "yyyy-MM-dd")} ~ ${format(new Date((item as Promotion).endDate), "yyyy-MM-dd")}`;
 
         const image =
-            type === "posting"
-                ? (item as Posting).image
-                : (item as Promotion).postId?.length
-                ? getPostById((item as Promotion).postId[0])?.image
+            type === "post"
+                ? (item as Post).image
+                : ((item as Promotion).postId ?? []).length > 0
+                ? getPostById((item as Promotion).postId?.[0] ?? "")?.image ?? "/images/no-post.jpg"
                 : "/images/no-post.jpg";
 
         const socialLinks = 
-            type === "posting"
-                ? [{ link: (item as Posting).link ?? "Link not available yet", platform: (item as Posting).platform }]
-                : (item as Promotion).postId.map((postId) => {
+            type === "post"
+                ? [{ link: (item as Post).link ?? "Link not available yet", platform: (item as Post).platform }]
+                : (item as Promotion).postId?.map((postId) => {
                     const post = getPostById(postId);
-                    return { link: `/postings?id=${postId}`, platform: post?.platform ?? "unknown" };
-                });
+                    return { link: `/posts?id=${postId}`, platform: post?.platform ?? "unknown" };
+                }) ?? [];
 
         return (
             <div ref={ref} className="relative p-4 bg-white dark:bg-gray-900 rounded-lg shadow-md cursor-pointer transition hover:shadow-lg flex items-center space-x-4 h-auto">
@@ -49,8 +50,11 @@ const ListCard = forwardRef<HTMLDivElement, ListCardProps<Posting | Promotion>>(
                 </div>
 
                 <div className="w-32 flex-shrink-0">
-                    <img 
+                    <Image 
                         src={image}
+                        alt={image}
+                        width={320}
+                        height={400}
                         className="aspect-[4/5] border border-gray-200 dark:border-gray-700 rounded-lg object-cover"
                     />
                 </div>
@@ -62,10 +66,10 @@ const ListCard = forwardRef<HTMLDivElement, ListCardProps<Posting | Promotion>>(
                         </div>
                         <span 
                             className={`px-2 py-1 text-xs font-semibold rounded-md
-                                ${getStatusClass((item as Posting).status)}
+                                ${getStatusClass((item as Post).status)}
                             }`}
                         >
-                            {(item as Posting).status}
+                            {(item as Post).status}
                         </span>
                     </div>
 
@@ -100,17 +104,17 @@ const ListCard = forwardRef<HTMLDivElement, ListCardProps<Posting | Promotion>>(
                             className="mt-2 text-sm text-gray-700 dark:text-gray-300"
                             style={{ whiteSpace: 'pre-wrap' }}
                         >
-                            {type === 'posting' 
-                                ? (item as Posting).caption 
+                            {type === 'post' 
+                                ? (item as Post).caption 
                                 : (item as Promotion).description}
                         </p>
                     </div>
 
                     <div className="mt-3 flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
-                        {type === "posting" ? (
+                        {type === "post" ? (
                             <div className="flex items-center space-x-1">
                                 <span>👍 ❤️ </span>
-                                <span>{(item as Posting).reactions || 0}</span>
+                                <span>{(item as Post).reactions || 0}</span>
                             </div>
                         ) : (
                             <div className="flex items-center space-x-1">
@@ -119,8 +123,8 @@ const ListCard = forwardRef<HTMLDivElement, ListCardProps<Posting | Promotion>>(
                             </div>
                         )}
 
-                        {type === "posting" && (
-                            <span>{(item as Posting).comments || 0} comments</span>
+                        {type === "post" && (
+                            <span>{(item as Post).comments || 0} comments</span>
                         )}
                     </div>
                 </div>

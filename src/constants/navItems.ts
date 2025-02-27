@@ -1,12 +1,28 @@
 // src/constants/navItems.ts
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
-export const NAV_ITEMS: {
+interface SubPage {
     name: string;
     href: string;
     description: string;
-    subPages: { name: string; href: string; description: string }[];
-    actions?: (router: any) => { label: string; onClick: () => void }[];
-}[] = [
+}
+
+interface ActionItem {
+    label: string;
+    onClick: () => void;
+}
+
+type ActionsFunction = (router: AppRouterInstance) => ActionItem[];
+
+interface NavItem {
+    name: string;
+    href: string;
+    description: string;
+    subPages?: SubPage[];
+    actions?: ActionsFunction;
+}
+
+export const NAV_ITEMS: NavItem[] = [
     {
         name: "Dashboard",
         href: "/dashboard",
@@ -14,25 +30,25 @@ export const NAV_ITEMS: {
         subPages: [],
     },
     {
-        name: "Postings",
-        href: "/postings",
+        name: "Posts",
+        href: "/posts",
         description: `
         Manage, schedule, and monitor your social media posts across multiple platforms in one place.
         - 📊 **Cross-platform Overview:** View all your posts across different social media platforms in a single list, including reactions and comment counts.
         - ❌ **Delete Unwanted Posts:** No need to delete posts manually on each platform—remove them directly from here with a single click.
-        - ⏳ **Edit Scheduled Posts:** Modify scheduled posts, including their posting time and content.
+        - ⏳ **Edit Scheduled Posts:** Modify scheduled posts, including their post time and content.
         - ⚠️ **Resolve Failed Posts:** If a post fails due to account issues, get notified and retry after fixing the problem.
         - ✨ **Create New Posts with AI Captions**: Want to generate a new post using AI-generated captions? Simply click the “⋯” (More Options) button on the right and select “Create Post”.
         `,
         subPages: [
             {
                 name: "Create Post",
-                href: "/postings/new",
+                href: "/posts/new",
                 description: "Start by uploading an image. Then, adjust the post settings to generate the perfect caption!",
             }
         ],
-        actions: (router) => [
-            { label: "Create Post", onClick: () => router.push("/postings/new") },
+        actions: (router: AppRouterInstance) => [
+            { label: "Create Post", onClick: () => router.push("/posts/new") },
             { label: "Learn about Social Media Management", onClick: () => router.push("/features/social-media-management") },
             { label: "Learn about AI Captions", onClick: () => router.push("/features/ai-captions") },
         ],
@@ -57,7 +73,7 @@ export const NAV_ITEMS: {
                 description: "Leverage machine learning to generate high-impact promotions.",
             }
         ],
-        actions: (router) => [
+        actions: (router: AppRouterInstance) => [
             { label: "Create Promotion", onClick: () => router.push("/promotions/new") },
             { label: "Learn More", onClick: () => router.push("/features/promotion-suggestions") },
         ],

@@ -4,9 +4,9 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaCalendarAlt } from "react-icons/fa";
 
-export default function DateRangePicker({ onChange }: { onChange: (range: { start: Date | null; end: Date | null }) => void }) {
-    const [startDate, setStartDate] = useState<Date | null>(null);
-    const [endDate, setEndDate] = useState<Date | null>(null);
+export default function DateRangePicker({ onChange }: { onChange: (range: { start: Date | undefined; end: Date | undefined }) => void }) {
+    const [startDate, setStartDate] = useState<Date | undefined>(undefined);
+    const [endDate, setEndDate] = useState<Date | undefined>(undefined);
     const [isOpen, setIsOpen] = useState(false);
 
     const handleApply = () => {
@@ -15,15 +15,14 @@ export default function DateRangePicker({ onChange }: { onChange: (range: { star
     };
 
     const handleReset = () => {
-        setStartDate(null);
-        setEndDate(null);
-        onChange({ start: null, end: null });
+        setStartDate(undefined);
+        setEndDate(undefined);
+        onChange({ start: undefined, end: undefined });
         setIsOpen(false);
     };
 
     return (
         <div className="relative inline-block">
-            {/* ✅ 버튼 클릭하면 Date Picker 열림 */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
                 className="flex items-center space-x-2 px-4 py-2 border rounded-lg bg-white dark:bg-gray-800 dark:border-gray-700 shadow-sm text-sm"
@@ -34,16 +33,14 @@ export default function DateRangePicker({ onChange }: { onChange: (range: { star
                 </span>
             </button>
 
-            {/* ✅ Date Picker 드롭다운 */}
             {isOpen && (
                 <div className="absolute left-0 mt-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 shadow-lg rounded-lg p-4 z-50 w-80">
                     <div className="flex flex-col space-y-4">
-                        {/* 📆 시작 날짜 선택 */}
                         <div>
                             <label className="block text-xs text-gray-500 dark:text-gray-400">Start</label>
                             <DatePicker
                                 selected={startDate}
-                                onChange={(date) => setStartDate(date)}
+                                onChange={(date) => setStartDate(date ?? undefined)}
                                 selectsStart
                                 startDate={startDate}
                                 endDate={endDate}
@@ -56,7 +53,7 @@ export default function DateRangePicker({ onChange }: { onChange: (range: { star
                             <label className="block text-xs text-gray-500 dark:text-gray-400">End</label>
                             <DatePicker
                                 selected={endDate}
-                                onChange={(date) => setEndDate(date)}
+                                onChange={(date) => setEndDate(date ?? undefined)}
                                 selectsEnd
                                 startDate={startDate}
                                 endDate={endDate}
