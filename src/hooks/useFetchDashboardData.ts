@@ -13,7 +13,13 @@ async function fetchDashboardData(): Promise<DashboardData | null> {
             throw new Error(`Failed to fetch dashboard data: ${res.status}`);
         }
 
-        return await res.json();
+        const data = await res.json();
+        
+        if (process.env.NODE_ENV === "development") {
+            console.log("📊 Dashboard Data:", data);
+        }
+
+        return data;
     } catch (error) {
         console.error("Error fetching dashboard data:", error);
         return null;
