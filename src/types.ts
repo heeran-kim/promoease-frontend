@@ -1,6 +1,9 @@
 export interface Business {
-    name: string;
+    name?: string;
     logo: string;
+    type?: string;
+    target?: string;
+    vibe?: string;
 }
 
 export interface SocialMedia {
