@@ -1,5 +1,6 @@
 // 📌 src/hooks/useFetchBusiness.ts
 import { useEffect, useState } from "react";
+import { Business } from "@/types";
 
 const fetchBusinessData = async () => {
     try {
@@ -11,8 +12,9 @@ const fetchBusinessData = async () => {
             },
         });
 
-        if (!response.ok) throw new Error("Failed to fetch business data");
-
+        if (!response.ok) {
+            throw new Error(`Failed to fetch business data: ${response.status}`);
+        }
         return await response.json();
     } catch (error) {
         console.error(error);
@@ -32,7 +34,7 @@ export const useFetchBusiness = () => {
                 setLoading(false);
             })
             .catch((err) => {
-                setError("Failed to load business data");
+                setError(err instanceof Error ? err.message : String(err));
                 setLoading(false);
             });
     }, []);
