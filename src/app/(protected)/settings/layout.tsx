@@ -1,7 +1,7 @@
 // src/app/settings/layout.tsx
 "use client";
 
-import SettingsSidebar from "@/components/settings/SettingsSidebar";
+import SettingsSidebar from "./components/SettingsSidebar"
 
 export default function SettingsLayout({
     children,

@@ -1,4 +1,4 @@
-// src/components/settings/SettingsSidebar.tsx
+// src/app/(protected)/settings/components/SettingsSidebar.tsx
 "use client";
 
 import { useState } from "react";
