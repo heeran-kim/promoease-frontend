@@ -3,7 +3,7 @@ import { DashboardData } from "@/types";
 
 async function fetchDashboardData(): Promise<DashboardData | null> {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/dashboard/`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/dashboard/`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
