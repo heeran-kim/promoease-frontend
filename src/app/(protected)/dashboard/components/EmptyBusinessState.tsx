@@ -1,3 +1,4 @@
+// app/(protected)/dashboard/components/EmptyBusinessState.tsx
 "use client";
 
 import { useRouter } from "next/navigation";

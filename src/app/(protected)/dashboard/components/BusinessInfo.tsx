@@ -1,3 +1,4 @@
+// app/(protected)/dashboard/components/BusinessInfo.tsx
 import SocialMediaLinks from "./SocialMediaLinks";
 import BusinessStatus from "./BusinessStatus";
 import LastPostInfo from "./LastPostInfo";
@@ -19,11 +20,7 @@ export default function BusinessInfo({ dashboardData }: BusinessInfoProps) {
 
             <LastPostInfo postsSummary={dashboardData.postsSummary} />
 
-            <BusinessStatus 
-                upcomingPosts={dashboardData.postsSummary.upcomingPosts} 
-                uploadedPosts={dashboardData.postsSummary.uploadedPosts} 
-                failedPosts={dashboardData.postsSummary.failedPosts} 
-            />
+            <BusinessStatus postsSummary={dashboardData.postsSummary} />
         </div>
     )
 }

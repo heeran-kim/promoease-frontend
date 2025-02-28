@@ -1,3 +1,4 @@
+// app/(protected)/dashboard/components/LastPostInfo.tsx
 import { platformConfig } from "@/constants/platforms";
 import { SocialMedia } from "@/types";
 

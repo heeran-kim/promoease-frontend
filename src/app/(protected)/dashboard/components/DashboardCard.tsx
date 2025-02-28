@@ -1,5 +1,4 @@
-"use client";
-
+// app/(protected)/dashboard/components/DashboardCard.tsx
 import clsx from "clsx";
 import { baseContainerClass } from "@/components/styles";
 import Image from "next/image";

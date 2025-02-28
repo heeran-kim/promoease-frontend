@@ -1,3 +1,4 @@
+// app/(protected)/dashboard/components/LastPostInfo.tsx
 import { FaLink } from "react-icons/fa";
 import { PostsSummary } from "@/types";
 
