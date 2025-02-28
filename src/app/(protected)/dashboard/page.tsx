@@ -1,39 +1,60 @@
 // src/app/dashboard/page.tsx
 "use client";
 
-import "@/mocks/mockPosts";
-import { getBusiness, Business } from "@/models/business"
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import BusinessCard from "./components/BusinessCard";
-import { primaryNavItemClass } from "@/components/styles";
+import DashboardCard from "./components/DashboardCard";
+import EmptyBusinessState from "./components/EmptyBusinessState";
+import { DashboardData } from "@/types";
+
+async function fetchDashboardData(): Promise<DashboardData | null> {
+    try {
+        const res = await fetch("/api/dashboard", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+        });
+
+        if (!res.ok) {
+            throw new Error(`Failed to fetch dashboard data: ${res.status}`);
+        }
+
+        return await res.json();
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+}
 
 export default function Dashboard() {
-    const [business, setBusiness] = useState<Business | null>(null);
-    const router = useRouter();
+    const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        const fetchedBusiness = getBusiness();
-        setBusiness(fetchedBusiness);
+        async function loadData() {
+            const data = await fetchDashboardData();
+            setDashboardData(data);
+            setLoading(false);
+        }
+
+        loadData();
     }, []);
+
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center h-64">
+                <p className="text-gray-500">Loading...</p>
+            </div>
+        );
+    }
 
     return (
         <div className="max-w-7xl mx-auto p-6">
-            {business ? (
-                <BusinessCard business={business} />
+            {dashboardData?.business ? (
+                <DashboardCard dashboardData={dashboardData} />
             ) : (
-                <div className="flex flex-col items-center justify-center h-64 border border-gray-300 bg-white rounded-lg">
-                    <p className="text-md text-gray-700 mb-8 text-center">
-                        You haven’t set up your business yet! <br />
-                        Get started by adding your restaurant details now.
-                    </p>
-                    <button 
-                        className={primaryNavItemClass}
-                        onClick={() => router.push("/settings/general")}
-                    >
-                        Add Your Business
-                    </button>
-                </div>
+                <EmptyBusinessState />
             )}
         </div>
     );
