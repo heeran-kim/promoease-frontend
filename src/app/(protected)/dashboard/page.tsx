@@ -40,7 +40,7 @@ export default function Dashboard() {
             const data = await fetchDashboardData();
             setDashboardData(data);
         } catch (err) {
-            setError("Failed to load dashboard data.");
+            setError(err instanceof Error ? err.message : String(err));
         } finally {
             setLoading(false);
         }
