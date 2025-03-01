@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function Hero() {
     return (
         <section className="pt-32 pb-20 bg-gradient-to-r from-indigo-500 to-indigo-700 dark:from-gray-900 dark:to-gray-800 text-white text-center relative">
@@ -19,12 +21,12 @@ export default function Hero() {
 
                 {/* 버튼 그룹 (위치 조정) */}
                 <div className="mt-8 flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-4">
-                    <a href="/get-started" className="px-6 py-3 bg-white text-indigo-600 font-medium rounded-full shadow-md hover:bg-gray-100 transition">
+                    <Link href="/get-started" className="px-6 py-3 bg-white text-indigo-600 font-medium rounded-full shadow-md hover:bg-gray-100 transition">
                         Get Started
-                    </a>
-                    <a href="/preview" className="px-6 py-3 bg-indigo-400 dark:bg-indigo-600 text-white font-medium rounded-full shadow-md hover:bg-indigo-500 dark:hover:bg-indigo-700 transition">
+                    </Link>
+                    <Link href="/preview" className="px-6 py-3 bg-indigo-400 dark:bg-indigo-600 text-white font-medium rounded-full shadow-md hover:bg-indigo-500 dark:hover:bg-indigo-700 transition">
                         AI Preview
-                    </a>
+                    </Link>
                 </div>
             </div>
         </section>
