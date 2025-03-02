@@ -30,7 +30,7 @@ export interface Post {
     id: string;
     business: string;
     platform: string;
-    category: string;
+    categories: string[];
     caption: string;
     image: string;
     link: string;
@@ -48,7 +48,7 @@ export interface Promotion {
     id: string;
     business: string;
     platform: string;
-    category: string;
+    categories: string[];
     image: string;
     link: string;
     created_at: string;

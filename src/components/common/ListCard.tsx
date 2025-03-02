@@ -69,13 +69,13 @@ const ListCard = forwardRef<HTMLDivElement, ListCardProps>(
                             </span>
                         )}
                     </div>
-
-                    <div 
-                        className="inline-flex items-center gap-1.5 text-xs font-medium 
-                                px-2 py-1 rounded-md bg-gray-500 dark:bg-blue-600 
-                                text-white dark:text-gray-100 w-fit min-w-[60px]">
-                        <FaTag className="text-sm" /> {item.category}
-                    </div> 
+                        {isPost && item.categories && (item as Post).categories.map((category, index) => (
+                            <div className="inline-flex items-center gap-1.5 text-xs font-medium 
+                                    px-2 py-1 rounded-md bg-gray-500 dark:bg-blue-600 
+                                    text-white dark:text-gray-100 w-fit min-w-[60px] m-1">
+                                <FaTag className="text-sm" />{category}
+                            </div> 
+                    ))}
                     <div className="flex">
                         {socialLinks.map(({ link, platform }, index) => (
                             <div key={index}>
