@@ -1,15 +1,13 @@
-// src/app/(protected)/posts/page.tsx
 "use client";
 
 import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
-import { getPosts, deletePost } from "@/models/post";
-import SearchBar from "@/components/common/SearchBar"; 
-import DateRangePicker from "@/components/common/DateRangePicker";
-import ListCard from "@/components/common/ListCard";
-import Select from "@/components/common/Select";
+import { useFetchData } from "@/hooks/useFetchData";
+import { useMutateData } from "@/hooks/useMutateData";
+import { SearchBar, DateRangePicker, ListCard, Select } from "@/components/common";
 import { PLATFORM_OPTIONS } from "@/constants/platforms";
 import { STATUS_OPTIONS } from "@/models/post";
+import { Post, DropboxItem } from "@/types";
 
 const ITEMS_PER_PAGE = 5; 
 
@@ -18,15 +16,19 @@ export default function PostsDashboardContent() {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedPlatform, setSelectedPlatform] = useState<(typeof PLATFORM_OPTIONS)[number] | null>(null);
     const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
-    const [posts, setPosts] = useState(getPosts());
     const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
+    const { mutateData } = useMutateData();
 
-    const handleDelete = (postId: string) => {
-        deletePost(postId);
-        setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
+    const { data, error, isLoading, refetch } = useFetchData<{ posts: Post[]}>(`${process.env.NEXT_PUBLIC_API_URL}/api/posts`);
+
+    const posts = data?.posts || [];
+    console.log("Fetched posts:", posts);
+    
+    const handleDelete = async (postId: string) => {
+        await mutateData(`${process.env.NEXT_PUBLIC_API_URL}/api/posts/${postId}`, "DELETE");
+        refetch();
     };
-
-    const handleEdit = (postId: string) => {
+        const handleEdit = (postId: string) => {
         console.log(`Editing post: ${postId}`);
         // TODO: Implement edit logic
     };
@@ -36,18 +38,15 @@ export default function PostsDashboardContent() {
         // TODO: Implement retry logic
     };
 
-    const handleLoadMore = () => {
-        setVisibleCount((prev) => prev + ITEMS_PER_PAGE);
-    };
+    const handleLoadMore = () => setVisibleCount((prev) => prev + ITEMS_PER_PAGE);
 
-    const filteredPosts = posts
-        .filter(post => 
-            (!selectedPlatform || post.platform === selectedPlatform) &&
-            (!selectedStatus || post.status === selectedStatus) &&
-            (!searchTerm || post.caption.toLowerCase().includes(searchTerm.toLowerCase()))
-        )
+    const filteredPosts = posts.filter(post => 
+        (!selectedPlatform || post.platform === selectedPlatform) &&
+        (!selectedStatus || post.status === selectedStatus) &&
+        (!searchTerm || post.caption.toLowerCase().includes(searchTerm.toLowerCase()))
+    );
+
     const slicedPosts = filteredPosts.slice(0, visibleCount);
-
     const searchParams = useSearchParams();
     const postRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
@@ -58,16 +57,20 @@ export default function PostsDashboardContent() {
         }
     }, [searchParams, postId]);
 
-    useEffect(() => {
-        if (!postId) return;
+    if (isLoading) {
+        return <div className="flex justify-center items-center h-64"><p className="text-gray-500">Loading...</p></div>;
+    }
 
-        const isPostVisible = posts.some(post => post.id === postId);
-        if (isPostVisible) {
-            postRefs.current[postId]?.scrollIntoView({ behavior: "smooth", block: "start" });
-        } else {
-            handleLoadMore();
-        }
-    }, [postId, posts]);
+    if (error) {
+        return (
+            <div className="flex flex-col justify-center items-center h-64 text-red-500">
+                <p>Failed to load posts.</p>
+                <button onClick={() => refetch()} className="mt-4 px-4 py-2 bg-red-500 text-white rounded">
+                    Retry
+                </button>
+            </div>
+        );
+    }
 
     return (
         <div>
@@ -80,7 +83,7 @@ export default function PostsDashboardContent() {
 
             <div className="space-y-4 mt-2">
                 {slicedPosts.map((post) => {
-                    const actions = [
+                    const actions: DropboxItem[] = [
                         post.status === "Failed" ? { label: "Retry", onClick: () => handleRetry(post.id) } : false,
                         post.status !== "Posted" ? { label: "Edit", onClick: () => handleEdit(post.id) } : false,
                         { label: "Delete", onClick: () => handleDelete(post.id) }

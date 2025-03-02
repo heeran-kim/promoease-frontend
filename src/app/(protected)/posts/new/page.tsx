@@ -61,13 +61,13 @@ export default function NewPost() {
                 const randomLink = `https://${platform}.com/${generateRandomString(8)}`;
                 addPost({
                     id: uuidv4(),
-                    createdAt: new Date().toISOString(),
-                    scheduledAt: new Date().toISOString(),
+                    created_at: new Date().toISOString(),
+                    scheduled_at: new Date().toISOString(),
                     status: "Posted",
                     image: image,
                     platform,
                     caption: platformCaptions[platform],
-                    type: postType,
+                    category: postType,
                     link: randomLink,
                 });
             });

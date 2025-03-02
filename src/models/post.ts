@@ -1,19 +1,17 @@
 // src/models/post.ts
-import { PLATFORM_OPTIONS } from "@/constants/platforms";
-
 export const STATUS_OPTIONS = ["Scheduled", "Posted", "Failed"] as const;
 export const TYPE_OPTIONS = ["Store Promotion", "Menu Promotion", "Event Promotion", "Announcement"] as const;
 export type PostType = (typeof TYPE_OPTIONS)[number];
 
 export type Post = {
     id: string;
-    createdAt: string;
-    scheduledAt: string;
-    status: (typeof STATUS_OPTIONS)[number];
+    created_at: string;
+    scheduled_at: string;
+    status: string;
     image: string;
     caption: string;
-    type: PostType;
-    platform: (typeof PLATFORM_OPTIONS)[number];
+    category: PostType;
+    platform: string;
     link: string | null;
     reactions?: number;
     comments?: number;
@@ -22,7 +20,7 @@ export type Post = {
 let posts: Post[] = [];
 
 export const setBulkPosts = (newPosts: Post[]) => {
-    posts = [...newPosts].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    posts = [...newPosts].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 };
 
 export const getPosts = (): Post[] => {
@@ -34,7 +32,7 @@ export const getPostById = (postId: string): Post | undefined => {
 };
 
 export const addPost = (newPost: Post) => {
-    posts = [newPost, ...posts].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    posts = [newPost, ...posts].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 };
 
 export const deletePost = (postId: string) => {
@@ -44,10 +42,10 @@ export const deletePost = (postId: string) => {
 export const getPostsSummary = () => {
     const lastUploadedPost = posts
         .filter((post) => post.status === "Posted")
-        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0];
+        .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())[0];
 
     return {
-        lastActivity: lastUploadedPost ? lastUploadedPost.createdAt : null,
+        lastActivity: lastUploadedPost ? lastUploadedPost.created_at : null,
         lastPostLink: lastUploadedPost ? lastUploadedPost.link : null,
         uploadedPosts: posts.filter((post) => post.status === "Posted").length,
         upcomingPosts: posts.filter((post) => post.status === "Scheduled").length,

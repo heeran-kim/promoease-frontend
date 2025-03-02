@@ -7,9 +7,9 @@ export type Promotion = {
     id: string;
     startDate: string;
     endDate: string;
-    type: (typeof TYPE_OPTIONS)[number];
+    category: string;
     description: string;
-    status: (typeof STATUS_OPTIONS)[number];
+    status: string;
     soldCount?: number;
     postId?: string[];
 };

@@ -10,14 +10,14 @@ const fetcher = async <T>(url: string): Promise<T | undefined> => {
         });
 
         if (!res.ok) {
-            throw new Error(`Failed to fetch business data: ${res.status}`);
+            throw new Error(`Failed to fetch data: ${res.status}`);
         }
 
         const data = await res.json();
 
         return data;
     } catch (error) {
-        console.error("Error fetching business data:", error);
+        console.error("Error fetching data:", error);
         return undefined;
     }
 };

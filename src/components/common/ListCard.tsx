@@ -1,18 +1,18 @@
 "use client";
 
 import React, { forwardRef } from "react";
-import { Post, getPostById } from "@/models/post";
-import { Promotion } from "@/models/promotion";
+import { getPostById } from "@/models/post";
 import { getPlatformIcon } from "@/constants/platforms";
 import { format } from "date-fns";
 import { getStatusClass } from "@/components/styles";
 import ActionDropdown from "@/components/common/ActionDropdown";
 import { FaRegCalendarAlt, FaTag } from "react-icons/fa";
 import Image from "next/image";
+import { Post, Promotion, DropboxItem } from "@/types";
 
-interface ListCardProps<T extends Post | Promotion> {
-    item: T;
-    actions: { label: string; onClick: () => void }[];
+interface ListCardProps {
+    item: Post | Promotion;
+    actions: DropboxItem[];
     type: "post" | "promotion";
 }
 
@@ -21,27 +21,26 @@ const formatShortURL = (url: string, maxLength = 18) => {
     return cleanURL.length > maxLength ? cleanURL.slice(0, maxLength) + "..." : cleanURL;
 };
 
-const ListCard = forwardRef<HTMLDivElement, ListCardProps<Post | Promotion>>(
+const ListCard = forwardRef<HTMLDivElement, ListCardProps>(
     ({ item, actions, type }, ref) => {
-        const formattedDate =
-            type === "post" 
-                ? format(new Date((item as Post).scheduledAt), "yyyy-MM-dd hh:mm a")
-                : `${format(new Date((item as Promotion).startDate), "yyyy-MM-dd")} ~ ${format(new Date((item as Promotion).endDate), "yyyy-MM-dd")}`;
+        const isPost = type === "post";
 
-        const image =
-            type === "post"
-                ? (item as Post).image
-                : ((item as Promotion).postId ?? []).length > 0
-                ? getPostById((item as Promotion).postId?.[0] ?? "")?.image ?? "/images/no-post.jpg"
-                : "/images/no-post.jpg";
+        const formattedDate = isPost
+            ? format(new Date((item as Post).scheduled_at), "yyyy-MM-dd hh:mm a")
+            : `${format(new Date((item as Promotion).start_at), "yyyy-MM-dd")} ~ ${format(new Date((item as Promotion).end_at), "yyyy-MM-dd")}`;
 
-        const socialLinks = 
-            type === "post"
-                ? [{ link: (item as Post).link ?? "Link not available yet", platform: (item as Post).platform }]
-                : (item as Promotion).postId?.map((postId) => {
-                    const post = getPostById(postId);
-                    return { link: `/posts?id=${postId}`, platform: post?.platform ?? "unknown" };
-                }) ?? [];
+        const image = isPost
+            ? (item as Post).image
+            : ((item as Promotion).id ?? []).length > 0
+            ? "/images/no-post.jpg"
+            : "/images/no-post.jpg";
+            const socialLinks = 
+                type === "post"
+                    ? [{ link: (item as Post).link ?? "Link not available yet", platform: (item as Post).platform }]
+                    : (item as Promotion).postIds?.map((postId) => {
+                        const post = getPostById(postId);
+                        return { link: `/posts?id=${postId}`, platform: post?.platform ?? "unknown" };
+                    }) ?? [];
 
         return (
             <div ref={ref} className="relative p-4 bg-white dark:bg-gray-900 rounded-lg shadow-md cursor-pointer transition hover:shadow-lg flex items-center space-x-4 h-auto">
@@ -52,7 +51,7 @@ const ListCard = forwardRef<HTMLDivElement, ListCardProps<Post | Promotion>>(
                 <div className="w-32 flex-shrink-0">
                     <Image 
                         src={image}
-                        alt={image}
+                        alt="Thumbnail"
                         width={320}
                         height={400}
                         className="aspect-[4/5] border border-gray-200 dark:border-gray-700 rounded-lg object-cover"
@@ -62,24 +61,21 @@ const ListCard = forwardRef<HTMLDivElement, ListCardProps<Post | Promotion>>(
                 <div className="flex-1">
                     <div className="flex items-center justify-between mt-5">
                         <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
-                            <FaRegCalendarAlt />{formattedDate}
+                            <FaRegCalendarAlt /> {formattedDate}
                         </div>
-                        <span 
-                            className={`px-2 py-1 text-xs font-semibold rounded-md
-                                ${getStatusClass((item as Post).status)}
-                            }`}
-                        >
-                            {(item as Post).status}
-                        </span>
+                        {isPost && (
+                            <span className={`px-2 py-1 text-xs font-semibold rounded-md ${getStatusClass((item as Post).status)}`}>
+                                {(item as Post).status}
+                            </span>
+                        )}
                     </div>
 
                     <div 
                         className="inline-flex items-center gap-1.5 text-xs font-medium 
                                 px-2 py-1 rounded-md bg-gray-500 dark:bg-blue-600 
                                 text-white dark:text-gray-100 w-fit min-w-[60px]">
-                        <FaTag className="text-sm" /> {item.type}
+                        <FaTag className="text-sm" /> {item.category}
                     </div> 
-
                     <div className="flex">
                         {socialLinks.map(({ link, platform }, index) => (
                             <div key={index}>
@@ -97,16 +93,11 @@ const ListCard = forwardRef<HTMLDivElement, ListCardProps<Post | Promotion>>(
                             </div>
                         ))}
                     </div>
-                    
+
 
                     <div className="mt-2 p-3 rounded-md bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-                        <p
-                            className="mt-2 text-sm text-gray-700 dark:text-gray-300"
-                            style={{ whiteSpace: 'pre-wrap' }}
-                        >
-                            {type === 'post' 
-                                ? (item as Post).caption 
-                                : (item as Promotion).description}
+                        <p className="mt-2 text-sm text-gray-700 dark:text-gray-300" style={{ whiteSpace: 'pre-wrap' }}>
+                            {isPost ? (item as Post).caption : (item as Promotion).description}
                         </p>
                     </div>
 
@@ -119,7 +110,7 @@ const ListCard = forwardRef<HTMLDivElement, ListCardProps<Post | Promotion>>(
                         ) : (
                             <div className="flex items-center space-x-1">
                                 <span>🛒 Sold:</span>
-                                <span>{(item as Promotion).soldCount || 0}</span>
+                                <span>{(item as Promotion).sold || 0}</span>
                             </div>
                         )}
 

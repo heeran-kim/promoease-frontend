@@ -25,3 +25,41 @@ export interface DashboardData {
     socialMedia: SocialMedia[];
     postsSummary: PostsSummary;
 }
+
+export interface Post {
+    id: string;
+    business: string;
+    platform: string;
+    category: string;
+    caption: string;
+    image: string;
+    link: string;
+    created_at: string;
+    posted_at: string;
+    scheduled_at: string;
+    status: string;
+    reactions: number;
+    comments: number;
+    reposts: number;
+    shares: number;
+}
+
+export interface Promotion {
+    id: string;
+    business: string;
+    platform: string;
+    category: string;
+    image: string;
+    link: string;
+    created_at: string;
+    start_at: string;
+    end_at: string;
+    status: string;
+    postIds: string[];
+    description: string;
+    sold: number;
+}
+export interface DropboxItem {
+    label: string;
+    onClick: () => void | Promise<void>;
+}
