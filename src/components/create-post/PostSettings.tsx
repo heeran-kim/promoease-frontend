@@ -2,6 +2,7 @@
 
 import Card from "@/components/common/Card";
 import { PostCategory, PlatformState } from "@/types";
+import { getPlatformIcon } from "@/utils/icon";
 
 interface PostSettingsProps {
     postCategories: PostCategory[];
@@ -39,7 +40,7 @@ export default function PostSettings({
                     <div className="flex flex-wrap gap-2">
                         {postCategories.map((category) => (
                             <button
-                                key={category.label}
+                                key={category.id}
                                 onClick={() => handleCategoryToggle(category.label)}
                                 className={`px-3 py-1.5 rounded-md border text-sm transition ${
                                     category.selected ? "bg-gray-300" : "bg-white text-gray-800 border-gray-300 hover:bg-gray-100"
@@ -68,6 +69,7 @@ export default function PostSettings({
                                             : "bg-gray-200 text-gray-500 border-gray-300 cursor-not-allowed"
                                     }`}
                                 >
+                                    {getPlatformIcon(platform)}
                                     {platform}
                                 </button>
                             )

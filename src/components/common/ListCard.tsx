@@ -2,7 +2,7 @@
 
 import React, { forwardRef } from "react";
 import { getPostById } from "@/models/post";
-import { getPlatformIcon } from "@/constants/platforms";
+import { getPlatformIcon } from "@/utils/icon";
 import { format } from "date-fns";
 import { getStatusClass } from "@/components/styles";
 import ActionDropdown from "@/components/common/ActionDropdown";

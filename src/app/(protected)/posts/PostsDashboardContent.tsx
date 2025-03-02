@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { useFetchData } from "@/hooks/useFetchData";
 import { useMutateData } from "@/hooks/useMutateData";
 import { SearchBar, DateRangePicker, ListCard, Select } from "@/components/common";
-import { PLATFORM_OPTIONS } from "@/constants/platforms";
+import { PLATFORM_OPTIONS } from "@/utils/icon";
 import { STATUS_OPTIONS } from "@/models/post";
 import { Post, DropboxItem } from "@/types";
 

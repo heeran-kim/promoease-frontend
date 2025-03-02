@@ -1,5 +1,5 @@
 // app/(protected)/dashboard/components/LastPostInfo.tsx
-import { platformConfig } from "@/constants/platforms";
+import { platformConfig } from "@/utils/icon";
 import { SocialMedia } from "@/types";
 
 interface SocialMediaLinksProps {

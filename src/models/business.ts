@@ -1,6 +1,6 @@
 // src/models/business.ts
 
-import { PLATFORM_OPTIONS } from "@/constants/platforms";
+import { PLATFORM_OPTIONS } from "@/utils/icon";
 
 export type Business = {
     id: string;

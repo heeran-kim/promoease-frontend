@@ -1,6 +1,6 @@
 export interface Business {
     name?: string;
-    logo: string;
+    logo?: string;
     type?: string;
     target?: string;
     vibe?: string;
@@ -66,6 +66,7 @@ export interface DropboxItem {
 }
 
 export interface PostCategory {
+    id: number;
     label: string;
     selected: boolean;
 }

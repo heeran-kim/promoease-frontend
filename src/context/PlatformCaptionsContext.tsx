@@ -2,7 +2,7 @@
 "use client";
 
 import { createContext, useContext, useState, ReactNode, useEffect } from "react";
-import { PLATFORM_OPTIONS } from "@/constants/platforms";
+import { PLATFORM_OPTIONS } from "@/utils/icon";
 
 interface PlatformCaptionsContextType {
     platformCaptions: Record<string, string>;

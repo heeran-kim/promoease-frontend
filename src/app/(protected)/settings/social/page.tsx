@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Card from "@/components/common/Card";
-import { platformConfig, getPlatformIcon } from "@/constants/platforms";
+import { platformConfig, getPlatformIcon } from "@/utils/icon";
 
 export default function SocialMediaSettings() {
     const [businessInfo, setBusinessInfo] = useState({
