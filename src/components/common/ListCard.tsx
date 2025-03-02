@@ -34,13 +34,14 @@ const ListCard = forwardRef<HTMLDivElement, ListCardProps>(
             : ((item as Promotion).id ?? []).length > 0
             ? "/images/no-post.jpg"
             : "/images/no-post.jpg";
-            const socialLinks = 
-                type === "post"
-                    ? [{ link: (item as Post).link ?? "Link not available yet", platform: (item as Post).platform }]
-                    : (item as Promotion).postIds?.map((postId) => {
-                        const post = getPostById(postId);
-                        return { link: `/posts?id=${postId}`, platform: post?.platform ?? "unknown" };
-                    }) ?? [];
+            
+        const socialLinks = 
+            type === "post"
+                ? [{ link: (item as Post).link ?? "Link not available yet", platform: (item as Post).platform }]
+                : (item as Promotion).postIds?.map((postId) => {
+                    const post = getPostById(postId);
+                    return { link: `/posts?id=${postId}`, platform: post?.platform ?? "unknown" };
+                }) ?? [];
 
         return (
             <div ref={ref} className="relative p-4 bg-white dark:bg-gray-900 rounded-lg shadow-md cursor-pointer transition hover:shadow-lg flex items-center space-x-4 h-auto">

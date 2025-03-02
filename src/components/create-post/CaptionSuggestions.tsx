@@ -5,26 +5,26 @@ import Card from "@/components/common/Card";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import DraggableCaption from "./DraggableCaption";
 import PlatformDropZone from "./PlatformDropZone";
-import { PLATFORM_OPTIONS, getPlatformIcon } from "@/constants/platforms";
 import { getRegisteredAccount, getRegisteredPlatforms } from "@/models/business";
 import { captions } from "@/constants/captions";
 import { usePlatformCaptions } from "@/context/PlatformCaptionsContext";
+import { PlatformState } from "@/types";
 
 interface CaptionSuggestionsProps {
     setStep: (step: number) => void;
-    selectedPlatform: string[];
-    setSelectedPlatform: React.Dispatch<React.SetStateAction<string[]>>;
+    platformOptions: string[];
+    platformStates: PlatformState[];
+    setPlatformStates: (type: PlatformState[]) => void;
     handleConfirmPost: () => void;
 }
 
-export default function CaptionSuggestions({ setStep, selectedPlatform, setSelectedPlatform, handleConfirmPost }: CaptionSuggestionsProps) {
+export default function CaptionSuggestions({ setStep, platformOptions, platformStates, setPlatformStates, handleConfirmPost }: CaptionSuggestionsProps) {
     const { platformCaptions, setPlatformCaptions } = usePlatformCaptions();
-    const registeredPlatforms = getRegisteredPlatforms();
     
     const togglePlatform = (platform: string) => {
-        if (!registeredPlatforms.includes(platform)) return;
+        if (!platformStates.includes(platform)) return;
 
-        setSelectedPlatform((prev: string[]) => {
+        setPlatformStates((prev: string[]) => {
             return prev.includes(platform)
                 ? prev.filter((p) => p !== platform)
                 : [...prev, platform];
@@ -36,8 +36,8 @@ export default function CaptionSuggestions({ setStep, selectedPlatform, setSelec
             const updatedCaptions: Record<string, string> = { ...prev };
             let hasChanges = false;
     
-            PLATFORM_OPTIONS.forEach((platform) => {
-                if (!selectedPlatform.includes(platform) && updatedCaptions[platform] !== "") {
+            platformOptions.forEach((platform) => {
+                if (!platformStates.includes(platform) && updatedCaptions[platform] !== "") {
                     updatedCaptions[platform] = "";
                     hasChanges = true;
                 }
@@ -45,7 +45,7 @@ export default function CaptionSuggestions({ setStep, selectedPlatform, setSelec
     
             return hasChanges ? updatedCaptions : prev;
         });
-    }, [selectedPlatform, setPlatformCaptions]);
+    }, [platformStates, setPlatformCaptions]);
     
     const handleCaptionEdit = (platform: string, text: string) => {
         setPlatformCaptions((prev) => ({
@@ -61,7 +61,7 @@ export default function CaptionSuggestions({ setStep, selectedPlatform, setSelec
         const draggedCaption = String(active.id);
         const targetPlatform = String(over.id);
     
-        if (!selectedPlatform.includes(targetPlatform)) return;
+        if (!platformStates.includes(targetPlatform)) return;
     
         setPlatformCaptions((prev: Record<string, string>) => ({
             ...prev,
@@ -86,28 +86,27 @@ export default function CaptionSuggestions({ setStep, selectedPlatform, setSelec
                     <div className="w-1/2 flex-grow space-y-6">
                         <h3 className="text-sm font-medium">📲 Captions by Platform:</h3>
                         <div className="space-y-4 mt-3">
-                            {PLATFORM_OPTIONS.map((platform) => (
+                            {platformOptions.map((platform) => (
                                 <div key={platform}>
                                     <div className="flex justify-between items-center mb-2">
                                         <div className="flex items-center gap-2">
-                                            {getPlatformIcon(platform)}
                                             <p className="text-sm font-semibold">{platform}</p>
-                                            {getRegisteredAccount(platform as keyof typeof PLATFORM_OPTIONS) && (
-                                                <span className="text-xs text-gray-500">({getRegisteredAccount(platform as keyof typeof PLATFORM_OPTIONS)})</span>
+                                            {getRegisteredAccount(platform as keyof typeof platformOptions) && (
+                                                <span className="text-xs text-gray-500">({getRegisteredAccount(platform as keyof typeof platformOptions)})</span>
                                             )}
                                         </div>
                                         <button
                                             onClick={() => togglePlatform(platform)}
                                             className={`text-xs px-2 py-1 rounded-md transition ${
-                                                registeredPlatforms.includes(platform)
-                                                    ? selectedPlatform.includes(platform)
+                                                platformStates.includes(platform)
+                                                    ? platformStates.includes(platform)
                                                         ? "bg-black text-white hover:bg-gray-800"
                                                         : "bg-gray-300 text-gray-800 hover:bg-gray-400"
                                                     : "bg-gray-200 text-gray-500 cursor-not-allowed"
                                             }`}
-                                            disabled={!registeredPlatforms.includes(platform)}
+                                            disabled={!platformStates.includes(platform)}
                                         >
-                                            {selectedPlatform.includes(platform) ? "Disable" : "Enable"}
+                                            {platformStates.includes(platform) ? "Disable" : "Enable"}
                                         </button>
                                     </div>
 
@@ -116,15 +115,15 @@ export default function CaptionSuggestions({ setStep, selectedPlatform, setSelec
                                             id={platform}
                                             className="w-full h-24 text-sm p-2 border rounded-md mt-1 resize-none"
                                             placeholder={
-                                                registeredPlatforms.includes(platform)
-                                                    ? selectedPlatform.includes(platform)
+                                                platformStates.includes(platform)
+                                                    ? platformStates.includes(platform)
                                                         ? "Drag a caption here or type your own..."
                                                         : "🔹 Want to post here? Enable this platform first!"
                                                     : "❌ You cannot post here. This platform is not registered."
                                             }
                                             value={platformCaptions[platform]}
                                             onChange={(e) => handleCaptionEdit(platform, e.target.value)}
-                                            disabled={!selectedPlatform.includes(platform)}
+                                            disabled={!platformStates.includes(platform)}
                                         />
                                     </PlatformDropZone>
                                 </div>

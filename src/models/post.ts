@@ -10,7 +10,7 @@ export type Post = {
     status: string;
     image: string;
     caption: string;
-    category: PostType;
+    categories: PostType;
     platform: string;
     link: string | null;
     reactions?: number;

@@ -4,6 +4,7 @@ export interface Business {
     type?: string;
     target?: string;
     vibe?: string;
+    salesDataEnabled?: boolean;
 }
 
 export interface SocialMedia {
@@ -62,4 +63,21 @@ export interface Promotion {
 export interface DropboxItem {
     label: string;
     onClick: () => void | Promise<void>;
+}
+
+export interface PostCategory {
+    label: string;
+    selected: boolean;
+}
+
+export interface PlatformState {
+    label: string;
+    selected: boolean;
+}
+
+export interface PostCreationData {
+    business: Pick<Business, "target" | "vibe" | "salesDataEnabled">;
+    postCategories: PostCategory[];
+    platformOptions: string[];
+    platformStates: PlatformState[];
 }

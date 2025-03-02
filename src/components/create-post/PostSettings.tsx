@@ -1,28 +1,34 @@
 "use client";
 
 import Card from "@/components/common/Card";
-import { getPlatformIcon, PLATFORM_OPTIONS } from "@/constants/platforms";
-import { getRegisteredPlatforms } from "@/models/business";
-import { PostType, TYPE_OPTIONS } from "@/models/post";
+import { PostCategory, PlatformState } from "@/types";
+
 interface PostSettingsProps {
-    postType: PostType;
-    setPostType: (type: PostType) => void;
-    selectedPlatform: string[];
-    setSelectedPlatform: React.Dispatch<React.SetStateAction<string[]>>;
+    postCategories: PostCategory[];
+    setPostCategories: (type: PostCategory[]) => void;
+    platformOptions: string[];
+    platformStates: PlatformState[];
+    setPlatformStates: (type: PlatformState[]) => void;
 }
 
 export default function PostSettings({
-    postType,
-    setPostType,
-    selectedPlatform,
-    setSelectedPlatform,
+    postCategories,
+    setPostCategories,
+    platformOptions,
+    platformStates,
+    setPlatformStates,
 }: PostSettingsProps) {
-    const registeredPlatforms = getRegisteredPlatforms();
-    const handlePlatformToggle = (platform: string) => {
-        if (!registeredPlatforms.includes(platform)) return;
-        setSelectedPlatform((prev: string[]) =>
-            prev.includes(platform) ? prev.filter((p) => p !== platform) : [...prev, platform]
+    const handleCategoryToggle = (categoryLabel: string) => {
+        setPostCategories(postCategories.map((category) =>
+                category.label === categoryLabel ? { ...category, selected: !category.selected } : category
+            )
         );
+    };
+
+    const handlePlatformToggle = (platformLabel: string) => {
+        setPlatformStates(platformStates.map((platform) =>
+            platform.label === platformLabel ? { ...platform, selected: !platform.selected } : platform
+        ));
     };
 
     return (
@@ -31,15 +37,15 @@ export default function PostSettings({
                 <div>
                     <p className="text-sm font-medium mb-1">📌 Select Purpose:</p>
                     <div className="flex flex-wrap gap-2">
-                        {TYPE_OPTIONS.map((type) => (
+                        {postCategories.map((category) => (
                             <button
-                                key={type}
-                                onClick={() => setPostType(type)}
+                                key={category.label}
+                                onClick={() => handleCategoryToggle(category.label)}
                                 className={`px-3 py-1.5 rounded-md border text-sm transition ${
-                                    postType === type ? "bg-gray-300" : "bg-white text-gray-800 border-gray-300 hover:bg-gray-100"
+                                    category.selected ? "bg-gray-300" : "bg-white text-gray-800 border-gray-300 hover:bg-gray-100"
                                 }`}
                             >
-                                {type}
+                                {category.label}
                             </button>
                         ))}
                     </div>
@@ -48,22 +54,24 @@ export default function PostSettings({
                 <div>
                     <p className="text-sm font-medium mb-1">🌍 Choose Platforms:</p>
                     <div className="flex flex-wrap gap-2">
-                        {PLATFORM_OPTIONS.map((platform) => (
-                            <button
-                                key={platform}
-                                onClick={() => handlePlatformToggle(platform)}
-                                className={`flex items-center gap-2 px-3 py-1.5 rounded-md border text-sm transition ${
-                                    registeredPlatforms.includes(platform)
-                                        ? selectedPlatform.includes(platform)
-                                            ? "bg-gray-300"
-                                            : "bg-white text-gray-800 border-gray-300 hover:bg-gray-100"
-                                        : "bg-gray-200 text-gray-500 border-gray-300 cursor-not-allowed"
-                                }`}
-                            >
-                                {getPlatformIcon(platform)}
-                                {platform}
-                            </button>
-                        ))}
+                        {platformOptions.map((platform: string) => {
+                            const platformState = platformStates.find((p) => p.label === platform);
+                            return (
+                                <button
+                                    key={platform}
+                                    onClick={() => handlePlatformToggle(platform)}
+                                    className={`flex items-center gap-2 px-3 py-1.5 rounded-md border text-sm transition ${
+                                        platformState
+                                            ? platformState.selected
+                                                ? "bg-gray-300"
+                                                : "bg-white text-gray-800 border-gray-300 hover:bg-gray-100"
+                                            : "bg-gray-200 text-gray-500 border-gray-300 cursor-not-allowed"
+                                    }`}
+                                >
+                                    {platform}
+                                </button>
+                            )
+                        })}
                     </div>
                 </div>
             </div>

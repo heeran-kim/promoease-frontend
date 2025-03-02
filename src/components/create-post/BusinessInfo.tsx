@@ -3,13 +3,18 @@
 import { useState } from "react";
 import Card from "@/components/common/Card";
 import { FaQuestionCircle } from "react-icons/fa";
+import { Business } from "@/types";
 
-export default function BusinessInfo() {
+interface BusinessInfoProps {
+    business: Business;
+}
+
+export default function BusinessInfo({ business }: BusinessInfoProps) {
     const [useSalesData, setUseSalesData] = useState(true);
     const [businessInfo, setBusinessInfo] = useState({
-        targetCustomers: "18-35 years old, mostly foodies",
-        vibe: "Cozy & premium dining experience",
-        salesDataProvided: true,
+        targetCustomers: business.target ?? "No target customers set",
+        vibe: business.vibe ?? "No vibe set",
+        salesDataProvided: business.salesDataEnabled ?? false,
     });
 
     const handleInputChange = (field: string, value: string) => {
