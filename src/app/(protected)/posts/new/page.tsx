@@ -11,7 +11,7 @@ import UserCustomization from "@/components/create-post/UserCustomization";
 import CaptionSuggestions from "@/components/create-post/CaptionSuggestions";
 import { usePlatformCaptions } from "@/context/PlatformCaptionsContext";
 
-import { useFetchData } from "@/hooks/useFetchData";
+import { useFetchData } from "@/hooks/useApi";
 import { PostCreationData, PostCategory, PlatformState } from "@/types";
 
 

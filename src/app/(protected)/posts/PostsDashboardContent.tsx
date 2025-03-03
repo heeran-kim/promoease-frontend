@@ -2,12 +2,11 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
-import { useFetchData } from "@/hooks/useFetchData";
-import { useMutateData } from "@/hooks/useMutateData";
+import { useFetchData, mutateData } from "@/hooks/useApi";
 import { SearchBar, DateRangePicker, ListCard, Select } from "@/components/common";
 import { PLATFORM_OPTIONS } from "@/utils/icon";
-import { STATUS_OPTIONS } from "@/models/post";
 import { Post, DropboxItem } from "@/types";
+import { POST_STATUS_OPTIONS } from "@/constants/posts";
 
 const ITEMS_PER_PAGE = 5; 
 
@@ -17,7 +16,6 @@ export default function PostsDashboardContent() {
     const [selectedPlatform, setSelectedPlatform] = useState<(typeof PLATFORM_OPTIONS)[number] | null>(null);
     const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
     const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
-    const { mutateData } = useMutateData();
 
     const { data, error, isLoading, mutate } = useFetchData<{ posts: Post[]}>("/api/posts/");
 
@@ -77,7 +75,7 @@ export default function PostsDashboardContent() {
                 <SearchBar setSearchTerm={setSearchTerm} placeholder="Search posts..." />
                 <DateRangePicker onChange={(range) => console.log("Selected Range:", range)} />
                 <Select value={selectedPlatform} onChange={setSelectedPlatform} options={PLATFORM_OPTIONS} placeholder="All Platforms"/>
-                <Select value={selectedStatus} onChange={setSelectedStatus} options={STATUS_OPTIONS} placeholder="All Status"/>
+                <Select value={selectedStatus} onChange={setSelectedStatus} options={POST_STATUS_OPTIONS} placeholder="All Status"/>
             </div>
 
             <div className="space-y-4 mt-2">

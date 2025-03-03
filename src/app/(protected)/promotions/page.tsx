@@ -8,7 +8,7 @@
 import DateRangePicker from "@/components/common/DateRangePicker";
 import ListCard from "@/components/common/ListCard";
 // import Select from "@/components/common/Select";
-import { useFetchData } from "@/hooks/useFetchData";
+import { useFetchData } from "@/hooks/useApi";
 import { Promotion } from "@/types";
 
 export default function PromotionsDashboard() {

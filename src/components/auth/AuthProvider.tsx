@@ -1,7 +1,7 @@
 // src/components/AuthProvider.tsx
 "use client";
 import { createContext, useContext } from "react";
-import { useFetchData } from "@/hooks/useFetchData";
+import { useFetchData } from "@/hooks/useApi";
 import { useRouter } from "next/navigation";
 import { User } from "@/types";
 

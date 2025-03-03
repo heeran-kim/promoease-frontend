@@ -25,8 +25,8 @@ const ListCard = forwardRef<HTMLDivElement, ListCardProps>(
         const isPost = type === "post";
 
         const formattedDate = isPost
-            ? format(new Date((item as Post).scheduled_at), "yyyy-MM-dd hh:mm a")
-            : `${format(new Date((item as Promotion).start_date), "yyyy-MM-dd")} ~ ${format(new Date((item as Promotion).end_date), "yyyy-MM-dd")}`;
+            ? format(new Date((item as Post).scheduledAt), "yyyy-MM-dd hh:mm a")
+            : `${format(new Date((item as Promotion).startDate), "yyyy-MM-dd")} ~ ${format(new Date((item as Promotion).endDate), "yyyy-MM-dd")}`;
 
         const image = isPost
             ? (item as Post).image
@@ -108,7 +108,7 @@ const ListCard = forwardRef<HTMLDivElement, ListCardProps>(
                         ) : (
                             <div className="flex items-center space-x-1">
                                 <span>🛒 Sold:</span>
-                                <span>{(item as Promotion).sold_count || 0}</span>
+                                <span>{(item as Promotion).soldCount || 0}</span>
                             </div>
                         )}
 
