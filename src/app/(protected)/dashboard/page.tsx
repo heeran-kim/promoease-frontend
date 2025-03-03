@@ -7,12 +7,10 @@ import { useFetchData } from "@/hooks/useFetchData";
 import { DashboardData } from "@/types";
 
 export default function Dashboard() {
-    const { data, error, isLoading, refetch } = useFetchData<DashboardData>(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/dashboard/`
-    );
+    const { data, error, isLoading, mutate } = useFetchData<DashboardData>("/api/dashboard/");
 
     const handleRetry = async () => {
-        await refetch();
+        await mutate();
     };
     
     return (

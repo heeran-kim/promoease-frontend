@@ -15,7 +15,7 @@ export default function PromotionsDashboard() {
     // const [searchTerm, setSearchTerm] = useState("");
     // const [selectedType, setSelectedType] = useState<string | null>(null);
     // const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
-    const { data } = useFetchData<{ promotions: Promotion[]}>(`${process.env.NEXT_PUBLIC_API_URL}/api/promotions`);
+    const { data } = useFetchData<{ promotions: Promotion[]}>("/api/promotions/");
     const promotions = data?.promotions || [];
 
     // const [promotions, setPromotions] = useState();

@@ -19,13 +19,13 @@ export default function PostsDashboardContent() {
     const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
     const { mutateData } = useMutateData();
 
-    const { data, error, isLoading, refetch } = useFetchData<{ posts: Post[]}>(`${process.env.NEXT_PUBLIC_API_URL}/api/posts`);
+    const { data, error, isLoading, mutate } = useFetchData<{ posts: Post[]}>("/api/posts/");
 
     const posts = data?.posts || [];
     
     const handleDelete = async (postId: string) => {
-        await mutateData(`${process.env.NEXT_PUBLIC_API_URL}/api/posts/${postId}`, "DELETE");
-        refetch();
+        await mutateData(`/api/posts/${postId}/`, "DELETE");
+        mutate();
     };
         const handleEdit = (postId: string) => {
         console.log(`Editing post: ${postId}`);
@@ -64,7 +64,7 @@ export default function PostsDashboardContent() {
         return (
             <div className="flex flex-col justify-center items-center h-64 text-red-500">
                 <p>Failed to load posts.</p>
-                <button onClick={() => refetch()} className="mt-4 px-4 py-2 bg-red-500 text-white rounded">
+                <button onClick={() => mutate()} className="mt-4 px-4 py-2 bg-red-500 text-white rounded">
                     Retry
                 </button>
             </div>

@@ -28,7 +28,7 @@ export default function NewPost() {
     const [postCategories, setPostCategories] = useState<PostCategory[]>([]);
     const [platformStates, setPlatformStates] = useState<PlatformState[]>([]);
 
-    const { data, error, isLoading, refetch } = useFetchData<PostCreationData>(`${process.env.NEXT_PUBLIC_API_URL}/api/posts/new`);
+    const { data, error, isLoading, mutate } = useFetchData<PostCreationData>("/api/posts/new/");
     console.log(data);
 
     useEffect(() => {
@@ -85,7 +85,7 @@ export default function NewPost() {
         return (
             <div className="flex flex-col justify-center items-center h-64 text-red-500">
                 <p>Failed to load data for creating post.</p>
-                <button onClick={() => refetch()} className="mt-4 px-4 py-2 bg-red-500 text-white rounded">
+                <button onClick={() => mutate()} className="mt-4 px-4 py-2 bg-red-500 text-white rounded">
                     Retry
                 </button>
             </div>

@@ -1,6 +1,6 @@
 // src/components/AuthProvider.tsx
 "use client";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext } from "react";
 import { useFetchData } from "@/hooks/useFetchData";
 import { useRouter } from "next/navigation";
 import { User } from "@/types";
@@ -16,9 +16,8 @@ const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const router = useRouter();
-    const { data: user, mutate } = useFetchData<User>(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/users/me/`
-    );
+    const { data: user, mutate } = useFetchData<User>("/api/users/me/");
+    
     const login = async (email: string, password: string) => {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/login/`, {
             method: "POST",
@@ -71,7 +70,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     return (
-        <AuthContext.Provider value={{ user: user ?? null, login, logout, register }}>
+        <AuthContext.Provider value={{ user, login, logout, register }}>
             {children}
         </AuthContext.Provider>
     );
