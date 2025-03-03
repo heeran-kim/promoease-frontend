@@ -1,13 +1,9 @@
 // src/components/AuthProvider.tsx
 "use client";
 import { createContext, useContext, useEffect, useState } from "react";
+import { useFetchData } from "@/hooks/useFetchData";
 import { useRouter } from "next/navigation";
-
-interface User {
-    name: string;
-    email: string;
-    role: string;
-}
+import { User } from "@/types";
 
 interface AuthContextType {
     user: User | null;
@@ -19,60 +15,10 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-    const [user, setUser] = useState<User | null>(null);
     const router = useRouter();
-
-    useEffect(() => {
-        checkAuth();
-    }, []);
-    
-    const checkAuth = async () => {
-        try {
-            let res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/me/`, {
-                method: "GET",
-                credentials: "include",
-                headers: { "Content-Type": "application/json" }
-            });
-
-            if (res.status === 401) {
-                // let newAccessToken = null;
-                console.warn("🔄 Access Token expired, trying to refresh...");
-                try {
-                    const refresth_res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/refresh/`, {
-                        method: "POST",
-                        credentials: "include",
-                    });
-    
-                    if (refresth_res.ok) {
-                        res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/me/`, {
-                            method: "GET",
-                            credentials: "include",
-                            headers: { "Content-Type": "application/json" },
-                        });
-                    } else {
-                        console.warn("❌ Refresh token expired or invalid. User must log in again.");
-                        setUser(null);
-                        return;
-                    }
-                } catch (error) {
-                    console.error("❌ Refresh Token API Error:", error);
-                    setUser(null);
-                    return;
-                }
-            }
-
-            if (res.ok) {
-                const data = await res.json();
-                setUser(data);
-            } else {
-                setUser(null);
-            }
-        } catch (error) {
-            console.error("Auth check failed", error);
-            setUser(null);
-        }
-    };
-
+    const { data: user, mutate } = useFetchData<User>(
+            `${process.env.NEXT_PUBLIC_API_URL}/api/users/me/`
+    );
     const login = async (email: string, password: string) => {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/login/`, {
             method: "POST",
@@ -83,12 +29,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
         if (res.ok) {
             await res.json();
-            checkAuth();
-            console.log("Login Successed! forwarding to dashboard.", user);
+            mutate(user, true);
             router.push("/dashboard");
-        } else {
-            console.error("Login failed");
-        }
+        } 
     };
 
     const logout = async () => {
@@ -100,11 +43,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             });
     
             if (res.ok) {
-                setUser(null);
+                mutate(user, true);
                 router.push("/login");
-            } else {
-                console.error("❌ Logout failed");
-            }
+            } 
         } catch (error) {
             console.error("❌ Logout API Error:", error);
         }
@@ -121,19 +62,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
             if (res.ok)
             {
-                console.log("✅ Register successful");
-                checkAuth();
+                mutate(user, true);
                 router.push("/dashboard");
-            } else {
-                console.error("❌ Register failed");
-            }
+            } 
         } catch (error) {
             console.error("❌ Register API Error:", error);
         }
     }
 
     return (
-        <AuthContext.Provider value={{ user, login, logout, register }}>
+        <AuthContext.Provider value={{ user: user ?? null, login, logout, register }}>
             {children}
         </AuthContext.Provider>
     );

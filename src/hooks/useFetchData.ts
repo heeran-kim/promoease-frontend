@@ -29,5 +29,5 @@ export function useFetchData<T>(url: string) {
         { revalidateOnFocus: true, shouldRetryOnError: true }
     );
 
-    return { data, error, isLoading: isValidating, refetch: mutate };
+    return { data, error, isLoading: isValidating, mutate };
 };

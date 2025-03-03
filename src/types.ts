@@ -81,3 +81,9 @@ export type Promotion = {
     status: string;
     sold_count?: number;
 };
+
+export interface User {
+    name: string;
+    email: string;
+    role: string;
+}
