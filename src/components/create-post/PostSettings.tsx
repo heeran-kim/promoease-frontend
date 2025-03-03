@@ -24,12 +24,14 @@ export default function PostSettings({
                 category.label === categoryLabel ? { ...category, selected: !category.selected } : category
             )
         );
+        console.log(postCategories);
     };
 
     const handlePlatformToggle = (platformLabel: string) => {
         setPlatformStates(platformStates.map((platform) =>
             platform.label === platformLabel ? { ...platform, selected: !platform.selected } : platform
         ));
+        console.log(platformStates);
     };
 
     return (

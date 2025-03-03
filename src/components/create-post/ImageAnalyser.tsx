@@ -60,6 +60,7 @@ export default function ImageAnalyser({ image, setImage, detectedItems, setDetec
                         </button>
 
                         {detectedItems.length > 0 && (
+                            <>
                             <div className="mt-3 p-3 border border-gray-200 rounded-md bg-gray-50 dark:bg-gray-800">
                                 <p className="text-sm font-medium mb-2">Detected Items:</p>
                                 <div className="flex flex-wrap gap-2">
@@ -76,6 +77,17 @@ export default function ImageAnalyser({ image, setImage, detectedItems, setDetec
                                     ))}
                                 </div>
                             </div>
+                            <div className="text-xs mt-2 text-gray-500">
+                                🚀 <strong>[AI Model Usage Plan]</strong> <br />
+                                - This feature is currently a sample and the AI analysis function has not been implemented yet. <br />
+                                - Image analysis AI will be used to detect objects within images. <br />
+                                - Planned <strong>pre-trained open-source models</strong> from Hugging Face:  <br />
+                                * <strong>CLIP</strong> (Image-to-text matching) <br /> 
+                                * <strong>ResNet</strong> (Deep learning-based image classification)  <br />
+                                * <strong>EfficientNet</strong> (Lightweight image recognition model) <br />
+                                - One of these models will be selected, or a combination may be used for optimal performance.
+                            </div>
+                            </>
                         )}
                     </div>
                 )}

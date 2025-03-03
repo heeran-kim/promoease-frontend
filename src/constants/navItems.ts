@@ -26,7 +26,7 @@ export const NAV_ITEMS: NavItem[] = [
     {
         name: "Dashboard",
         href: "/dashboard",
-        description: "Get an overview of your business and key metrics.",
+        description: "Welcome to your dashboard. Get an overview of your business, including posts and key metrics. More tools and insights will be available soon!",
         subPages: [],
     },
     {

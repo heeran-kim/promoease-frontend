@@ -63,13 +63,6 @@ export default function NewPost() {
         }
         setIsLoading(true);
 
-        function generateRandomString(length = 6) {
-            return [...Array(length)]
-                .map(() => "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-                .charAt(Math.floor(Math.random() * 62)))
-                .join('');
-        }
-
         setTimeout(() => {
             platformStates.forEach((platform) => {
                 console.log(platform);

@@ -22,7 +22,6 @@ export default function PostsDashboardContent() {
     const { data, error, isLoading, refetch } = useFetchData<{ posts: Post[]}>(`${process.env.NEXT_PUBLIC_API_URL}/api/posts`);
 
     const posts = data?.posts || [];
-    console.log("Fetched posts:", posts);
     
     const handleDelete = async (postId: string) => {
         await mutateData(`${process.env.NEXT_PUBLIC_API_URL}/api/posts/${postId}`, "DELETE");

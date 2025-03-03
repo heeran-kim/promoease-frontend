@@ -1,7 +1,6 @@
 "use client";
 
 import React, { forwardRef } from "react";
-import { getPostById } from "@/models/post";
 import { getPlatformIcon } from "@/utils/icon";
 import { format } from "date-fns";
 import { getStatusClass } from "@/components/styles";
@@ -27,21 +26,21 @@ const ListCard = forwardRef<HTMLDivElement, ListCardProps>(
 
         const formattedDate = isPost
             ? format(new Date((item as Post).scheduled_at), "yyyy-MM-dd hh:mm a")
-            : `${format(new Date((item as Promotion).start_at), "yyyy-MM-dd")} ~ ${format(new Date((item as Promotion).end_at), "yyyy-MM-dd")}`;
+            : `${format(new Date((item as Promotion).start_date), "yyyy-MM-dd")} ~ ${format(new Date((item as Promotion).end_date), "yyyy-MM-dd")}`;
 
         const image = isPost
             ? (item as Post).image
-            : ((item as Promotion).id ?? []).length > 0
-            ? "/images/no-post.jpg"
-            : "/images/no-post.jpg";
+            : ((item as Promotion).posts ?? []).length > 0
+            ? (item as Promotion).posts[0].image
+            : "/media/no-post.jpg";
             
         const socialLinks = 
             type === "post"
                 ? [{ link: (item as Post).link ?? "Link not available yet", platform: (item as Post).platform }]
-                : (item as Promotion).postIds?.map((postId) => {
-                    const post = getPostById(postId);
-                    return { link: `/posts?id=${postId}`, platform: post?.platform ?? "unknown" };
-                }) ?? [];
+                : (item as Promotion).posts?.map((post) => ({
+                    link: `/posts?id=${post.id}`,
+                    platform: post.platform ?? "unknown"
+                })) ?? [];
 
         return (
             <div ref={ref} className="relative p-4 bg-white dark:bg-gray-900 rounded-lg shadow-md cursor-pointer transition hover:shadow-lg flex items-center space-x-4 h-auto">
@@ -64,14 +63,12 @@ const ListCard = forwardRef<HTMLDivElement, ListCardProps>(
                         <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
                             <FaRegCalendarAlt /> {formattedDate}
                         </div>
-                        {isPost && (
-                            <span className={`px-2 py-1 text-xs font-semibold rounded-md ${getStatusClass((item as Post).status)}`}>
-                                {(item as Post).status}
-                            </span>
-                        )}
+                        <span className={`px-2 py-1 text-xs font-semibold rounded-md ${getStatusClass(item.status)}`}>
+                            {item.status}
+                        </span>
                     </div>
-                        {isPost && item.categories && (item as Post).categories.map((category, index) => (
-                            <div className="inline-flex items-center gap-1.5 text-xs font-medium 
+                        {item.categories && item.categories.map((category) => (
+                            <div key={category} className="inline-flex items-center gap-1.5 text-xs font-medium 
                                     px-2 py-1 rounded-md bg-gray-500 dark:bg-blue-600 
                                     text-white dark:text-gray-100 w-fit min-w-[60px] m-1">
                                 <FaTag className="text-sm" />{category}
@@ -111,7 +108,7 @@ const ListCard = forwardRef<HTMLDivElement, ListCardProps>(
                         ) : (
                             <div className="flex items-center space-x-1">
                                 <span>🛒 Sold:</span>
-                                <span>{(item as Promotion).sold || 0}</span>
+                                <span>{(item as Promotion).sold_count || 0}</span>
                             </div>
                         )}
 

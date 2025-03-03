@@ -6,7 +6,7 @@ import { FaQuestionCircle } from "react-icons/fa";
 import { Business } from "@/types";
 
 interface BusinessInfoProps {
-    business: Business;
+    business: Omit<Business, 'logo'>;
 }
 
 export default function BusinessInfo({ business }: BusinessInfoProps) {

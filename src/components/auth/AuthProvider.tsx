@@ -44,8 +44,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                     });
     
                     if (refresth_res.ok) {
-                        console.log("✅ Successfully refreshed access token");
-                        // After refreshing, retry fetching user info
                         res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/me/`, {
                             method: "GET",
                             credentials: "include",
@@ -104,7 +102,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             if (res.ok) {
                 setUser(null);
                 router.push("/login");
-                console.log("✅ Logout successful");
             } else {
                 console.error("❌ Logout failed");
             }

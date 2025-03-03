@@ -26,7 +26,7 @@ export default function NavLinks() {
             {/* Products Dropdown (Keeps Active State While Open) */}
             <div className="relative group" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                 <button className={dropdownNavItemClass(isDropdownOpen)}>
-                    <span>Products</span>
+                    <span>Features</span>
                     {isDropdownOpen ? <FaChevronUp size={14} className="ml-1" /> : <FaChevronDown size={14} className="ml-1" />}
                 </button>
 

@@ -1,6 +1,6 @@
 "use client";
 import { ReactNode } from "react";
-import { FaRobot, FaLightbulb, FaPen, FaChartLine } from "react-icons/fa";
+import { FaServer, FaRobot, FaLightbulb, FaPen, FaChartLine } from "react-icons/fa";
 
 interface FeatureItem {
     id: string;
@@ -63,4 +63,14 @@ export const features: FeatureItem[] = [
             Understand what works, measure ROI, and make informed decisions to optimize your campaigns.
         `,
     },
+    {
+        id: "tech-stack",
+        href: "/features/tech-stack",
+        icon: <FaServer className="text-xl" />,
+        name: "Tech Stack",
+        shortDescription: "Our core technologies & infrastructure",
+        longTitle: "Technology Stack & System Architecture",
+        longDescription: `
+        `,
+    }
 ];

@@ -5,14 +5,18 @@
 // import { deletePost } from "@/models/post";
 // import { TYPE_OPTIONS, STATUS_OPTIONS } from "@/models/promotion";
 // import SearchBar from "@/components/common/SearchBar";
-// import DateRangePicker from "@/components/common/DateRangePicker";
-// import ListCard from "@/components/common/ListCard";
+import DateRangePicker from "@/components/common/DateRangePicker";
+import ListCard from "@/components/common/ListCard";
 // import Select from "@/components/common/Select";
+import { useFetchData } from "@/hooks/useFetchData";
+import { Promotion } from "@/types";
 
 export default function PromotionsDashboard() {
     // const [searchTerm, setSearchTerm] = useState("");
     // const [selectedType, setSelectedType] = useState<string | null>(null);
     // const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
+    const { data } = useFetchData<{ promotions: Promotion[]}>(`${process.env.NEXT_PUBLIC_API_URL}/api/promotions`);
+    const promotions = data?.promotions || [];
 
     // const [promotions, setPromotions] = useState();
 
@@ -35,18 +39,22 @@ export default function PromotionsDashboard() {
     //     setPromotions((prevPromotions) => prevPromotions.filter((promo) => promo.id !== promotionId));
     // };
 
-    // const handleCreatePost = (promotionId: string) => {
-    //     console.log(`Create a new post for promotion ID: ${promotionId}`);
-    // };
+    const handleCreatePost = (promotionId: string) => {
+        console.log(`Create a new post for promotion ID: ${promotionId}`);
+    };
 
-    // const handleDuplicate = (promotionId: string) => {
-    //     console.log(`Duplicate for promotion ID: ${promotionId}`);
-    // }
+    const handleDuplicate = (promotionId: string) => {
+        console.log(`Duplicate for promotion ID: ${promotionId}`);
+    }
+
+    const handleDelete = (promotionId: string) => {
+        console.log(`Delete promotion ID: ${promotionId}`);
+    }
 
     // const filteredPromotions = promotions.filter(promo =>
-    //     (!selectedType || promo.category === selectedType) &&
-    //     (!selectedStatus || promo.status === selectedStatus) &&
-    //     (!searchTerm || promo.description.toLowerCase().includes(searchTerm.toLowerCase()))
+        // (!selectedType || promo.categories === selectedType) &&
+        // (!selectedStatus || promo.status === selectedStatus) &&
+        // (!searchTerm || promo.description.toLowerCase().includes(searchTerm.toLowerCase()))
     // );
 
     // const ongoingPromotions = filteredPromotions.filter(promo => promo.status === "Ongoing");
@@ -55,15 +63,16 @@ export default function PromotionsDashboard() {
 
     return (
         <div>
-            {/* <div className="flex items-center space-x-4 py-4 border-b">
-                <SearchBar setSearchTerm={setSearchTerm} placeholder="Search promotions..." />
+            <div className="flex items-center space-x-4 py-4 border-b">
+                {/* <SearchBar setSearchTerm={setSearchTerm} placeholder="Search promotions..." /> */}
                 <DateRangePicker onChange={(range) => console.log("Selected Range:", range)} />
-                <Select value={selectedType} onChange={setSelectedType} options={TYPE_OPTIONS} placeholder="All Types"/>
-                <Select value={selectedStatus} onChange={setSelectedStatus} options={STATUS_OPTIONS} placeholder="All Status"/>
+                {/* <Select value={selectedType} onChange={setSelectedType} options={TYPE_OPTIONS} placeholder="All Types"/>
+                <Select value={selectedStatus} onChange={setSelectedStatus} options={STATUS_OPTIONS} placeholder="All Status"/> */}
             </div>
 
             <div className="space-y-4 mt-2">
-                {[...upcomingPromotions, ...ongoingPromotions, ...endedPromotions].map((promo) => (
+                {promotions.map((promo) => (
+                // {[...upcomingPromotions, ...ongoingPromotions, ...endedPromotions].map((promo) => (
                     <ListCard 
                         key={promo.id} 
                         item={promo} 
@@ -75,7 +84,7 @@ export default function PromotionsDashboard() {
                         ]}
                     />
                 ))}
-            </div> */}
+            </div>
         </div>
     );
 }

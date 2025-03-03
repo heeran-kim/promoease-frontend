@@ -1,13 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
 import Card from "@/components/common/Card";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import DraggableCaption from "./DraggableCaption";
 import PlatformDropZone from "./PlatformDropZone";
-import { getRegisteredAccount, getRegisteredPlatforms } from "@/models/business";
 import { captions } from "@/constants/captions";
-import { usePlatformCaptions } from "@/context/PlatformCaptionsContext";
 import { PlatformState } from "@/types";
 
 interface CaptionSuggestionsProps {
@@ -19,39 +16,17 @@ interface CaptionSuggestionsProps {
 }
 
 export default function CaptionSuggestions({ setStep, platformOptions, platformStates, setPlatformStates, handleConfirmPost }: CaptionSuggestionsProps) {
-    const { platformCaptions, setPlatformCaptions } = usePlatformCaptions();
-    
-    const togglePlatform = (platform: string) => {
-        if (!platformStates.includes(platform)) return;
-
-        setPlatformStates((prev: string[]) => {
-            return prev.includes(platform)
-                ? prev.filter((p) => p !== platform)
-                : [...prev, platform];
-        });
+    const handlePlatformToggle = (platformLabel: string) => {
+        setPlatformStates(platformStates.map((platform) =>
+            platform.label === platformLabel ? { ...platform, selected: !platform.selected } : platform
+        ));
+        console.log(platformStates);
     };
-
-    useEffect(() => {
-        setPlatformCaptions((prev: Record<string, string>) => {
-            const updatedCaptions: Record<string, string> = { ...prev };
-            let hasChanges = false;
     
-            platformOptions.forEach((platform) => {
-                if (!platformStates.includes(platform) && updatedCaptions[platform] !== "") {
-                    updatedCaptions[platform] = "";
-                    hasChanges = true;
-                }
-            });
-    
-            return hasChanges ? updatedCaptions : prev;
-        });
-    }, [platformStates, setPlatformCaptions]);
-    
-    const handleCaptionEdit = (platform: string, text: string) => {
-        setPlatformCaptions((prev) => ({
-            ...prev,
-            [platform]: text,
-        }));
+    const handleCaptionEdit = (platformLabel: string, text: string) => {
+        setPlatformStates(platformStates.map((platform) =>
+            platform.label === platformLabel ? { ...platform, caption: text } : platform
+        ));
     };
 
     const handleDragEnd = (event: DragEndEvent) => {
@@ -60,13 +35,12 @@ export default function CaptionSuggestions({ setStep, platformOptions, platformS
     
         const draggedCaption = String(active.id);
         const targetPlatform = String(over.id);
+
+        if (!platformStates.find((p) => p.label === targetPlatform)) return;
     
-        if (!platformStates.includes(targetPlatform)) return;
-    
-        setPlatformCaptions((prev: Record<string, string>) => ({
-            ...prev,
-            [targetPlatform]: draggedCaption,
-        }));
+        setPlatformStates(platformStates.map((platform) =>
+            platform.label === targetPlatform ? { ...platform, caption: draggedCaption } : platform
+        ));
     };
 
     return (
@@ -81,6 +55,15 @@ export default function CaptionSuggestions({ setStep, platformOptions, platformS
                         {captions.map((caption) => (
                             <DraggableCaption key={caption} id={caption} text={caption} />
                         ))}
+                        <div className="text-xs mt-2 text-gray-500">
+                            🚀 <strong>[AI Model Usage Plan]</strong> <br />
+                            - This feature is currently a sample, and the AI-generated captions have been pre-defined. <br />
+                            - AI-powered caption generation will be implemented to create context-aware captions based on images and user inputs. <br />
+                            - Planned <strong>pre-trained AI models</strong> for caption generation:  <br />
+                            * <strong>GPT-4 / T5</strong> → (Natural language generation for captions) <br /> 
+                            * <strong>BART</strong> → (Text summarization & refinement) <br />
+                            - Depending on the requirements, one of these models will be selected, or a combination may be used to optimize caption relevance and creativity.
+                        </div>
                     </div>
 
                     <div className="w-1/2 flex-grow space-y-6">
@@ -91,22 +74,22 @@ export default function CaptionSuggestions({ setStep, platformOptions, platformS
                                     <div className="flex justify-between items-center mb-2">
                                         <div className="flex items-center gap-2">
                                             <p className="text-sm font-semibold">{platform}</p>
-                                            {getRegisteredAccount(platform as keyof typeof platformOptions) && (
-                                                <span className="text-xs text-gray-500">({getRegisteredAccount(platform as keyof typeof platformOptions)})</span>
+                                            {platformStates.find((p) => p.label === platform) && (
+                                                <span className="text-xs text-gray-500">(@{platformStates.find((p) => p.label === platform)?.account})</span>
                                             )}
                                         </div>
                                         <button
-                                            onClick={() => togglePlatform(platform)}
+                                            onClick={() => handlePlatformToggle(platform)}
                                             className={`text-xs px-2 py-1 rounded-md transition ${
-                                                platformStates.includes(platform)
-                                                    ? platformStates.includes(platform)
+                                                platformStates.find((p) => p.label === platform)
+                                                    ? platformStates.find((p) => p.label === platform)?.selected
                                                         ? "bg-black text-white hover:bg-gray-800"
                                                         : "bg-gray-300 text-gray-800 hover:bg-gray-400"
                                                     : "bg-gray-200 text-gray-500 cursor-not-allowed"
                                             }`}
-                                            disabled={!platformStates.includes(platform)}
+                                            disabled={!platformStates.find((p) => p.label === platform)}
                                         >
-                                            {platformStates.includes(platform) ? "Disable" : "Enable"}
+                                            {platformStates.find((p) => p.label === platform)?.selected ? "Disable" : "Enable"}
                                         </button>
                                     </div>
 
@@ -115,15 +98,15 @@ export default function CaptionSuggestions({ setStep, platformOptions, platformS
                                             id={platform}
                                             className="w-full h-24 text-sm p-2 border rounded-md mt-1 resize-none"
                                             placeholder={
-                                                platformStates.includes(platform)
-                                                    ? platformStates.includes(platform)
+                                                platformStates.find((p) => p.label === platform)
+                                                    ? platformStates.find((p) => p.label === platform)?.selected
                                                         ? "Drag a caption here or type your own..."
                                                         : "🔹 Want to post here? Enable this platform first!"
                                                     : "❌ You cannot post here. This platform is not registered."
                                             }
-                                            value={platformCaptions[platform]}
+                                            value={platformStates.find((p) => p.label === platform)?.caption}
                                             onChange={(e) => handleCaptionEdit(platform, e.target.value)}
-                                            disabled={!platformStates.includes(platform)}
+                                            disabled={!platformStates.find((p) => p.label === platform)?.selected}
                                         />
                                     </PlatformDropZone>
                                 </div>

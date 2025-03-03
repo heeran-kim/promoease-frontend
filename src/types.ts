@@ -1,6 +1,6 @@
 export interface Business {
     name?: string;
-    logo?: string;
+    logo: string;
     type?: string;
     target?: string;
     vibe?: string;
@@ -45,21 +45,6 @@ export interface Post {
     shares: number;
 }
 
-export interface Promotion {
-    id: string;
-    business: string;
-    platform: string;
-    categories: string[];
-    image: string;
-    link: string;
-    created_at: string;
-    start_at: string;
-    end_at: string;
-    status: string;
-    postIds: string[];
-    description: string;
-    sold: number;
-}
 export interface DropboxItem {
     label: string;
     onClick: () => void | Promise<void>;
@@ -73,7 +58,9 @@ export interface PostCategory {
 
 export interface PlatformState {
     label: string;
+    account: string;
     selected: boolean;
+    caption: string;
 }
 
 export interface PostCreationData {
@@ -82,3 +69,15 @@ export interface PostCreationData {
     platformOptions: string[];
     platformStates: PlatformState[];
 }
+
+export type Promotion = {
+    id: string;
+    business: string;
+    posts: Post[];
+    categories: string[];
+    description: string;
+    start_date: string;
+    end_date: string;
+    status: string;
+    sold_count?: number;
+};
