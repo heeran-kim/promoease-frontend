@@ -18,7 +18,7 @@ export const DASHBOARD_API = {
 
 // Business API Endpoints
 export const BUSINESSES_API = {
-    GET_ALL: `${BASE_URL}/businesses/`,
+    GET_ALL: `${BASE_URL}/businesses/me/`,
     UPDATE: (id: string) => `${BASE_URL}/businesses/${id}/`,
 };
 
