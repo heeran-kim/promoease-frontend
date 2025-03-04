@@ -4,7 +4,6 @@ import Card from "@/components/common/Card";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import DraggableCaption from "./DraggableCaption";
 import PlatformDropZone from "./PlatformDropZone";
-import { captions } from "@/constants/captions";
 import { PlatformState } from "@/types";
 
 interface CaptionSuggestionsProps {
@@ -13,14 +12,14 @@ interface CaptionSuggestionsProps {
     platformStates: PlatformState[];
     setPlatformStates: (type: PlatformState[]) => void;
     handleConfirmPost: () => void;
+    captions: string[];
 }
 
-export default function CaptionSuggestions({ setStep, platformOptions, platformStates, setPlatformStates, handleConfirmPost }: CaptionSuggestionsProps) {
+export default function CaptionSuggestions({ setStep, platformOptions, platformStates, setPlatformStates, handleConfirmPost, captions }: CaptionSuggestionsProps) {
     const handlePlatformToggle = (platformLabel: string) => {
         setPlatformStates(platformStates.map((platform) =>
             platform.label === platformLabel ? { ...platform, selected: !platform.selected } : platform
         ));
-        console.log(platformStates);
     };
     
     const handleCaptionEdit = (platformLabel: string, text: string) => {
@@ -36,7 +35,7 @@ export default function CaptionSuggestions({ setStep, platformOptions, platformS
         const draggedCaption = String(active.id);
         const targetPlatform = String(over.id);
 
-        if (!platformStates.find((p) => p.label === targetPlatform)) return;
+        if (!platformStates.find((p) => p.label === targetPlatform)?.selected) return;
     
         setPlatformStates(platformStates.map((platform) =>
             platform.label === targetPlatform ? { ...platform, caption: draggedCaption } : platform
@@ -49,8 +48,8 @@ export default function CaptionSuggestions({ setStep, platformOptions, platformS
             description="Drag and drop a caption to your selected platform. You can also edit captions before posting. If you want different AI-generated captions, click 'Back to Edit' to adjust your inputs and generate new suggestions."
         >
             <DndContext onDragEnd={handleDragEnd}>
-                <div className="flex gap-6">
-                    <div className="w-1/2 flex-shrink-0 space-y-3">
+                <div className="flex flex-col lg:flex-row items-start gap-6">
+                    <div className="w-full lg:w-1/2 flex-shrink-0 space-y-3">
                         <h3 className="text-sm font-medium">📝 Generated Captions:</h3>
                         {captions.map((caption) => (
                             <DraggableCaption key={caption} id={caption} text={caption} />
@@ -66,7 +65,7 @@ export default function CaptionSuggestions({ setStep, platformOptions, platformS
                         </div>
                     </div>
 
-                    <div className="w-1/2 flex-grow space-y-6">
+                    <div className="w-full lg:w-1/2 flex-grow space-y-6">
                         <h3 className="text-sm font-medium">📲 Captions by Platform:</h3>
                         <div className="space-y-4 mt-3">
                             {platformOptions.map((platform) => (
@@ -104,7 +103,7 @@ export default function CaptionSuggestions({ setStep, platformOptions, platformS
                                                         : "🔹 Want to post here? Enable this platform first!"
                                                     : "❌ You cannot post here. This platform is not registered."
                                             }
-                                            value={platformStates.find((p) => p.label === platform)?.caption}
+                                            value={platformStates.find((p) => p.label === platform)?.selected ? platformStates.find((p) => p.label === platform)?.caption : ""}
                                             onChange={(e) => handleCaptionEdit(platform, e.target.value)}
                                             disabled={!platformStates.find((p) => p.label === platform)?.selected}
                                         />

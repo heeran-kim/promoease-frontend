@@ -4,29 +4,22 @@ import DragAndDropUploader from "@/components/common/DragAndDropUploader";
 import Card from "@/components/common/Card";
 import { Dispatch, SetStateAction } from "react";
 
-export default function ImageAnalyser({ image, setImage, detectedItems, setDetectedItems }: {
-    image: string; 
-    setImage: (image: string) => void;
+interface ImageAnalyserProps {
+    image: File | null;
+    setImage: (image: File | null) => void;
     detectedItems: string[];
     setDetectedItems: Dispatch<SetStateAction<string[]>>;
-}) {
+    handleAnalyseImage: (e: React.MouseEvent<HTMLButtonElement>) => void; 
+}
+
+export default function ImageAnalyser({ image, setImage, detectedItems, setDetectedItems, handleAnalyseImage }: ImageAnalyserProps) {
     const handleImageUpload = (file: File | null) => {
         if (file) {
-            const fileURL = URL.createObjectURL(file);
-            setImage(fileURL);
+            setImage(file);
             setDetectedItems([]);
         } else {
-            setImage("");
+            setImage(null);
         }
-    };
-
-    const handleAnalyseImage = async () => {
-        if (!image) {
-            alert("Please select an image first!");
-            return;
-        }
-        const fakeAnalysis = ["Steak", "Grilled Meat", "Garlic", "Herbs", "Lemon", "Lamb"];
-        setDetectedItems(fakeAnalysis);
     };
 
     const removeDetectedItem = (index: number) => {
@@ -34,7 +27,7 @@ export default function ImageAnalyser({ image, setImage, detectedItems, setDetec
     };
 
     return (
-        <div className="w-1/3 flex-shrink-0">
+        <div className="w-full lg:w-1/3 flex-shrink-0">
             <Card
                 title="Step 1: Upload & Analyse Image"
                 description={
@@ -48,7 +41,7 @@ export default function ImageAnalyser({ image, setImage, detectedItems, setDetec
                     </div>
                 }
             >
-                <DragAndDropUploader value={image} onChange={handleImageUpload} fileType="image" />
+                <DragAndDropUploader value={image ? URL.createObjectURL(image) : ""}  onChange={handleImageUpload} fileType="image" />
             
                 {image && (
                     <div className="mt-3">

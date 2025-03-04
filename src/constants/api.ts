@@ -36,3 +36,9 @@ export const PROMOTIONS_API = {
     CREATE: `${BASE_URL}/promotions/create/`,
     DELETE: (id: string) => `${BASE_URL}/promotions/${id}/`,
 };
+
+// AI API Endpoints
+export const AI_API = {
+    IMG_ANALYSIS: `${BASE_URL}/ai/images/analyse/`,
+    CAPTION_GENERATE: `${BASE_URL}/ai/captions/generate/`,
+}

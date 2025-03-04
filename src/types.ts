@@ -90,6 +90,7 @@ export interface PostCreationData {
     platformStates: PlatformState[];
 }
 
+
 // Represents a promotional campaign consisting of multiple posts
 export type Promotion = {
     id: string;                     // Unique promotion ID
@@ -108,4 +109,9 @@ export interface User {
     name: string;                   // Name of the user
     email: string;                  // ex: "user@example.com"
     role: string;                   // ex: "admin", "business owner"
+}
+
+
+export interface ImageAnalysisResponse {
+    detectedItems: string[];        // List of detected objects (e.g., ["Steak", "Lemon"])
 }

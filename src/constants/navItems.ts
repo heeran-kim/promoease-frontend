@@ -43,12 +43,12 @@ export const NAV_ITEMS: NavItem[] = [
         subPages: [
             {
                 name: "Create Post",
-                href: "/posts/new",
+                href: "/posts/create",
                 description: "Start by uploading an image. Then, adjust the post settings to generate the perfect caption!",
             }
         ],
         actions: (router: AppRouterInstance) => [
-            { label: "Create Post", onClick: () => router.push("/posts/new") },
+            { label: "Create Post", onClick: () => router.push("/posts/create") },
             { label: "Learn about Social Media Management", onClick: () => router.push("/features/social-media-management") },
             { label: "Learn about AI Captions", onClick: () => router.push("/features/ai-captions") },
         ],

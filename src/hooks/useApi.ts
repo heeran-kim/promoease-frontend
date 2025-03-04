@@ -64,14 +64,21 @@ export function useFetchData<T>(url: string) {
 export const mutateData = async <T>(
     url: string,
     method: "POST" | "PUT" | "DELETE",
-    body?: Record<string, unknown> | null
+    body?: Record<string, unknown> | FormData | null, // Allow both JSON & FormData
+    isFormData: boolean = false // Flag to determine request type
 ): Promise<T | null> => {
     try {
+        const requestBody: BodyInit | null | undefined = isFormData
+            ? (body as FormData) // Cast to FormData if isFormData is true
+            : body
+            ? JSON.stringify(toSnakeCase(body)) // Convert JSON body
+            : undefined;
+
         const res = await fetch(url, {
             method,
-            headers: { "Content-Type": "application/json" },
+            headers: isFormData ? {} : { "Content-Type": "application/json" }, // Remove Content-Type for FormData
             credentials: "include",
-            body: body ? JSON.stringify(toSnakeCase(body)) : undefined, // Convert request to snake_case
+            body: requestBody,
         });
 
         if (!res.ok) throw new Error(`Failed to ${method} data: ${res.status}`);

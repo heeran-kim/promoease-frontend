@@ -1,4 +1,4 @@
-// src/app/posts/new/page.tsx
+// src/app/posts/create/page.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -10,27 +10,29 @@ import PostSettings from "@/components/create-post/PostSettings";
 import UserCustomization from "@/components/create-post/UserCustomization";
 import CaptionSuggestions from "@/components/create-post/CaptionSuggestions";
 import { usePlatformCaptions } from "@/context/PlatformCaptionsContext";
-
-import { useFetchData } from "@/hooks/useApi";
-import { PostCreationData, PostCategory, PlatformState } from "@/types";
-import { POSTS_API } from "@/constants/api";
+import { useFetchData, mutateData } from "@/hooks/useApi";
+import { PostCreationData, PostCategory, PlatformState, ImageAnalysisResponse } from "@/types";
+import { AI_API, POSTS_API } from "@/constants/api";
 
 
 export default function NewPost() {
-    const [step, setStep] = useState(2); 
-    const [customText, setCustomText] = useState("");
-    const [image, setImage] = useState<string>("");
+    const [step, setStep] = useState(2);
+
+    const { data, error, mutate } = useFetchData<PostCreationData>(POSTS_API.CREATE);
+
+    const [image, setImage] = useState<File | null>(null);
     const [detectedItems, setDetectedItems] = useState<string[]>([]);
-    const [isCaptionGenerationLoading, setIsLoading] = useState(false);
-    const [isSuccess, setIsSuccess] = useState(false);
-    const { platformCaptions, resetPlatformCaptions } = usePlatformCaptions(); 
-    const router = useRouter();
     
     const [postCategories, setPostCategories] = useState<PostCategory[]>([]);
     const [platformStates, setPlatformStates] = useState<PlatformState[]>([]);
-
-    const { data, error, isLoading, mutate } = useFetchData<PostCreationData>(POSTS_API.CREATE);
-    console.log(data);
+    const [customText, setCustomText] = useState("");
+    
+    const [captions, setCaptions] = useState<string[]>([]);
+    const { platformCaptions, resetPlatformCaptions } = usePlatformCaptions(); 
+    const [isLoading, setIsLoading] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
+    
+    const router = useRouter();
 
     useEffect(() => {
         if (data?.postCategories) {
@@ -42,19 +44,66 @@ export default function NewPost() {
         }
     }, [data]);
 
-    const handleGenerateCaptions = () => {
+    const handleAnalyseImage = async () => {
+        if (!image) {
+            alert("Please select an image first!");
+            return;
+        }
+        
+        const formData = new FormData();
+        formData.append("image", image);
+        
+        setIsLoading(true);
+        const res: ImageAnalysisResponse | null = await mutateData<ImageAnalysisResponse>(AI_API.IMG_ANALYSIS, "POST", formData, true);
+        if (!res || !res.detectedItems) {
+            console.error("❌ Failed to fetch image analysis result or empty data.");
+            setDetectedItems([]);
+            setIsLoading(false);
+            return;
+        }
+        setDetectedItems(res.detectedItems);
+        setIsLoading(false);
+    };
+
+    const handleGenerateCaptions = async () => {
         if (!image) {
             alert("Please upload an image before generating AI captions.");
             return;
+        }
+        if (!detectedItems?.length) {
+            const proceedWithoutImageDetails = confirm(
+                "⚠️ No objects detected from the image. Captions may not include image-related descriptions. Do you want to continue?"
+            );
+            if (!proceedWithoutImageDetails) {
+                return;
+            }
         }
         if (Object.values(platformCaptions).some((caption) => caption !== "")) {
             resetPlatformCaptions();
         }
         setIsLoading(true);
-        setTimeout(() => {
-            setStep(3);
+
+         const res: {captions: string[]} | null = await mutateData<{captions: string[]}>(
+            AI_API.CAPTION_GENERATE,
+            "POST",
+            {
+                "businessInfo": data?.business,
+                "postCategories": postCategories,
+                "platformStates": platformStates,
+                "customText": customText,
+                "imgItems": detectedItems
+            },
+            false
+        );
+        if (!res) {
+            alert("❌ Failed to fetch caption generation result or empty data.");
+            setCaptions([]);
             setIsLoading(false);
-        }, 2000);
+            return;
+        }
+        setCaptions(res.captions);
+        setIsLoading(false);
+        setStep(3);
     };
 
     const handleConfirmPost = () => {
@@ -65,10 +114,6 @@ export default function NewPost() {
         setIsLoading(true);
 
         setTimeout(() => {
-            platformStates.forEach((platform) => {
-                console.log(platform);
-            });
-    
             setIsSuccess(true);
     
             setTimeout(() => {
@@ -95,7 +140,7 @@ export default function NewPost() {
 
     return (
         <div className="max-w-6xl mx-auto flex gap-6 p-6">
-            {isCaptionGenerationLoading && (
+            {isLoading && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
                     <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center">
                         {isSuccess ? (
@@ -116,9 +161,15 @@ export default function NewPost() {
             )}
 
             {step == 2 ? (
-                <>
-                    <ImageAnalyser image={image} setImage={setImage} detectedItems={detectedItems} setDetectedItems={setDetectedItems} />
-                    <div className="w-2/3 flex-grow space-y-6">
+                <div className="flex flex-col lg:flex-row items-start gap-6">
+                    <ImageAnalyser 
+                        image={image} 
+                        setImage={setImage} 
+                        detectedItems={detectedItems} 
+                        setDetectedItems={setDetectedItems} 
+                        handleAnalyseImage={handleAnalyseImage}
+                    />
+                    <div className="w-full lg:w-2/3 flex-grow space-y-6">
                         <Card title="Step 2: Tell AI About Your Post" description="Help AI understand your post by providing some details. Your selections will shape the generated captions!">
                             <div className="space-y-1">
                                 <BusinessInfo business={data.business} />
@@ -141,7 +192,7 @@ export default function NewPost() {
                             </div>
                         </Card>
                     </div>
-                </>
+                </div>
             ):(
                 <CaptionSuggestions
                     setStep={setStep}
@@ -149,6 +200,7 @@ export default function NewPost() {
                     platformStates={platformStates}
                     setPlatformStates={setPlatformStates}
                     handleConfirmPost={handleConfirmPost}
+                    captions={captions}
                 />
             )}
         </div>
