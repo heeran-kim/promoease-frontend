@@ -57,7 +57,7 @@ export default function GeneralSettings() {
     const handleSave = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!editedBusiness) return;
         const fieldName = e.currentTarget.id as keyof Business;
-        await mutateData(BUSINESSES_API.UPDATE(businessData.id), "PUT", {
+        await mutateData(BUSINESSES_API.UPDATE("todolater"), "PUT", {
             [fieldName]: editedBusiness[fieldName],
         });
         mutate(businessData, true);
