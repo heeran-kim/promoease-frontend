@@ -7,6 +7,7 @@ import { SearchBar, DateRangePicker, ListCard, Select } from "@/components/commo
 import { PLATFORM_OPTIONS } from "@/utils/icon";
 import { Post, DropboxItem } from "@/types";
 import { POST_STATUS_OPTIONS } from "@/constants/posts";
+import { POSTS_API } from "@/constants/api";
 
 const ITEMS_PER_PAGE = 5; 
 
@@ -17,12 +18,12 @@ export default function PostsDashboardContent() {
     const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
     const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
 
-    const { data, error, isLoading, mutate } = useFetchData<{ posts: Post[]}>("/api/posts/");
+    const { data, error, isLoading, mutate } = useFetchData<{ posts: Post[]}>(POSTS_API.GET_ALL);
 
     const posts = data?.posts || [];
     
     const handleDelete = async (postId: string) => {
-        await mutateData(`/api/posts/${postId}/`, "DELETE");
+        await mutateData(POSTS_API.DELETE(postId), "DELETE");
         mutate();
     };
         const handleEdit = (postId: string) => {

@@ -5,9 +5,10 @@ import DashboardCard from "./components/DashboardCard";
 import EmptyBusinessState from "./components/EmptyBusinessState";
 import { useFetchData } from "@/hooks/useApi";
 import { DashboardData } from "@/types";
+import { DASHBOARD_API } from "@/constants/api";
 
 export default function Dashboard() {
-    const { data, error, isLoading, mutate } = useFetchData<DashboardData>("/api/dashboard/");
+    const { data, error, isLoading, mutate } = useFetchData<DashboardData>(DASHBOARD_API.GET_ALL);
 
     const handleRetry = async () => {
         await mutate();

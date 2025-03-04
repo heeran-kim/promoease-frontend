@@ -4,6 +4,7 @@ import { createContext, useContext } from "react";
 import { useFetchData } from "@/hooks/useApi";
 import { useRouter } from "next/navigation";
 import { User } from "@/types";
+import { USERS_API } from "@/constants/api";
 
 interface AuthContextType {
     user: User | null;
@@ -14,59 +15,53 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-    const router = useRouter();
-    const { data: user, mutate } = useFetchData<User>("/api/users/me/");
-    
-    const login = async (email: string, password: string) => {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/login/`, {
-            method: "POST",
+const fetchWithAuth = async (
+    url: string,
+    method: string,
+    mutate: () => Promise<User | null | undefined>,
+    body?: object
+) => {
+    try {
+        const res = await fetch(url, {
+            method,
             credentials: "include",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password }),
+            body: body ? JSON.stringify(body) : undefined,
         });
 
-        if (res.ok) {
-            await res.json();
-            mutate(user, true);
-            router.push("/dashboard");
-        } 
+        if (!res.ok) {
+            const errorData = await res.json();
+            // Extract first error field dynamically
+            const firstKey = Object.keys(errorData)[0]; 
+            const errorMessage = firstKey ? errorData[firstKey].join(" ") : JSON.stringify(errorData);
+            throw new Error(errorMessage);
+        }
+
+        await mutate(); // triggers a refetch to get the latest user data from the server
+        return res.json();
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+    const router = useRouter();
+    const { data: user, mutate } = useFetchData<User>(USERS_API.ME);
+    
+    const login = async (email: string, password: string) => {
+        await fetchWithAuth(USERS_API.LOGIN, "POST", mutate, { email, password });
+        router.push("/dashboard");
     };
 
     const logout = async () => {
-        try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/logout/`, {
-                method: "POST",
-                credentials: "include",
-                headers: { "Content-Type": "application/json" },
-            });
-    
-            if (res.ok) {
-                mutate(user, true);
-                router.push("/login");
-            } 
-        } catch (error) {
-            console.error("❌ Logout API Error:", error);
-        }
+        await fetchWithAuth(USERS_API.LOGOUT, "POST", mutate);
+        router.push("/login");
     };
 
     const register = async (name: string, email: string, password: string) => {
-        try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/register/`, {
-                method: "POST",
-                credentials: "include",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({name, email, password}),
-            });
-
-            if (res.ok)
-            {
-                mutate(user, true);
-                router.push("/dashboard");
-            } 
-        } catch (error) {
-            console.error("❌ Register API Error:", error);
-        }
+        await fetchWithAuth(USERS_API.REGISTER, "POST", mutate, { name, email, password });
+        await login(email, password);
+        router.push("/dashboard");
     }
 
     return (

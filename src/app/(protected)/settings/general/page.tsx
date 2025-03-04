@@ -7,9 +7,10 @@ import DragAndDropUploader from "@/components/common/DragAndDropUploader";
 import { useFetchData, mutateData } from "@/hooks/useApi";
 import { Business, EMPTY_BUSINESS } from "@/types";
 import { INDUSTRY_OPTIONS, DEFAULT_LOGO_PATH } from "@/constants/settings";
+import { BUSINESSES_API } from "@/constants/api";
 
 export default function GeneralSettings() {
-    const { data: businessData, error, isLoading, mutate } = useFetchData<Business>("/api/businesses/me/");
+    const { data: businessData, error, isLoading, mutate } = useFetchData<Business>(BUSINESSES_API.GET_ALL);
     const [editedBusiness, setEditedBusiness] = useState<Business>(EMPTY_BUSINESS);
     const [googleMapsUrl, setGoogleMapsUrl] = useState("");
     const isPredefinedCategory = INDUSTRY_OPTIONS.includes(editedBusiness?.category ?? "");
@@ -56,7 +57,7 @@ export default function GeneralSettings() {
     const handleSave = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!editedBusiness) return;
         const fieldName = e.currentTarget.id as keyof Business;
-        await mutateData("/api/businesses/me/", "PUT", {
+        await mutateData(BUSINESSES_API.UPDATE(businessData.id), "PUT", {
             [fieldName]: editedBusiness[fieldName],
         });
         mutate(businessData, true);

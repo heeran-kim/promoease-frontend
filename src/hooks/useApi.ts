@@ -1,7 +1,5 @@
 import useSWR from "swr";
 
-const baseUrl = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "");
-
 // Converts snake_case to camelCase (for API responses)
 const toCamelCase = <T>(obj: T): T => {
     if (Array.isArray(obj)) {
@@ -32,18 +30,15 @@ const toSnakeCase = <T>(obj: T): T => {
 
 // Fetcher for SWR
 const fetcher = async <T>(url: string): Promise<T | null> => {
-    const fullUrl = `${baseUrl}${url.startsWith("/") ? url : `/${url}`}`;
-
     try {
-        const res = await fetch(fullUrl, {
+        const res = await fetch(url, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
         });
 
         if (res.status === 401) {
-            if (url === "/api/users/me/") return null;
-            throw new Error("Unauthorized (401)");
+            return null;
         }
 
         if (!res.ok) throw new Error(`Failed to fetch data: ${res.status}`);
@@ -71,10 +66,8 @@ export const mutateData = async <T>(
     method: "POST" | "PUT" | "DELETE",
     body?: Record<string, unknown> | null
 ): Promise<T | null> => {
-    const fullUrl = `${baseUrl}${url.startsWith("/") ? url : `/${url}`}`;
-
     try {
-        const res = await fetch(fullUrl, {
+        const res = await fetch(url, {
             method,
             headers: { "Content-Type": "application/json" },
             credentials: "include",

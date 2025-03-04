@@ -14,7 +14,7 @@ const EmailPage: React.FC = () => {
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
     const handleBackToLoginOptions = () => {
-        router.back(); // 이전 페이지로 이동
+        router.back();
     };
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {

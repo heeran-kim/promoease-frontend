@@ -10,12 +10,13 @@ import ListCard from "@/components/common/ListCard";
 // import Select from "@/components/common/Select";
 import { useFetchData } from "@/hooks/useApi";
 import { Promotion } from "@/types";
+import { PROMOTIONS_API } from "@/constants/api";
 
 export default function PromotionsDashboard() {
     // const [searchTerm, setSearchTerm] = useState("");
     // const [selectedType, setSelectedType] = useState<string | null>(null);
     // const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
-    const { data } = useFetchData<{ promotions: Promotion[]}>("/api/promotions/");
+    const { data } = useFetchData<{ promotions: Promotion[]}>(PROMOTIONS_API.GET_ALL);
     const promotions = data?.promotions || [];
 
     // const [promotions, setPromotions] = useState();

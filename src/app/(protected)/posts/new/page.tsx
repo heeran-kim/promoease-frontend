@@ -13,6 +13,7 @@ import { usePlatformCaptions } from "@/context/PlatformCaptionsContext";
 
 import { useFetchData } from "@/hooks/useApi";
 import { PostCreationData, PostCategory, PlatformState } from "@/types";
+import { POSTS_API } from "@/constants/api";
 
 
 export default function NewPost() {
@@ -28,7 +29,7 @@ export default function NewPost() {
     const [postCategories, setPostCategories] = useState<PostCategory[]>([]);
     const [platformStates, setPlatformStates] = useState<PlatformState[]>([]);
 
-    const { data, error, isLoading, mutate } = useFetchData<PostCreationData>("/api/posts/new/");
+    const { data, error, isLoading, mutate } = useFetchData<PostCreationData>(POSTS_API.CREATE);
     console.log(data);
 
     useEffect(() => {
