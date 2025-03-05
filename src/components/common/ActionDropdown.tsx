@@ -2,6 +2,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { HiDotsHorizontal } from "react-icons/hi";
 import { Action } from "@/app/types/nav";
 
@@ -13,6 +14,7 @@ export default function ActionDropdown({ actions }: (ActionDropdownProps)) {
     const [open, setOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const buttonRef = useRef<HTMLButtonElement>(null);
+    const router = useRouter();
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
@@ -52,7 +54,7 @@ export default function ActionDropdown({ actions }: (ActionDropdownProps)) {
                         <button
                             key={action.label}
                             onClick={() => {
-                                action.onClick;
+                                action.onClick(router);
                                 setOpen(false);
                             }}
                             disabled={action.disabled}
