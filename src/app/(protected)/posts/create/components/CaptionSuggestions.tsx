@@ -4,27 +4,27 @@ import Card from "@/components/common/Card";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import DraggableCaption from "./DraggableCaption";
 import PlatformDropZone from "./PlatformDropZone";
-import { PlatformState } from "@/types";
+import { PlatformState } from "@/app/types/post";
+import { PLATFORM_OPTIONS } from "@/utils/icon";
 
 interface CaptionSuggestionsProps {
     setStep: (step: number) => void;
-    platformOptions: string[];
     platformStates: PlatformState[];
     setPlatformStates: (type: PlatformState[]) => void;
     handleConfirmPost: () => void;
     captions: string[];
 }
 
-export default function CaptionSuggestions({ setStep, platformOptions, platformStates, setPlatformStates, handleConfirmPost, captions }: CaptionSuggestionsProps) {
-    const handlePlatformToggle = (platformLabel: string) => {
+export default function CaptionSuggestions({ setStep, platformStates, setPlatformStates, handleConfirmPost, captions }: CaptionSuggestionsProps) {
+    const handlePlatformToggle = (platformKey: string) => {
         setPlatformStates(platformStates.map((platform) =>
-            platform.label === platformLabel ? { ...platform, selected: !platform.selected } : platform
+            platform.key === platformKey ? { ...platform, isSelected: !platform.isSelected } : platform
         ));
     };
     
-    const handleCaptionEdit = (platformLabel: string, text: string) => {
+    const handleCaptionEdit = (platformKey: string, text: string) => {
         setPlatformStates(platformStates.map((platform) =>
-            platform.label === platformLabel ? { ...platform, caption: text } : platform
+            platform.key === platformKey ? { ...platform, caption: text } : platform
         ));
     };
 
@@ -35,11 +35,10 @@ export default function CaptionSuggestions({ setStep, platformOptions, platformS
         const draggedCaption = String(active.id);
         const targetPlatform = String(over.id);
 
-        if (!platformStates.find((p) => p.label === targetPlatform)?.selected) return;
-    
-        setPlatformStates(platformStates.map((platform) =>
-            platform.label === targetPlatform ? { ...platform, caption: draggedCaption } : platform
-        ));
+        if (!platformStates.find((p) => p.key === targetPlatform)?.isSelected) return;
+
+        // TODO: SET CAPTIONS
+        console.log("draggedCaption:", draggedCaption)
     };
 
     return (
@@ -68,27 +67,24 @@ export default function CaptionSuggestions({ setStep, platformOptions, platformS
                     <div className="w-full lg:w-1/2 flex-grow space-y-6">
                         <h3 className="text-sm font-medium">📲 Captions by Platform:</h3>
                         <div className="space-y-4 mt-3">
-                            {platformOptions.map((platform) => (
+                            {PLATFORM_OPTIONS.map((platform) => (
                                 <div key={platform}>
                                     <div className="flex justify-between items-center mb-2">
                                         <div className="flex items-center gap-2">
                                             <p className="text-sm font-semibold">{platform}</p>
-                                            {platformStates.find((p) => p.label === platform) && (
-                                                <span className="text-xs text-gray-500">(@{platformStates.find((p) => p.label === platform)?.account})</span>
-                                            )}
                                         </div>
                                         <button
                                             onClick={() => handlePlatformToggle(platform)}
                                             className={`text-xs px-2 py-1 rounded-md transition ${
-                                                platformStates.find((p) => p.label === platform)
-                                                    ? platformStates.find((p) => p.label === platform)?.selected
+                                                platformStates.find((p) => p.key === platform)
+                                                    ? platformStates.find((p) => p.key === platform)?.isSelected
                                                         ? "bg-black text-white hover:bg-gray-800"
                                                         : "bg-gray-300 text-gray-800 hover:bg-gray-400"
                                                     : "bg-gray-200 text-gray-500 cursor-not-allowed"
                                             }`}
-                                            disabled={!platformStates.find((p) => p.label === platform)}
+                                            disabled={!platformStates.find((p) => p.key === platform)}
                                         >
-                                            {platformStates.find((p) => p.label === platform)?.selected ? "Disable" : "Enable"}
+                                            {platformStates.find((p) => p.key === platform)?.isSelected ? "Disable" : "Enable"}
                                         </button>
                                     </div>
 
@@ -97,15 +93,15 @@ export default function CaptionSuggestions({ setStep, platformOptions, platformS
                                             id={platform}
                                             className="w-full h-24 text-sm p-2 border rounded-md mt-1 resize-none"
                                             placeholder={
-                                                platformStates.find((p) => p.label === platform)
-                                                    ? platformStates.find((p) => p.label === platform)?.selected
+                                                platformStates.find((p) => p.key === platform)
+                                                    ? platformStates.find((p) => p.key === platform)?.isSelected
                                                         ? "Drag a caption here or type your own..."
                                                         : "🔹 Want to post here? Enable this platform first!"
                                                     : "❌ You cannot post here. This platform is not registered."
                                             }
-                                            value={platformStates.find((p) => p.label === platform)?.selected ? platformStates.find((p) => p.label === platform)?.caption : ""}
+                                            // value={platformStates.find((p) => p.key === platform)?.isSelected ? platformCaptions[platform] : ""} // TODO
                                             onChange={(e) => handleCaptionEdit(platform, e.target.value)}
-                                            disabled={!platformStates.find((p) => p.label === platform)?.selected}
+                                            disabled={!platformStates.find((p) => p.key === platform)?.isSelected}
                                         />
                                     </PlatformDropZone>
                                 </div>

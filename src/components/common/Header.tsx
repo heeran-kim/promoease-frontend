@@ -3,34 +3,41 @@
 
 import { useRouter } from "next/navigation";
 import ActionDropdown from "./ActionDropdown";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft, FaPlus } from "react-icons/fa";
+import { HeaderProps } from "@/app/types/nav";
 
-interface HeaderProps {
-    title: string;
-    description?: string;
-    actions?: { label: string; onClick: () => void }[];
-    backTo?: string;
-}
 
-export default function Header({ title, description, actions, backTo }: HeaderProps) {
+export default function Header({ title, description, createAction, moreActions, backTo }: HeaderProps) {
     const router = useRouter();
     return (
         <div className="border-b border-gray-300 dark:border-gray-700 px-6 py-8">
             {backTo && (
-                    <div className="relative text-xs">
+                <div className="relative text-xs">
                     <button
                         onClick={() => router.push(backTo)}
                         className="absolute top-1/2 right-2 p-2 rounded-lg hover:bg-gray-200 transition"
                     >
-                        <FaArrowLeft size={14} />
+                        <FaArrowLeft className="text-gray-600" size={14} />
                     </button>
                 </div>
             )}
 
-            {actions && actions.length > 0 && (
-                <ActionDropdown actions={actions} />
+            {createAction && (
+                <div className="relative text-xs">
+                    <button
+                        onClick={createAction(router)?.onClick}
+                        className="absolute top-1/2 right-10 p-2 rounded-lg hover:bg-gray-200 transition"
+                    >
+                        <FaPlus className="text-gray-600" size={14} />
+                    </button>
+                </div>
             )}
 
+            {moreActions && (
+                <ActionDropdown actions={moreActions(router) ?? []} />
+            )}
+
+            
             <h1 className="text-2xl font-semibold text-gray-800 dark:text-white">
                 {title}
             </h1>

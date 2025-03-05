@@ -3,18 +3,13 @@
 
 import { useState, useRef, useEffect } from "react";
 import { HiDotsHorizontal } from "react-icons/hi";
-
-interface Action {
-    label: string;
-    onClick: () => void;
-    disabled?: boolean;
-}
+import { Action } from "@/app/types/nav";
 
 interface ActionDropdownProps {
     actions: Action[];
 }
 
-export default function ActionDropdown({ actions }: ActionDropdownProps) {
+export default function ActionDropdown({ actions }: (ActionDropdownProps)) {
     const [open, setOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const buttonRef = useRef<HTMLButtonElement>(null);
@@ -57,7 +52,7 @@ export default function ActionDropdown({ actions }: ActionDropdownProps) {
                         <button
                             key={action.label}
                             onClick={() => {
-                                action.onClick();
+                                action.onClick;
                                 setOpen(false);
                             }}
                             disabled={action.disabled}

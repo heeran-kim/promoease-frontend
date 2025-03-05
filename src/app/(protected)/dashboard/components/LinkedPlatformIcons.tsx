@@ -1,25 +1,25 @@
 // app/(protected)/dashboard/components/LastPostInfo.tsx
 import { platformConfig } from "@/utils/icon";
-import { SocialMedia } from "@/types";
+import { Platform } from "@/app/types/business";
 
-interface SocialMediaLinksProps {
-    social: SocialMedia[];
+interface LinkedPlatformsProps {
+    linkedPlatforms: Platform[];
 }
 
-export default function SocialMediaLinks({ social }: SocialMediaLinksProps) {
-    if (social.length === 0) return null;
+export default function LinkedPlatformIcons({ linkedPlatforms }: LinkedPlatformsProps) {
+    if (linkedPlatforms.length === 0) return null;
 
     return (
         <div className="flex items-center">
             <div className="flex space-x-2 bg-gray-100 px-3 py-1 rounded-full">
-                {social.map(({ platform, link }) => {
-                    const platformInfo = platformConfig[platform];
+                {linkedPlatforms.map(({ key, link }) => {
+                    const platformInfo = platformConfig[key];
                     if (!platformInfo) return null;
                     const { icon: Icon, color } = platformInfo;
 
                     return (
                         <a
-                            key={platform}
+                            key={key}
                             href={link}
                             target="_blank"
                             rel="noopener noreferrer"

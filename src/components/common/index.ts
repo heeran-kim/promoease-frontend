@@ -8,4 +8,3 @@ export { default as ListCard } from "./ListCard";
 export { default as ScrollToTop } from "./ScrollToTop";
 export { default as SearchBar } from "./SearchBar";
 export { default as Select } from "./Select";
-export { default as SortDropdown } from "./SortDropdown";

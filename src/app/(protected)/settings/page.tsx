@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import Card from "@/components/common/Card";
 import DragAndDropUploader from "@/components/common/DragAndDropUploader";
 import { useFetchData, mutateData } from "@/hooks/useApi";
-import { Business, EMPTY_BUSINESS } from "@/types";
+import { Business, EMPTY_BUSINESS } from "@/app/types/business";
 import { INDUSTRY_OPTIONS, DEFAULT_LOGO_PATH } from "@/constants/settings";
 import { BUSINESSES_API } from "@/constants/api";
 
@@ -177,7 +177,7 @@ export default function GeneralSettings() {
                     type="text"
                     className="w-1/2 text-sm p-2 border rounded-md focus:ring focus:ring-blue-300"
                     placeholder="e.g. 18-35 years old, mostly female"
-                    value={editedBusiness?.target ?? ""}
+                    value={editedBusiness?.targetCustomers ?? ""}
                     onChange={handleInputChange}
                 />
             </Card>

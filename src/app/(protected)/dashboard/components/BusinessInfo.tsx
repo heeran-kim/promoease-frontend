@@ -1,8 +1,8 @@
 // app/(protected)/dashboard/components/BusinessInfo.tsx
-import SocialMediaLinks from "./SocialMediaLinks";
+import LinkedPlatformIcons from "./LinkedPlatformIcons";
 import BusinessStatus from "./BusinessStatus";
 import LastPostInfo from "./LastPostInfo";
-import { DashboardData } from "@/types";
+import { DashboardData } from "@/app/types/business";
 
 interface BusinessInfoProps {
     dashboardData: DashboardData;
@@ -15,7 +15,7 @@ export default function BusinessInfo({ dashboardData }: BusinessInfoProps) {
                 <h3 className="text-md font-semibold text-gray-900 dark:text-gray-200">
                     {dashboardData.business.name}
                 </h3> 
-                <SocialMediaLinks social={dashboardData.socialMedia} />
+                <LinkedPlatformIcons linkedPlatforms={dashboardData.linkedPlatforms} />
             </div>
 
             <LastPostInfo postsSummary={dashboardData.postsSummary} />

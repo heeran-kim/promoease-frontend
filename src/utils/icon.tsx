@@ -6,7 +6,6 @@ export const platformConfig: Record<string, { icon: React.ElementType; color: st
     facebook: { icon: FaFacebook, color: "text-blue-600" },
     instagram: { icon: FaInstagram, color: "text-pink-500" },
     twitter: { icon: FaTwitter, color: "text-blue-400" },
-    "twitter / x": { icon: FaTwitter, color: "text-blue-400" },
     threads: { icon: FaThreads, color: "text-black" },
 };
 

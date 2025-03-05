@@ -57,7 +57,7 @@ export default function DragAndDropUploader({ value, onChange, fileType = "image
                 ${fileType === "logo" 
                     ? "w-24 h-24 rounded-full aspect-square border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900"
                     : fileType === "image" 
-                    ? "w-full max-w-md aspect-[4/5] border-2 border-dashed border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"
+                    ? "max-w-xs aspect-[4/5] border-2 border-dashed border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"
                     : "w-full p-6 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"
                 }`}
         >
@@ -68,7 +68,7 @@ export default function DragAndDropUploader({ value, onChange, fileType = "image
                     <div
                         className={`relative flex items-center justify-center cursor-pointer transition group 
                                     ${fileType === "logo" ? "w-24 h-24 rounded-full aspect-square border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900" 
-                                    : "w-full max-w-md bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"}`}
+                                    : "max-w-xs max-w-md bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"}`}
                     >
                         <Image
                             src={preview}

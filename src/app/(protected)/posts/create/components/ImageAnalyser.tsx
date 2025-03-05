@@ -1,25 +1,42 @@
 "use client";
 
+import { useState } from "react";
 import DragAndDropUploader from "@/components/common/DragAndDropUploader";
-import Card from "@/components/common/Card";
-import { Dispatch, SetStateAction } from "react";
+import Card from "@/components/common/CompactCard";
+import { usePostCreation } from "@/context/PostCreationContext";
+import { mutateData } from "@/hooks/useApi";
+import { ImageAnalysisResponse } from "@/app/types/post";
+import { AI_API } from "@/constants/api";
 
-interface ImageAnalyserProps {
-    image: File | null;
-    setImage: (image: File | null) => void;
-    detectedItems: string[];
-    setDetectedItems: Dispatch<SetStateAction<string[]>>;
-    handleAnalyseImage: (e: React.MouseEvent<HTMLButtonElement>) => void; 
-}
+export default function ImageAnalyser() {
+    const { image, setImage, detectedItems, setDetectedItems } = usePostCreation();
+    const [isLoading, setIsLoading] = useState(false);
 
-export default function ImageAnalyser({ image, setImage, detectedItems, setDetectedItems, handleAnalyseImage }: ImageAnalyserProps) {
     const handleImageUpload = (file: File | null) => {
-        if (file) {
-            setImage(file);
-            setDetectedItems([]);
-        } else {
-            setImage(null);
+        setImage(file);
+        setDetectedItems([]);
+    };
+
+    const handleAnalyseImage = async () => {
+        if (!image) {
+            alert("Please upload an image first!");
+            return;
         }
+        
+        const formData = new FormData();
+        formData.append("image", image);
+        
+        setIsLoading(true);
+
+        const res: ImageAnalysisResponse | null = await mutateData<ImageAnalysisResponse>(AI_API.IMG_ANALYSIS, "POST", formData, true);
+        if (!res || !res.detectedItems) {
+            console.error("❌ Failed to fetch image analysis result or empty data.");
+            setDetectedItems([]);
+            setIsLoading(false);
+            return;
+        }
+        setDetectedItems(res.detectedItems);
+        setIsLoading(false);
     };
 
     const removeDetectedItem = (index: number) => {
@@ -27,34 +44,25 @@ export default function ImageAnalyser({ image, setImage, detectedItems, setDetec
     };
 
     return (
-        <div className="w-full lg:w-1/3 flex-shrink-0">
-            <Card
-                title="Step 1: Upload & Analyse Image"
-                description={
-                    <div className="text-sm text-gray-600 dark:text-gray-300 space-y-2">
-                        <p>Start by uploading an image. The AI will analyse its content to extract key elements that will help in generating your caption.</p>
-                        <ul className="list-disc ml-4">
-                            <li>Upload an image by <strong>dragging & dropping</strong> or clicking to select a file.</li>
-                            <li>After uploading, click the <strong>&quot;Analyse Image&quot;</strong> button to detect key elements.</li>
-                            <li>Remove incorrect tags by hovering over them and clicking the <strong>X button</strong>.</li>
-                        </ul>
-                    </div>
-                }
-            >
-                <DragAndDropUploader value={image ? URL.createObjectURL(image) : ""}  onChange={handleImageUpload} fileType="image" />
-            
-                {image && (
-                    <div className="mt-3">
-                        <button
-                            onClick={handleAnalyseImage}
-                            className="w-full bg-black text-white py-2 px-4 rounded-md hover:bg-gray-800 transition"
-                        >
-                            Analyse Image
-                        </button>
+        <Card
+            title="Step 1: Upload & Analyse Image"
+            description="Upload an image and let AI detect key elements to generate captions."
+        >
+            <DragAndDropUploader value={image ? URL.createObjectURL(image) : ""}  onChange={handleImageUpload} fileType="image" />
+        
+            {image && (
+                <div className="mt-2">
+                    <button
+                        onClick={handleAnalyseImage}
+                        className="w-full text-sm bg-black text-white py-2 px-4 rounded-md hover:bg-gray-800 transition"
+                        disabled={isLoading}
+                    >
+                        {isLoading ? "Analysing..." : "Analyse Image"}
+                    </button>
 
-                        {detectedItems.length > 0 && (
-                            <>
-                            <div className="mt-3 p-3 border border-gray-200 rounded-md bg-gray-50 dark:bg-gray-800">
+                    {detectedItems.length > 0 && (
+                        <>
+                            <div className="mt-3 p-2 border border-gray-200 rounded-md bg-gray-50 dark:bg-gray-800">
                                 <p className="text-sm font-medium mb-2">Detected Items:</p>
                                 <div className="flex flex-wrap gap-2">
                                     {detectedItems.map((item, index) => (
@@ -80,11 +88,10 @@ export default function ImageAnalyser({ image, setImage, detectedItems, setDetec
                                 * <strong>EfficientNet</strong> (Lightweight image recognition model) <br />
                                 - One of these models will be selected, or a combination may be used for optimal performance.
                             </div>
-                            </>
-                        )}
-                    </div>
-                )}
-            </Card>
-        </div>
+                        </>
+                    )}
+                </div>
+            )}
+        </Card>
     );
 }

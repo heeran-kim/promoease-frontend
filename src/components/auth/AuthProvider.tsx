@@ -3,7 +3,7 @@
 import { createContext, useContext } from "react";
 import { useFetchData } from "@/hooks/useApi";
 import { useRouter } from "next/navigation";
-import { User } from "@/types";
+import { User } from "@/app/types/index";
 import { USERS_API } from "@/constants/api";
 
 interface AuthContextType {

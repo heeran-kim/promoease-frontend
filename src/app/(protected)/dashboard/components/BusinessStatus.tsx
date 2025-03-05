@@ -1,6 +1,6 @@
 // app/(protected)/dashboard/components/BusinessStatus.tsx
 import React from "react";
-import { PostsSummary } from "@/types";
+import { PostsSummary } from "@/app/types/business";
 
 export default function BusinessStatus ({ postsSummary }: { postsSummary: PostsSummary }) {
     const { failedPosts, upcomingPosts, uploadedPosts } = postsSummary;

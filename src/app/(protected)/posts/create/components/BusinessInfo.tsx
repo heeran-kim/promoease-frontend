@@ -1,53 +1,35 @@
 "use client";
 
-import { useState } from "react";
-import Card from "@/components/common/Card";
+import Card from "@/components/common/CompactCard";
 import { FaQuestionCircle } from "react-icons/fa";
-import { Business } from "@/types";
+import { usePostCreation } from "@/context/PostCreationContext";
 
-interface BusinessInfoProps {
-    business: Pick<Business, "target" | "vibe" | "salesDataEnabled">;
-}
+export default function BusinessInfo() {
+    const { hasSalesData, customisedBusinessInfo, setCustomisedBusinessInfo } = usePostCreation();
 
-export default function BusinessInfo({ business }: BusinessInfoProps) {
-    const [useSalesData, setUseSalesData] = useState(true);
-    const [businessInfo, setBusinessInfo] = useState({
-        targetCustomers: business.target ?? "No target customers set",
-        vibe: business.vibe ?? "No vibe set",
-        salesDataProvided: business.salesDataEnabled ?? false,
-    });
-
-    const handleInputChange = (field: string, value: string) => {
-        setBusinessInfo((prev) => ({
-            ...prev,
-            [field]: value,
-        }));
+    const handleInputChange = (field: keyof typeof customisedBusinessInfo, value: string | boolean) => {
+        setCustomisedBusinessInfo({ ...customisedBusinessInfo, [field]: value });
     };
 
     return (
-        <Card
-            title="Business Information"
-            description="This information is automatically retrieved from your Business Settings."
-        >
+        <Card title="Business Information">
             <div className="flex flex-wrap gap-4">
-                {/* 🎯 타겟 고객 */}
                 <div className="flex-1 min-w-[200px]">
                     <label className="text-sm font-medium">🎯 Target Customers</label>
                     <input
                         type="text"
                         className="w-full text-sm p-2 border rounded-md focus:ring focus:ring-blue-300"
-                        value={businessInfo.targetCustomers}
+                        value={customisedBusinessInfo.targetCustomers}
                         onChange={(e) => handleInputChange("targetCustomers", e.target.value)}
                     />
                 </div>
 
-                {/* 🌟 비즈니스 분위기 */}
                 <div className="flex-1 min-w-[200px]">
                     <label className="text-sm font-medium">🌟 Vibe</label>
                     <input
                         type="text"
                         className="w-full text-sm p-2 border rounded-md focus:ring focus:ring-blue-300"
-                        value={businessInfo.vibe}
+                        value={customisedBusinessInfo.vibe}
                         onChange={(e) => handleInputChange("vibe", e.target.value)}
                     />
                 </div>
@@ -57,12 +39,15 @@ export default function BusinessInfo({ business }: BusinessInfoProps) {
                         type="checkbox"
                         id="useSalesData"
                         className="w-4 h-4"
-                        checked={useSalesData}
-                        onChange={(e) => setUseSalesData(e.target.checked)}
-                        disabled={!businessInfo.salesDataProvided}
+                        checked={customisedBusinessInfo.isUsingSalesData}
+                        onChange={(e) => setCustomisedBusinessInfo({
+                            ...customisedBusinessInfo,
+                            isUsingSalesData: e.target.checked
+                        })}
+                        disabled={!hasSalesData}
                     />
-                    <label htmlFor="useSalesData" className={`text-sm ${!businessInfo.salesDataProvided ? "text-gray-400" : "text-gray-700 dark:text-gray-300"}`}>
-                        {businessInfo.salesDataProvided ? "Use Sales Data for AI captions" : "Sales data not available. Provide data in settings."}
+                    <label htmlFor="useSalesData" className={`text-sm ${!hasSalesData ? "text-gray-400" : "text-gray-700 dark:text-gray-300"}`}>
+                        {hasSalesData ? "Use Sales Data for AI captions" : "Sales data not available. Provide data in settings."}
                     </label>
 
                     <div className="relative inline-block">

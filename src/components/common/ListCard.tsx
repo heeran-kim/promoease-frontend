@@ -7,7 +7,9 @@ import { getStatusClass } from "@/components/styles";
 import ActionDropdown from "@/components/common/ActionDropdown";
 import { FaRegCalendarAlt, FaTag } from "react-icons/fa";
 import Image from "next/image";
-import { Post, Promotion, DropboxItem } from "@/types";
+import { DropboxItem } from "@/app/types";
+import { Post } from "@/app/types/post";
+import { Promotion } from "@/app/types/promotion";
 
 interface ListCardProps {
     item: Post | Promotion;
